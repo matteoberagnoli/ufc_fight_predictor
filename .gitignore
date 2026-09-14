@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# UFC fight predictor: data/raw is committed (pins the Kaggle dataset
+# version); everything derived from it is regenerable via the pipeline.
+data/processed/
+data/external/
+
+# Personal/local project notes, not part of the shared codebase
+log/
+ROADMAP.md
+debug_randomize.py
+ufc_fight_predictor.code-workspace
