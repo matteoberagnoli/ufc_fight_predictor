@@ -40,6 +40,18 @@ def add_winner_id(fights: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def drop_label_source_columns(fights: pd.DataFrame) -> pd.DataFrame:
+    """Drop `result`/`winner_id` once `fighter_a_won` has been derived from them.
+
+    Both are now redundant: `winner_id` is recoverable at any time as
+    `fighter_a_id if fighter_a_won else fighter_b_id`, and `result` was only
+    ever `winner_id` as a string. Keeping them around risks a future `X =
+    fights_featured.drop(columns=[...])` accidentally leaving the label in
+    the features.
+    """
+    return fights.drop(columns=["result", "winner_id"])
+
+
 def build_fight_dataset(
     raw_dir=None,
     seed: int = RANDOMIZE_SEED,
@@ -53,6 +65,7 @@ def build_fight_dataset(
     fights = drop_undecided(fights)
     fights = add_winner_id(fights)
     fights = randomize_fighter_sides(fights, seed=seed)
+    fights = drop_label_source_columns(fights)
 
     fights = fights.sort_values("event_date").reset_index(drop=True)
     return fights

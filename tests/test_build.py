@@ -34,3 +34,12 @@ def test_build_fight_dataset_is_reproducible():
     first = build_fight_dataset()
     second = build_fight_dataset()
     pd.testing.assert_frame_equal(first, second)
+
+
+def test_build_fight_dataset_drops_redundant_label_columns():
+    # result/winner_id are redundant with fighter_a_won + the two fighter
+    # ids, and keeping them around risks a future accidental leak into X
+    df = build_fight_dataset()
+    assert "result" not in df.columns
+    assert "winner_id" not in df.columns
+    assert "fighter_a_won" in df.columns

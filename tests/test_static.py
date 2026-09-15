@@ -1,0 +1,70 @@
+import numpy as np
+import pandas as pd
+import pytest
+
+from ufc_predictor.features.static import attach_static_features
+
+
+@pytest.fixture
+def toy_featured() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "fights_url": ["f/1", "f/2"],
+            "fighter_a_id": [1, 2],
+            "fighter_b_id": [2, 3],
+            "fighter_a_age_during": [28.0, 31.0],
+            "fighter_b_age_during": [30.0, 25.0],
+            "fighter_a_height_cm": [180.0, 175.0],
+            "fighter_b_height_cm": [175.0, 190.0],
+        }
+    )
+
+
+@pytest.fixture
+def toy_fighters() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "fighter_id": [1, 2, 3],
+            "fighter_reach_cm": [183.0, 178.0, np.nan],
+            "fighter_stance": ["Orthodox", "Southpaw", "Orthodox"],
+        }
+    )
+
+
+def test_attach_static_features_row_count_unchanged(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    assert len(out) == len(toy_featured)
+
+
+def test_reach_and_stance_joined_correctly(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    # fight 1: fighter_a=1 (reach 183, Orthodox), fighter_b=2 (reach 178, Southpaw)
+    row = out.iloc[0]
+    assert row["fighter_a_reach_cm"] == 183.0
+    assert row["fighter_a_stance"] == "Orthodox"
+    assert row["fighter_b_reach_cm"] == 178.0
+    assert row["fighter_b_stance"] == "Southpaw"
+
+
+def test_missing_reach_stays_nan_not_dropped(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    # fight 2: fighter_b=3, whose reach is NaN in the fixture
+    row = out.iloc[1]
+    assert pd.isna(row["fighter_b_reach_cm"])
+    assert len(out) == 2  # row wasn't dropped just because reach is missing
+
+
+def test_diff_columns_are_a_minus_b(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    row = out.iloc[0]
+    assert row["diff_static_age"] == 28.0 - 30.0
+    assert row["diff_static_height_cm"] == 180.0 - 175.0
+    assert row["diff_static_reach_cm"] == 183.0 - 178.0
+
+
+def test_same_fighter_gets_same_static_values_in_different_fights(toy_featured, toy_fighters):
+    # fighter 2 is fighter_b in fight 1 and fighter_a in fight 2 - same person,
+    # same reach/stance either side of the swap
+    out = attach_static_features(toy_featured, toy_fighters)
+    assert out.iloc[0]["fighter_b_reach_cm"] == out.iloc[1]["fighter_a_reach_cm"]
+    assert out.iloc[0]["fighter_b_stance"] == out.iloc[1]["fighter_a_stance"]
