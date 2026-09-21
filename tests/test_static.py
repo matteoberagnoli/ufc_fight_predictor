@@ -9,13 +9,13 @@ from ufc_predictor.features.static import attach_static_features
 def toy_featured() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "fights_url": ["f/1", "f/2"],
-            "fighter_a_id": [1, 2],
-            "fighter_b_id": [2, 3],
-            "fighter_a_age_during": [28.0, 31.0],
-            "fighter_b_age_during": [30.0, 25.0],
-            "fighter_a_height_cm": [180.0, 175.0],
-            "fighter_b_height_cm": [175.0, 190.0],
+            "fights_url": ["f/1", "f/2", "f/3", "f/4"],
+            "fighter_a_id": [1, 2, 2, 1],
+            "fighter_b_id": [2, 3, 4, 5],
+            "fighter_a_age_during": [28.0, 31.0, 31.0, 28.0],
+            "fighter_b_age_during": [30.0, 25.0, 29.0, 33.0],
+            "fighter_a_height_cm": [180.0, 175.0, 175.0, 180.0],
+            "fighter_b_height_cm": [175.0, 190.0, 178.0, 182.0],
         }
     )
 
@@ -24,9 +24,11 @@ def toy_featured() -> pd.DataFrame:
 def toy_fighters() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "fighter_id": [1, 2, 3],
-            "fighter_reach_cm": [183.0, 178.0, np.nan],
-            "fighter_stance": ["Orthodox", "Southpaw", "Orthodox"],
+            "fighter_id": [1, 2, 3, 4, 5],
+            "fighter_reach_cm": [183.0, 178.0, np.nan, 180.0, 190.0],
+            # fighter 4 shares fighter 2's stance (Southpaw); fighter 5 has no
+            # stance recorded, for the "can't tell" case
+            "fighter_stance": ["Orthodox", "Southpaw", "Orthodox", "Southpaw", np.nan],
         }
     )
 
@@ -34,6 +36,41 @@ def toy_fighters() -> pd.DataFrame:
 def test_attach_static_features_row_count_unchanged(toy_featured, toy_fighters):
     out = attach_static_features(toy_featured, toy_fighters)
     assert len(out) == len(toy_featured)
+
+
+def test_ape_index_is_reach_minus_height(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    row = out.iloc[0]
+    assert row["fighter_a_ape_index_cm"] == pytest.approx(183.0 - 180.0)
+    assert row["fighter_b_ape_index_cm"] == pytest.approx(178.0 - 175.0)
+    assert row["diff_static_ape_index_cm"] == pytest.approx(
+        row["fighter_a_ape_index_cm"] - row["fighter_b_ape_index_cm"]
+    )
+
+
+def test_ape_index_is_nan_when_reach_missing(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    row = out.iloc[1]  # fighter_b=3, reach is NaN
+    assert pd.isna(row["fighter_b_ape_index_cm"])
+    assert pd.isna(row["diff_static_ape_index_cm"])
+
+
+def test_same_stance_true_when_stances_match(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    # fight 3: fighter_a=2 (Southpaw), fighter_b=4 (Southpaw)
+    assert out.iloc[2]["same_stance"] == True  # noqa: E712
+
+
+def test_same_stance_false_when_stances_differ(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    # fight 1: Orthodox vs Southpaw
+    assert out.iloc[0]["same_stance"] == False  # noqa: E712
+
+
+def test_same_stance_is_na_when_either_stance_unknown(toy_featured, toy_fighters):
+    out = attach_static_features(toy_featured, toy_fighters)
+    # fight 4: fighter_b=5 has no recorded stance
+    assert pd.isna(out.iloc[3]["same_stance"])
 
 
 def test_reach_and_stance_joined_correctly(toy_featured, toy_fighters):
@@ -51,7 +88,7 @@ def test_missing_reach_stays_nan_not_dropped(toy_featured, toy_fighters):
     # fight 2: fighter_b=3, whose reach is NaN in the fixture
     row = out.iloc[1]
     assert pd.isna(row["fighter_b_reach_cm"])
-    assert len(out) == 2  # row wasn't dropped just because reach is missing
+    assert len(out) == len(toy_featured)  # row wasn't dropped just because reach is missing
 
 
 def test_diff_columns_are_a_minus_b(toy_featured, toy_fighters):
