@@ -17,6 +17,7 @@ UNDECIDED_RESULTS = {"nc", "d"}
 
 
 def attach_event_dates(fights: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
+    #merge fights with events to get event date and drop the link.
     merged = fights.merge(
         events[["url_link", "event_date"]],
         left_on="event_url",
@@ -33,23 +34,34 @@ def attach_event_dates(fights: pd.DataFrame, events: pd.DataFrame) -> pd.DataFra
 def drop_undecided(fights: pd.DataFrame) -> pd.DataFrame:
     return fights[~fights["result"].isin(UNDECIDED_RESULTS)].copy()
 
+def rename_result_to_winner_id(fights: pd.DataFrame) -> pd.DataFrame:
+    """Give the raw `result` column the name of what it actually holds.
 
-def add_winner_id(fights: pd.DataFrame) -> pd.DataFrame:
-    out = fights.copy()
-    out["winner_id"] = out["result"].astype("int64")
+    Despite the name, `result` is the winning fighter's id, stored as a
+    string - so this is a rename plus a cast, not a computation. Renaming
+    rather than adding a second column keeps exactly one copy of the label
+    in the table, so there is nothing extra to remember to drop later.
+
+    Must run after `drop_undecided`: `result` is "nc"/"d" for draws and
+    no-contests, which cannot be cast to an integer.
+
+    `errors="raise"` matters. Without it a missing `result` column would be
+    a silent no-op here, and the failure would surface further down as a
+    confusing `KeyError: 'winner_id'` instead of pointing at this line.
+    """
+    out = fights.rename(columns={"result": "winner_id"}, errors="raise")
+    out["winner_id"] = out["winner_id"].astype("int64")
     return out
 
-
 def drop_label_source_columns(fights: pd.DataFrame) -> pd.DataFrame:
-    """Drop `result`/`winner_id` once `fighter_a_won` has been derived from them.
+    """Drop `winner_id` once `fighter_a_won` has been derived from it.
 
-    Both are now redundant: `winner_id` is recoverable at any time as
-    `fighter_a_id if fighter_a_won else fighter_b_id`, and `result` was only
-    ever `winner_id` as a string. Keeping them around risks a future `X =
-    fights_featured.drop(columns=[...])` accidentally leaving the label in
-    the features.
+    It is now redundant: the winner is recoverable at any time as
+    `fighter_a_id if fighter_a_won else fighter_b_id`. Keeping it around
+    risks a future `X = fights_featured.drop(columns=[...])` accidentally
+    leaving the label in the features.
     """
-    return fights.drop(columns=["result", "winner_id"])
+    return fights.drop(columns=["winner_id"])
 
 
 def build_fight_dataset(
@@ -63,7 +75,7 @@ def build_fight_dataset(
 
     fights = attach_event_dates(fights, events)
     fights = drop_undecided(fights)
-    fights = add_winner_id(fights)
+    fights = rename_result_to_winner_id(fights)
     fights = randomize_fighter_sides(fights, seed=seed)
     fights = drop_label_source_columns(fights)
 
