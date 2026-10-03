@@ -1,5 +1,7 @@
 """Reading raw source tables and writing processed pipeline outputs."""
 
+import json
+
 import pandas as pd
 
 from ufc_predictor.config import PROCESSED_DIR, RAW_DIR
@@ -26,3 +28,16 @@ def save_processed(df: pd.DataFrame, name: str, processed_dir=PROCESSED_DIR) -> 
 
 def load_processed(name: str, processed_dir=PROCESSED_DIR) -> pd.DataFrame:
     return pd.read_parquet(processed_dir / f"{name}.parquet")
+
+
+def save_processed_json(obj: dict, name: str, processed_dir=PROCESSED_DIR) -> None:
+    # sorted keys and a fixed layout: the same content always gives the same file
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    with open(processed_dir / f"{name}.json", "w") as f:
+        json.dump(obj, f, indent=2, sort_keys=True)
+        f.write("\n")
+
+
+def load_processed_json(name: str, processed_dir=PROCESSED_DIR) -> dict:
+    with open(processed_dir / f"{name}.json") as f:
+        return json.load(f)

@@ -73,7 +73,10 @@ def randomize_fighter_sides(
 
     Expects `df` to already have a `winner_id` column (the pre-swap winning
     fighter's id, e.g. derived from the raw `result` column) so the label can
-    be computed once, before any columns move.
+    be computed once, before any columns move. A nullable Int64 `winner_id`
+    with NA means the fight had no winner (a draw or no-contest), and
+    `fighter_a_won` comes out NA for those rows rather than False - they are
+    kept as fighter history but can never be training rows.
     """
     pairs = find_side_column_pairs(df.columns)
     swap = stable_swap_mask(df[id_col], seed=seed)
@@ -86,5 +89,5 @@ def randomize_fighter_sides(
         out[b_col] = np.where(swap, df[f1_col], df[f2_col])
 
     out = out.drop(columns=[c for pair in pairs for c in pair[1:]])
-    out["fighter_a_won"] = out["fighter_a_id"] == out["winner_id"]
+    out["fighter_a_won"] = (out["fighter_a_id"] == out["winner_id"]).astype("boolean")
     return out

@@ -34,6 +34,12 @@ from ufc_predictor.features.rolling import MIRRORED_STATS, SHARED_STATS
 
 LABEL_COLUMN = "fighter_a_won"
 
+# `outcome` says the same thing as the label and more ("draw" / "no_contest"
+# as well as which corner won), so it is the answer sheet too and must never
+# reach `X`. It is kept on the table because it is what `modeling.split`
+# filters on and what makes a draw readable when checking a row by hand.
+LABEL_COLUMNS = (LABEL_COLUMN, "outcome")
+
 METADATA_COLUMNS = [
     "event_date",
     "event_url",
@@ -182,7 +188,7 @@ def unclassified_columns(fights: pd.DataFrame) -> list[str]:
     classified = set(feature_columns(fights))
     classified |= set(leaky_columns(fights))
     classified |= set(METADATA_COLUMNS)
-    classified.add(LABEL_COLUMN)
+    classified |= set(LABEL_COLUMNS)
     # the per-side halves the diffs are built from: safe, deliberately unused
     classified |= {
         c for c in fights.columns
@@ -197,9 +203,21 @@ def unclassified_columns(fights: pd.DataFrame) -> list[str]:
 
 
 def make_xy(fights: pd.DataFrame, groups=None) -> tuple[pd.DataFrame, pd.Series]:
-    """Split a featured fight table into a design matrix and the label."""
+    """Split a featured fight table into a design matrix and the label.
+
+    Every row must have a winner. Draws and no-contests have no answer to
+    learn, so passing the full featured table is a mistake - run it through
+    `modeling.split.drop_undecided` (or `chronological_split`, which does it
+    for you) first.
+    """
+    undecided = fights[LABEL_COLUMN].isna().sum()
+    if undecided:
+        raise ValueError(
+            f"{undecided} row(s) have no winner (draws/no-contests). "
+            "Use modeling.split.drop_undecided or chronological_split first."
+        )
     columns = feature_columns(fights, groups=groups)
-    return fights[columns].copy(), fights[LABEL_COLUMN].copy()
+    return fights[columns].copy(), fights[LABEL_COLUMN].astype(bool)
 
 
 def nan_report(fights: pd.DataFrame) -> pd.DataFrame:

@@ -1,11 +1,13 @@
 import pandas as pd
 import pytest
 
+from ufc_predictor.config import VALIDATION_START
 from ufc_predictor.data.build import build_fight_dataset
 from ufc_predictor.data.io import load_fighters, load_processed
 from ufc_predictor.features import manifest as m
-from ufc_predictor.features.rolling import attach_prior_features
+from ufc_predictor.features.rolling import attach_prior_features, fit_alphas
 from ufc_predictor.features.static import attach_static_features
+from ufc_predictor.modeling.split import drop_undecided
 
 
 @pytest.fixture(scope="module")
@@ -21,7 +23,7 @@ def featured() -> pd.DataFrame:
         return load_processed("fights_featured")
     except (FileNotFoundError, OSError):
         fights = build_fight_dataset()
-        out = attach_prior_features(fights)
+        out = attach_prior_features(fights, fit_alphas(fights, until=VALIDATION_START))
         return attach_static_features(out, load_fighters())
 
 
@@ -54,11 +56,32 @@ def test_leaky_columns_are_the_raw_per_fight_stats(featured):
 
 
 def test_make_xy_splits_features_from_label(featured):
-    X, y = m.make_xy(featured)
-    assert len(X) == len(y) == len(featured)
+    decided = drop_undecided(featured)
+    X, y = m.make_xy(decided)
+    assert len(X) == len(y) == len(decided)
     assert m.LABEL_COLUMN not in X.columns
     assert y.name == m.LABEL_COLUMN
+    assert y.dtype == bool          # no NA survives, so a plain bool is safe
     assert not set(X.columns) & set(m.leaky_columns(featured))
+
+
+def test_make_xy_refuses_rows_with_no_winner(featured):
+    """A draw has no answer to learn, so it must never reach X silently.
+
+    The featured table deliberately holds them (they are fighter history),
+    which makes passing it straight to make_xy an easy mistake - hence a
+    loud failure rather than 143 rows of NA label.
+    """
+    with pytest.raises(ValueError, match="no winner"):
+        m.make_xy(featured)
+
+
+def test_outcome_is_treated_as_a_label_not_a_feature(featured):
+    # `outcome` says everything fighter_a_won does and more, so it is the
+    # answer sheet too
+    assert "outcome" in m.LABEL_COLUMNS
+    assert "outcome" not in m.feature_columns(featured)
+    assert "outcome" not in m.METADATA_COLUMNS
 
 
 def test_groups_compose_as_their_union(featured):

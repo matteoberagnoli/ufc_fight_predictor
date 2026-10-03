@@ -12,16 +12,29 @@ The approach:
      appearance ("long format") - each fight contributes two rows, one for
      fighter_a and one for fighter_b.
   2. Sort each fighter's rows chronologically.
-  3. Shift every stat down by one fight *before* computing any average or
-     count. This is the actual leakage guard: it removes the current fight's
-     own row from view before anything is aggregated, so a fighter's Nth
-     fight can only ever see fights 1..N-1.
-  4. Merge the resulting prior-fight features back onto the wide fight table
+  3. Only ever look at earlier rows. This is the actual leakage guard, and it
+     appears in two places: the record features shift every column down by
+     one fight before counting, and the ratio features add up running totals
+     that stop at the previous fight (shrinkage.prior_totals). Either way a
+     fighter's Nth fight can only ever see fights 1..N-1.
+  4. Every feature that is a total divided by an amount of evidence - accuracy,
+     per-minute rates, control share, win rate, average fight time - is shrunk
+     towards the league value, so a tiny sample can't produce an extreme
+     number. See features/shrinkage.py for why and how.
+  5. Merge the resulting prior-fight features back onto the wide fight table
      for both sides, and take fighter_a-minus-fighter_b differences.
+
+Draws and no-contests are part of this history, even though they can never
+be modelling rows: the strikes landed and the cage time elapsed either way.
+Only `wins`, `losses`, `win_rate` and `streak` treat them specially - see
+`_fighter_score` and `_streak_after_each_fight`.
 """
 
 import numpy as np
 import pandas as pd
+
+from ufc_predictor.features import shrinkage
+from ufc_predictor.features.shrinkage import RatioFeature
 
 ROLLING_WINDOW = 3
 
@@ -31,8 +44,8 @@ ROLLING_WINDOW = 3
 # and attempted separately. That's a reparameterisation, not a loss - landed =
 # attempts x accuracy recovers the original exactly - but it separates "how
 # much they throw" from "how well it lands", which the raw pair tangles
-# together. The landed averages are still computed (accuracy needs them) and
-# stay in the long table; they're just not carried onto the wide fight table.
+# together. Landed totals are still added up (accuracy needs them); they're
+# just not carried onto the wide fight table.
 #
 # Note the location stats are exact decompositions of sig_strikes, verified on
 # the raw data: sig_strikes == head + body + leg == distance + clinch + ground,
@@ -62,11 +75,11 @@ UNPAIRED_STATS = ["knockdowns", "submissions", "ctrl_time", "reversals"]
 # signal in its own right, and the denominator any per-minute rate needs.
 SHARED_STATS = ["total_fight_time"]
 
-# stats normalised to a per-minute rate (see _rate_features) rather than
-# left as a raw per-fight count.
+# stats turned into a per-minute rate (see ratio_features) rather than left as
+# a raw per-fight count - a count means nothing without the fight's length.
 RATE_STATS = list(PAIRED_STATS.values()) + ["knockdowns", "submissions", "reversals"]
 
-# absorbed-side stats normalised as a fraction of fight time instead - only
+# turned into a share of fight time instead of a per-minute rate - only
 # ctrl_time, since it shares units (seconds) with total_fight_time.
 FRACTION_STATS = ["ctrl_time"]
 
@@ -76,6 +89,25 @@ ROLLED_STATS = (
 )
 
 MIRRORED_STATS = ROLLED_STATS  # these get an "_absorbed" counterpart too
+
+
+def _fighter_score(fights: pd.DataFrame, side: str) -> pd.Series:
+    """How this fight went for `side`: 1.0 won, 0.0 lost, 0.5 drew, NaN no-contest.
+
+    One float column carries all four outcomes, which is what lets the same
+    value serve two jobs. The record counts read it as categories (wins are
+    the 1.0s, losses the 0.0s). The shrunk `win_rate` feature reads it as a
+    number to add up, so a draw contributes half a win - and a no-contest,
+    being NaN, drops out of both the top and the bottom of the ratio, since
+    `shrinkage._ingredients` masks the evidence wherever the total is
+    missing. That is "a draw is half a win, a no-contest never happened",
+    expressed once.
+    """
+    won = fights["fighter_a_won"]
+    mine = won if side == "fighter_a" else ~won
+    score = mine.astype("float64")          # True -> 1.0, False -> 0.0, NA -> NaN
+    score[fights["outcome"] == "draw"] = 0.5
+    return score
 
 
 def _side_history(fights: pd.DataFrame, side: str) -> pd.DataFrame:
@@ -88,7 +120,7 @@ def _side_history(fights: pd.DataFrame, side: str) -> pd.DataFrame:
             "opponent_id": fights[f"{other}_id"],
             "fights_url": fights["fights_url"],
             "event_date": fights["event_date"],
-            "won": fights["fighter_a_won"] if side == "fighter_a" else ~fights["fighter_a_won"],
+            "won": _fighter_score(fights, side),
         }
     )
     for stat in MIRRORED_STATS:
@@ -107,6 +139,12 @@ def _side_history(fights: pd.DataFrame, side: str) -> pd.DataFrame:
     # way, so title-status-plus-duration is a lower bound on true 5-round
     # fights, not an exact count.
     out["is_five_round"] = out["is_title"] | (out["total_fight_time"] > 900)
+
+    # the "evidence" columns the shrunk ratio features divide by (see ratio_features)
+    out["minutes"] = out["total_fight_time"] / 60
+    out["fights"] = 1.0
+    out["ctrl_minutes"] = out["ctrl_time"] / 60
+    out["ctrl_minutes_absorbed"] = out["ctrl_time_absorbed"] / 60
     return out
 
 
@@ -125,147 +163,77 @@ def build_fighter_history(fights: pd.DataFrame) -> pd.DataFrame:
     ).reset_index(drop=True)
 
 
-def _streak_after_each_fight(won: pd.Series) -> pd.Series:
-    """Running win/loss streak *after* each fight: +2 = won last 2, -1 = lost last 1."""
+def _streak_after_each_fight(score: pd.Series) -> pd.Series:
+    """Running win/loss streak *after* each fight: +2 = won last 2, -1 = lost last 1.
+
+    A draw resets the streak to 0 - the fighter genuinely failed to win, so
+    the run is over. A no-contest leaves it untouched: it is usually an
+    overturned result or an accidental foul, and wiping out real momentum
+    for it would say something the fight never showed.
+    """
     streak = []
     current = 0
-    for did_win in won:
-        if did_win:
+    for value in score:
+        if pd.isna(value):                      # no-contest: carry on unchanged
+            pass
+        elif value == 1.0:
             current = current + 1 if current >= 0 else 1
-        else:
+        elif value == 0.0:
             current = current - 1 if current <= 0 else -1
+        else:                                   # draw
+            current = 0
         streak.append(current)
-    return pd.Series(streak, index=won.index)
+    return pd.Series(streak, index=score.index)
 
 
-def _add_prior_features_for_one_fighter(g: pd.DataFrame) -> pd.DataFrame:
+# counts and facts about a fighter's record - the evidence itself, not an
+# estimate made from it, so there is nothing to shrink
+RECORD_COLUMNS = [
+    "fight_count", "is_debut", "wins", "losses", "streak",
+    "days_since_last_fight", "title_fights", "five_round_fights",
+]
+
+
+def _record_features_for_one_fighter(g: pd.DataFrame) -> pd.DataFrame:
     """g is one fighter's rows, already in chronological order."""
-    g = g.copy()
     n = len(g)
 
     # names here deliberately don't repeat "prior" - the {side}_prior_ prefix
     # added later in attach_prior_features() already says that for every
-    # column in this list, so e.g. this becomes fighter_a_prior_win_rate,
-    # not fighter_a_prior_prior_win_rate.
+    # column in this list, so e.g. this becomes fighter_a_prior_wins,
+    # not fighter_a_prior_prior_wins.
+    # every prior appearance counts as experience, including draws and
+    # no-contests - the fighter was in the cage
     fight_count = pd.Series(np.arange(n), index=g.index)
-    wins = g["won"].astype(int).shift(1).cumsum().fillna(0)
+    prior = lambda flag: flag.astype(int).shift(1).cumsum().fillna(0)  # noqa: E731
+    wins = prior(g["won"].eq(1.0))      # <- shift(1): today's result isn't known yet
+    losses = prior(g["won"].eq(0.0))    # counted directly: fight_count also holds draws/NCs
     streak_after = _streak_after_each_fight(g["won"])
-    title_fights = g["is_title"].astype(int).shift(1).cumsum().fillna(0)
-    five_round_fights = g["is_five_round"].astype(int).shift(1).cumsum().fillna(0)
+    title_fights = prior(g["is_title"])
+    five_round_fights = prior(g["is_five_round"])
 
-    new = {
-        "fight_count": fight_count,
-        "is_debut": fight_count == 0,
-        "wins": wins,
-        "losses": fight_count - wins,
-        "win_rate": wins / fight_count.replace(0, np.nan),
-        "streak": streak_after.shift(1).fillna(0),
-        "days_since_last_fight": g["event_date"].diff().dt.days,
-        "title_fights": title_fights,
-        "five_round_fights": five_round_fights,
-    }
-
-    rolled = (
-        MIRRORED_STATS
-        + [f"{s}_absorbed" for s in MIRRORED_STATS]
-        + SHARED_STATS
+    return pd.DataFrame(
+        {
+            "fight_count": fight_count,
+            "is_debut": fight_count == 0,
+            "wins": wins,
+            "losses": losses,
+            "streak": streak_after.shift(1).fillna(0),
+            "days_since_last_fight": g["event_date"].diff().dt.days,
+            "title_fights": title_fights,
+            "five_round_fights": five_round_fights,
+        },
+        index=g.index,
     )
-    for stat in rolled:
-        prior = g[stat].shift(1)  # <- the leakage guard: today's own row is gone
-        new[f"{stat}_career_avg"] = prior.expanding().mean()
-        new[f"{stat}_last{ROLLING_WINDOW}_avg"] = prior.rolling(
-            ROLLING_WINDOW, min_periods=1
-        ).mean()
-
-    new.update(_accuracy_ratios(new))
-    new.update(_rate_features(g, ""))
-    new.update(_rate_features(g, "_absorbed"))
-    return pd.concat([g, pd.DataFrame(new, index=g.index)], axis=1)
-
-
-def _rate_features(g: pd.DataFrame, direction: str) -> dict:
-    """Normalise volume counts by fight length, for one direction.
-
-    `direction=""` is the fighter's own output; `direction="_absorbed"` is
-    what opponents did to them. A raw count (e.g. sig_strike_atts_career_avg
-    = 40) means nothing on its own - 40 strikes thrown in a typical 3-minute
-    fight is very different from 40 over 15 minutes, whichever side threw
-    them.
-
-    RATE_STATS (attempt counts, knockdowns, submissions, reversals) become a
-    per-minute rate. ctrl_time is handled separately as a fraction: it's
-    already in the same units as total_fight_time (seconds), so dividing
-    gives "share of the fight spent controlled/controlling" directly, which
-    is more interpretable than a per-minute figure would be.
-
-    The denominator is re-derived per stat rather than reusing one global
-    rolled duration, and that detail matters. `expanding().mean()` silently
-    skips NaNs, so if a stat is missing for some bouts (ctrl_time is absent
-    for ~1.5% of fighter-appearances) its average covers fewer fights than a
-    duration average taken over all of them - and dividing the two mismatched
-    averages produced control-time fractions above 1.0. Masking the duration
-    to exactly the bouts where the stat is present keeps numerator and
-    denominator over the same fights.
-    """
-    out = {}
-    prior_duration = g["total_fight_time"].shift(1)
-
-    for window in ("career_avg", f"last{ROLLING_WINDOW}_avg"):
-        def mean_over(series: pd.Series) -> pd.Series:
-            if window == "career_avg":
-                return series.expanding().mean()
-            return series.rolling(ROLLING_WINDOW, min_periods=1).mean()
-
-        for stat in RATE_STATS + FRACTION_STATS:
-            prior_stat = g[f"{stat}{direction}"].shift(1)
-            paired_duration = prior_duration.where(prior_stat.notna())
-
-            numerator = mean_over(prior_stat)
-            denominator = mean_over(paired_duration).replace(0, np.nan)
-
-            if stat in FRACTION_STATS:
-                out[f"{stat}{direction}_frac_{window}"] = numerator / denominator
-            else:
-                out[f"{stat}{direction}_per_min_{window}"] = numerator / (denominator / 60)
-    return out
-
-
-def _accuracy_ratios(rolled: dict) -> dict:
-    """Landed/attempted ratios for both directions, from already-rolled averages.
-
-    Computed as (average landed) / (average attempted) rather than the average
-    of per-fight ratios. That's deliberate: it's the volume-weighted accuracy
-    over the fighter's prior bouts, so a fight where they threw two strikes and
-    landed both doesn't count as much as a fight where they threw eighty.
-
-    Both directions are built. `*_accuracy` is the fighter's own - how well
-    their offence lands. `*_absorbed_accuracy` is how often opponents land what
-    they throw *at* this fighter, which is the real defensive-vulnerability
-    signal: raw absorbed volume conflates it with fight length and opponent
-    output, and the two turn out to be almost uncorrelated in this data.
-    """
-    out = {}
-    for window in ("career_avg", f"last{ROLLING_WINDOW}_avg"):
-        for landed, attempted in PAIRED_STATS.items():
-            for suffix in ("", "_absorbed"):
-                num = rolled[f"{landed}{suffix}_{window}"]
-                den = rolled[f"{attempted}{suffix}_{window}"]
-                out[f"{landed}{suffix}_accuracy_{window}"] = num / den.replace(0, np.nan)
-    return out
-
-
-def add_prior_features(history: pd.DataFrame) -> pd.DataFrame:
-    """Add every prior-fight feature to a fighter-history long table."""
-    return history.groupby("fighter_id", group_keys=False).apply(_add_prior_features_for_one_fighter, include_groups=False).join(history[["fighter_id"]])
 
 
 def _volume_column_name(stat: str, direction: str, window: str) -> str:
     """Name of the volume column carried to the wide table for one stat.
 
     RATE_STATS/FRACTION_STATS are normalised by fight length in both
-    directions (see _rate_features) and replace the raw per-fight count -
-    a raw count means nothing without knowing how long the fight ran.
-    Anything else stays a plain per-fight average.
+    directions and replace the raw per-fight count - a raw count means
+    nothing without knowing how long the fight ran. Anything else stays a
+    plain per-fight average.
     """
     if stat in RATE_STATS:
         return f"{stat}{direction}_per_min_{window}"
@@ -304,10 +272,83 @@ PRIOR_FEATURE_COLUMNS = (
 )
 
 
-def attach_prior_features(fights: pd.DataFrame) -> pd.DataFrame:
-    """Add fighter_a_prior_*/fighter_b_prior_* columns and their diffs to fights."""
+def ratio_features() -> list[RatioFeature]:
+    """Every feature that is a total divided by an amount of evidence - all shrunk.
+
+    One spec per wide-table column, so each column gets its own alpha. The
+    absorbed direction uses the league value of the fighter's own direction:
+    every strike one fighter lands is one the other absorbs, so league-wide
+    the two are the same number.
+    """
+    specs = []
+    for window, last_n in (("career_avg", None), (f"last{ROLLING_WINDOW}_avg", ROLLING_WINDOW)):
+        for landed, attempted in PAIRED_STATS.items():
+            for d in ("", "_absorbed"):
+                specs.append(RatioFeature(
+                    f"{landed}{d}_accuracy_{window}", f"{landed}{d}", f"{attempted}{d}",
+                    landed, attempted, "attempts", last_n,
+                ))
+        for stat in RATE_STATS:
+            for d in ("", "_absorbed"):
+                specs.append(RatioFeature(
+                    _volume_column_name(stat, d, window), f"{stat}{d}", "minutes",
+                    stat, "minutes", "minutes", last_n,
+                ))
+        # control time is the one FRACTION_STAT: minutes in control / minutes fought
+        for d in ("", "_absorbed"):
+            specs.append(RatioFeature(
+                _volume_column_name("ctrl_time", d, window), f"ctrl_minutes{d}", "minutes",
+                "ctrl_minutes", "minutes", "minutes", last_n,
+            ))
+        specs.append(RatioFeature(
+            f"total_fight_time_{window}", "total_fight_time", "fights",
+            "total_fight_time", "fights", "fights", last_n,
+        ))
+    # a win depends on the opponent, so its alpha is chosen by who wins, not by
+    # the fighter alone (see shrinkage.choose_alphas)
+    specs.append(RatioFeature(
+        "win_rate", "won", "fights", "won", "fights", "fights", judged_by="who_wins",
+    ))
+    return specs
+
+
+RATIO_FEATURES = ratio_features()
+
+
+def no_shrinkage() -> dict[str, float]:
+    """alpha = 0 for every ratio feature: the raw ratios, with 0/0 left as NaN."""
+    return {spec.name: 0.0 for spec in RATIO_FEATURES}
+
+
+def add_prior_features(history: pd.DataFrame, alphas: dict[str, float]) -> pd.DataFrame:
+    """Add every prior-fight feature to a fighter-history long table."""
+    record = history.groupby("fighter_id", group_keys=False).apply(
+        _record_features_for_one_fighter, include_groups=False
+    )
+    ratios = shrinkage.shrunk_features(history, RATIO_FEATURES, alphas)
+    return pd.concat([history, record, ratios], axis=1)
+
+
+def fit_alphas(fights: pd.DataFrame, *, until: str) -> dict[str, float]:
+    """Learn one shrinkage alpha per ratio feature from fights before `until`.
+
+    Pass the start of the period the model must not see: VALIDATION_START
+    while choosing features, TEST_START for the final model. Fights before
+    ERA_START still count as history but aren't scored.
+    """
+    return shrinkage.choose_alphas(
+        build_fighter_history(fights), RATIO_FEATURES, until, fights=fights
+    )
+
+
+def attach_prior_features(fights: pd.DataFrame, alphas: dict[str, float]) -> pd.DataFrame:
+    """Add fighter_a_prior_*/fighter_b_prior_* columns and their diffs to fights.
+
+    `alphas` says how strongly each ratio feature is shrunk - from fit_alphas,
+    or shrinkage.load_alphas for a saved set; no_shrinkage() gives raw ratios.
+    """
     history = build_fighter_history(fights)
-    history = add_prior_features(history)
+    history = add_prior_features(history, alphas)
 
     out = fights.copy()
     for side in ("fighter_a", "fighter_b"):
