@@ -45,6 +45,7 @@ METADATA_COLUMNS = [
     "event_url",
     "fights_url",
     "weight_class",
+    "division",  # readable form of weight_class_lbs, see features/weight_class.py
     "fighter_a_id",
     "fighter_b_id",
     "fighter_a_name",
@@ -105,7 +106,9 @@ def _group_of(column: str) -> str | None:
     """Which feature group a column belongs to, or None if it is not a feature."""
     if column in ("fighter_a_prior_is_debut", "fighter_b_prior_is_debut"):
         return "cold_start"
-    if column == "same_stance" or column.startswith(_DIFF_STATIC):
+    # same_stance, weight_class_lbs and is_womens_bout are facts about the
+    # bout itself, not either corner - same reason none of them is a diff_
+    if column in ("same_stance", "weight_class_lbs", "is_womens_bout") or column.startswith(_DIFF_STATIC):
         return "physical"
     if not column.startswith(_DIFF_PRIOR):
         return None
