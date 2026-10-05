@@ -78,6 +78,10 @@ RECORD_STEMS = {
     "days_since_last_fight", "title_fights", "five_round_fights",
 }
 
+# ratings built from who beat whom (features/elo.py) - a group of its own so
+# group_importance can measure them separately from the plain record
+STRENGTH_STEMS = {"elo"}
+
 # order matters: longer suffixes first, so "_accuracy_career_avg" is stripped
 # before the bare "_career_avg" can match part of it
 _SUFFIXES = (
@@ -116,6 +120,8 @@ def _group_of(column: str) -> str | None:
     stem, absorbed = _decompose(column)
     if stem in RECORD_STEMS:
         return "record"
+    if stem in STRENGTH_STEMS:
+        return "strength"
     if stem in PACE_STEMS:
         return "pace"
     # the absorbed direction is defence whatever the underlying stat is -
@@ -132,7 +138,7 @@ def _group_of(column: str) -> str | None:
 
 
 GROUP_NAMES = (
-    "record", "physical", "cold_start", "pace",
+    "record", "strength", "physical", "cold_start", "pace",
     "striking", "grappling", "damage", "defence",
 )
 

@@ -5,8 +5,10 @@ import pytest
 from ufc_predictor.modeling.model import (
     corner_disagreement,
     fit_model,
+    fit_models,
     mirror,
     predict_proba,
+    predict_proba_mean,
     to_matrix,
 )
 
@@ -82,3 +84,16 @@ def test_model_picks_up_the_signal():
     X, y = _toy(2_000)
     p = predict_proba(fit_model(X, y), X)
     assert np.corrcoef(p, X["diff_prior_skill"])[0, 1] > 0.5
+
+
+def test_one_seed_ensemble_is_just_the_model():
+    X, y = _toy()
+    models = fit_models(X, y, seeds=(0,))
+    np.testing.assert_allclose(predict_proba_mean(models, X), predict_proba(fit_model(X, y), X))
+
+
+def test_ensemble_averages_its_members():
+    X, y = _toy()
+    models = fit_models(X, y, params={"max_features": 0.5}, seeds=(0, 1, 2))
+    members = [predict_proba(m, X) for m in models]
+    np.testing.assert_allclose(predict_proba_mean(models, X), np.mean(members, axis=0))

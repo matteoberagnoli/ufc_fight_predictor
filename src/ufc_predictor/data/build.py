@@ -57,6 +57,20 @@ def split_result_column(fights: pd.DataFrame) -> pd.DataFrame:
     differently further down.
     """
     out = fights.rename(columns={"result": "winner_id"}, errors="raise")
+
+    # A missing result has to be caught here, explicitly. `astype(str)` below
+    # turns NaN into the string "nan", which `pd.to_numeric` then parses
+    # happily back into NaN - so the errors="raise" guard would never fire,
+    # and the fight would end up with no winner id, no undecided kind, and an
+    # `outcome` of "fighter_b" from add_outcome_column's default: a row whose
+    # two label columns contradict each other, silently.
+    missing = out["winner_id"].isna()
+    if missing.any():
+        raise ValueError(
+            f"{int(missing.sum())} fight(s) have no `result` value. Every fight must "
+            "name a winner or be marked a draw/no-contest."
+        )
+
     raw = out["winner_id"].astype(str)
     undecided = raw.isin(UNDECIDED_RESULTS)
 

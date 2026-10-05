@@ -14,13 +14,8 @@ answered - on the validation years only.
 
 import pandas as pd
 
-from ufc_predictor.features.rolling import (
-    PAIRED_STATS,
-    ROLLING_WINDOW,
-    attach_prior_features,
-    no_shrinkage,
-)
-from ufc_predictor.features.static import attach_static_features
+from ufc_predictor.features.pipeline import build_featured_table
+from ufc_predictor.features.rolling import PAIRED_STATS, ROLLING_WINDOW, no_shrinkage
 
 
 def zero_fill_undefined_accuracy(featured: pd.DataFrame) -> pd.DataFrame:
@@ -46,11 +41,18 @@ def zero_fill_undefined_accuracy(featured: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def build_variants(fights: pd.DataFrame, alphas: dict, fighters: pd.DataFrame) -> dict:
-    """{"raw", "zero_fill", "shrunk"} -> a full featured table for each."""
-    raw = attach_static_features(attach_prior_features(fights, no_shrinkage()), fighters)
+def build_variants(fights: pd.DataFrame, alphas: dict, fighters: pd.DataFrame,
+                   elo_k: float | None) -> dict:
+    """{"raw", "zero_fill", "shrunk"} -> a full featured table for each.
+
+    Only the ratio-feature treatment differs between them. Both tables come
+    from features.pipeline.build_featured_table, the same function that builds
+    the main table, so static attributes, weight class and Elo are identical
+    in all three and the comparison isolates shrinkage and nothing else.
+    """
+    raw = build_featured_table(fights, fighters, no_shrinkage(), elo_k=elo_k)
     return {
         "raw": raw,
         "zero_fill": zero_fill_undefined_accuracy(raw),
-        "shrunk": attach_static_features(attach_prior_features(fights, alphas), fighters),
+        "shrunk": build_featured_table(fights, fighters, alphas, elo_k=elo_k),
     }

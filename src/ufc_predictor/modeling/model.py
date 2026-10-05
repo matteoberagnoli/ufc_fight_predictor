@@ -21,8 +21,10 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
 
-# Not tuned: cautious settings for a first model with ~2,900 training rows and
-# 105 features. Tuning them is a job for the validation years, later.
+# The starting point: cautious settings chosen by judgement for a first model
+# with ~2,900 training rows and 107 features, never measured against
+# alternatives. `modeling.tune` searches for better ones; pass its result as
+# `params` to `make_model`/`fit_model` to use them.
 MODEL_PARAMS = {
     "max_iter": 300,           # how many trees
     "learning_rate": 0.05,     # how much each tree may correct the ones before it
@@ -71,13 +73,22 @@ def mirror(X: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def make_model() -> HistGradientBoostingClassifier:
-    return HistGradientBoostingClassifier(**MODEL_PARAMS)
+def make_model(params: dict | None = None) -> HistGradientBoostingClassifier:
+    """An untrained model. `params` overrides individual MODEL_PARAMS entries.
+
+    Merging onto MODEL_PARAMS rather than replacing it means a caller who
+    passes only the settings it cares about still gets `early_stopping=False`
+    and `random_state=0` - the two that must not quietly revert to their
+    scikit-learn defaults, since early stopping would carve out a *random*
+    slice of the training years as its check set.
+    """
+    settings = {**MODEL_PARAMS, **(params or {})}
+    return HistGradientBoostingClassifier(**settings)
 
 
-def fit_model(X: pd.DataFrame, y: pd.Series) -> HistGradientBoostingClassifier:
+def fit_model(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> HistGradientBoostingClassifier:
     """Train on each fight once, as the coin flip presented it."""
-    return make_model().fit(to_matrix(X), np.asarray(y, dtype=bool))
+    return make_model(params).fit(to_matrix(X), np.asarray(y, dtype=bool))
 
 
 def predict_proba(model, X: pd.DataFrame) -> np.ndarray:
@@ -92,6 +103,21 @@ def predict_proba(model, X: pd.DataFrame) -> np.ndarray:
     as_is = model.predict_proba(X)[:, 1]
     swapped = model.predict_proba(mirror(X))[:, 1]
     return (as_is + (1 - swapped)) / 2
+
+
+def fit_models(X: pd.DataFrame, y: pd.Series, params: dict | None = None, seeds=range(8)) -> list:
+    """The same model trained once per seed.
+
+    With max_features below 1 each seed sees different random feature subsets
+    and gives slightly different answers; averaging them (predict_proba_mean)
+    removes that luck from the final prediction.
+    """
+    return [fit_model(X, y, params=(params or {}) | {"random_state": s}) for s in seeds]
+
+
+def predict_proba_mean(models: list, X: pd.DataFrame) -> np.ndarray:
+    """P(fighter A wins): each model asked both ways round, then averaged over the models."""
+    return np.mean([predict_proba(model, X) for model in models], axis=0)
 
 
 def corner_disagreement(model, X: pd.DataFrame) -> float:

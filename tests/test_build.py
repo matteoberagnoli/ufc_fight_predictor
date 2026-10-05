@@ -68,3 +68,23 @@ def test_build_fight_dataset_drops_redundant_label_columns(fights):
         assert column not in fights.columns
     assert LABEL_COLUMN in fights.columns
     assert "outcome" in fights.columns
+
+
+def test_a_missing_result_is_rejected_loudly():
+    """`astype(str)` turns NaN into "nan", which pd.to_numeric parses back to
+    NaN - so without an explicit check the fight would silently end up with
+    fighter_a_won = <NA> but outcome = "fighter_b", two label columns
+    disagreeing. Reachable the moment a scrape returns an incomplete row."""
+    from ufc_predictor.data.build import split_result_column
+
+    fights = pd.DataFrame({"fights_url": ["f1"], "result": [None]})
+    with pytest.raises(ValueError, match="no `result` value"):
+        split_result_column(fights)
+
+
+def test_a_result_that_is_neither_an_id_nor_a_known_code_is_rejected(fights):
+    from ufc_predictor.data.build import split_result_column
+
+    bad = pd.DataFrame({"fights_url": ["f1"], "result": ["draw"]})   # not "d"
+    with pytest.raises(ValueError):
+        split_result_column(bad)
