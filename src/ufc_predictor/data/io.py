@@ -1,4 +1,9 @@
-"""Reading raw source tables and writing processed pipeline outputs."""
+"""Reading raw source tables and writing processed pipeline outputs.
+
+The three raw tables read here are written by `data/source.refresh()`, which
+downloads the Kaggle source and converts it into this fixed format - so the
+rest of the pipeline doesn't depend on any one source's layout.
+"""
 
 import json
 

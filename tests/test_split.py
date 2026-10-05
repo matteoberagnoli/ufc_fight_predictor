@@ -113,7 +113,12 @@ def test_real_data_split_sizes():
     except (FileNotFoundError, OSError):
         pytest.skip("processed data not built yet - run notebook 02")
     train, validation, test = chronological_split(fights)
-    assert (len(train), len(validation), len(test)) == (2862, 941, 1471)
+    # train and validation are the same fights as with the previous data source.
+    # The test period runs to the end of the data, so it grows with each refresh:
+    # 1,471 fights to 2024-11-09, 2,448 once 2025-26 was added (data source v18).
+    assert (len(train), len(validation)) == (2862, 941)
+    assert len(test) >= 1471
+    assert test["event_date"].min() >= pd.Timestamp("2022-01-01")
 
 
 
