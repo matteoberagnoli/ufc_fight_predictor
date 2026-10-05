@@ -3,6 +3,7 @@ import optuna
 import pandas as pd
 import pytest
 
+from ufc_predictor.config import TEST_START
 from ufc_predictor.modeling.model import MODEL_PARAMS, make_model
 from ufc_predictor.modeling.tune import (
     check_no_test_years,
@@ -97,7 +98,8 @@ def test_folds_need_at_least_two():
 # ---------------------------------------------------------------- the guard
 
 def test_tuning_refuses_data_reaching_the_test_years():
-    fights = _toy(years=(2019, 2020, 2021, 2022))
+    first_test_year = pd.Timestamp(TEST_START).year
+    fights = _toy(years=tuple(range(first_test_year - 3, first_test_year + 1)))
     with pytest.raises(ValueError, match="test years"):
         check_no_test_years(fights)
     with pytest.raises(ValueError, match="test years"):

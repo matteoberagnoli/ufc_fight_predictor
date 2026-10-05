@@ -19,8 +19,14 @@ ERA_START = "2014-01-01"
 #   train       ERA_START -> VALIDATION_START   fit the model (and shrinkage alphas)
 #   validation  VALIDATION_START -> TEST_START  make every design decision here
 #   test        TEST_START -> end of data       look once, at the very end
-VALIDATION_START = "2020-01-01"
-TEST_START = "2022-01-01"
+#
+# Until Day 9 this was 2014-19 / 2020-21 / 2022+. When the data grew to 2026,
+# the test period swelled to 2,448 fights (39%) - far more than one honest
+# check needs (~900 fights already pin log loss to about +/-0.008) - while the
+# model learned nothing from the most recent years. So everything slid
+# forward. 2022-2024 had never been scored, so they were still clean to use.
+VALIDATION_START = "2023-01-01"
+TEST_START = "2025-01-01"
 
 # Shrinkage (see features/shrinkage.py): each estimate is pulled towards the
 # league-wide value over this many years before the fight. Tested: 1, 3 or 5

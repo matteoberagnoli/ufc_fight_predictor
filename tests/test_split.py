@@ -87,14 +87,15 @@ def test_split_puts_every_era_fight_in_exactly_one_period():
 
 
 def test_periods_run_forward_in_time():
-    fights = _dated(["2014-02-01", "2018-05-05", "2020-03-03", "2021-11-11", "2023-01-01"])
+    fights = _dated(["2014-02-01", "2020-05-05", "2023-03-03", "2024-11-11", "2025-06-01"])
     train, validation, test = chronological_split(fights)
+    assert len(train) and len(validation) and len(test)
     assert train["event_date"].max() < validation["event_date"].min()
     assert validation["event_date"].max() < test["event_date"].min()
 
 
 def test_split_defaults_come_from_config():
-    fights = _dated(["2015-01-01", "2020-06-01", "2023-06-01"])
+    fights = _dated(["2015-01-01", "2023-06-01", "2025-06-01"])
     default = chronological_split(fights)
     explicit = chronological_split(fights, era_start=ERA_START,
                                    validation_start=VALIDATION_START, test_start=TEST_START)
@@ -113,12 +114,12 @@ def test_real_data_split_sizes():
     except (FileNotFoundError, OSError):
         pytest.skip("processed data not built yet - run notebook 02")
     train, validation, test = chronological_split(fights)
-    # train and validation are the same fights as with the previous data source.
-    # The test period runs to the end of the data, so it grows with each refresh:
-    # 1,471 fights to 2024-11-09, 2,448 once 2025-26 was added (data source v18).
-    assert (len(train), len(validation)) == (2862, 941)
-    assert len(test) >= 1471
-    assert test["event_date"].min() >= pd.Timestamp("2022-01-01")
+    # Day 9 split: train 2014-2022, validation 2023-2024. The test period runs
+    # to the end of the data, so it grows with each refresh: 925 fights to
+    # 2026-09-26 (data source v18).
+    assert (len(train), len(validation)) == (4309, 1017)
+    assert len(test) >= 925
+    assert test["event_date"].min() >= pd.Timestamp(TEST_START)
 
 
 
@@ -129,11 +130,11 @@ def test_drop_undecided_keeps_only_fights_with_a_winner():
 
 
 def test_split_excludes_draws_and_no_contests():
-    fights = _dated(["2015-01-01", "2016-01-01", "2020-06-01", "2023-06-01"],
+    fights = _dated(["2015-01-01", "2016-01-01", "2023-06-01", "2025-06-01"],
                     outcomes=["fighter_a", "draw", "no_contest", "fighter_b"])
     train, validation, test = chronological_split(fights)
     assert list(train["fights_url"]) == ["f/0"]     # the 2016 draw is gone
-    assert list(validation["fights_url"]) == []     # the 2020 no-contest is gone
+    assert list(validation["fights_url"]) == []     # the 2023 no-contest is gone
     assert list(test["fights_url"]) == ["f/3"]
 
 

@@ -7,23 +7,25 @@ grid fine enough to be useful would be far too big to run.
 
 Two decisions shape everything here.
 
-**Where each trial is scored.** Not on the 2020-2021 validation years. Those
-are 941 fights, which carry about +/-1.7 points of accuracy noise, so trying
+**Where each trial is scored.** Not on the validation years. Those are
+~1,000 fights, which carry about +/-1.6 points of accuracy noise, so trying
 60 settings against them and keeping the best would mostly find whichever
 setting got lucky on those particular fights - and would spend the one clean
 check we have left before the test years. Instead each trial is scored by
 *expanding-window cross-validation inside the training years*:
 
-    fold 1   train 2014-2015        ->  score on 2016
-    fold 2   train 2014-2016        ->  score on 2017
-    fold 3   train 2014-2017        ->  score on 2018
-    fold 4   train 2014-2018        ->  score on 2019
+    fold 1   train 2014-2018        ->  score on 2019
+    fold 2   train 2014-2019        ->  score on 2020
+    fold 3   train 2014-2020        ->  score on 2021
+    fold 4   train 2014-2021        ->  score on 2022
 
-Always past -> future, never the reverse, because a model that trains on 2019
-to predict 2016 is being asked an easier question than the real one. Four
-folds give ~1,900 scored fights instead of 941, and a setting has to work in
-four different years rather than one, so a fluke is far less likely to win.
-2020-2021 then stays untouched, available to check the tuned model honestly.
+(the last four training years, whatever the split in config.py makes them).
+Always past -> future, never the reverse, because a model that trains on 2022
+to predict 2019 is being asked an easier question than the real one. Four
+folds give ~1,900 scored fights instead of ~1,000, and a setting has to work
+in four different years rather than one, so a fluke is far less likely to
+win. The validation years then stay untouched, available to check the tuned
+model honestly.
 
 **Log loss, not accuracy.** Accuracy only moves when a fight crosses the 50%
 line, so it steps in chunks and two genuinely different settings often tie.
@@ -37,8 +39,8 @@ against a differently-made prediction than the one you ship would optimise
 the wrong thing.
 
 One honest caveat: the shrinkage alphas in `alphas.json` were fitted on
-2014-2019 as a whole, so a fold scored on 2016 uses features built with an
-alpha that saw 2017-2019. That is a small leak - one scalar per feature,
+the training years as a whole, so a fold scored on 2019 uses features built
+with an alpha that saw 2020-2022. That is a small leak - one scalar per feature,
 shared by every trial, so it cannot favour one setting over another - but it
 means fold scores here read very slightly better than a true 2016 forecast
 would. Refitting alphas per fold would remove it, at several times the
@@ -77,7 +79,7 @@ def expanding_folds(fights: pd.DataFrame, n_folds: int = N_FOLDS) -> list[tuple[
     indices into `fights`.
 
     More folds means more scored fights, but the earliest fold then trains on
-    very little: with 4 folds the first one learns from ~960 fights, which may
+    less: with 4 folds the first one learns from ~2,350 fights (2014-2018), which may
     flatter settings that suit small data. 3 folds trades scored fights for
     more realistic training sizes.
     """
@@ -127,7 +129,7 @@ def suggest_params(trial: optuna.Trial) -> dict:
     tree weighs all 107 features at every split, so the trees end up alike -
     each one reaching for the same strongest feature first. Below 1.0 each
     split sees a random subset, which forces variety between trees. With far
-    more features than the ~2,900 rows can firmly support, this is the setting
+    more features than the ~4,300 training rows can firmly support, this is the setting
     most likely to help.
     """
     return {
@@ -227,7 +229,7 @@ def tune(fights: pd.DataFrame, n_trials: int = 60, n_folds: int = N_FOLDS,
     """Search for the settings with the lowest cross-validated log loss.
 
     Pass the *training* split only - `check_no_test_years` refuses anything
-    reaching the test years, and scoring on the 2020-2021 validation years is
+    reaching the test years, and scoring on the validation years is
     deliberately not what happens here (see the module docstring).
 
     `seed` fixes Optuna's own search; `model_seeds` are the model seeds each
