@@ -13,12 +13,19 @@ Three numbers, always on fights the model never trained on:
 
 Men's fights are reported first because they are what this project is for.
 The model still trains on all fights: tested on men's validation fights, the
-pooled model did better than one trained on men's fights only.
+pooled model did better than one trained on men's fights only - first with
+the untuned model (Day 7), then again with each version tuned separately
+(08_feature_questions.ipynb): pooled was better in 8 of 8 seeds in
+cross-validation and on validation.
+
+`compare` asks whether the *picks* got better; `compare_log_loss` asks
+whether the *probabilities* did, fight by fight. Log loss is the headline,
+so `compare_log_loss` is usually the test that matters.
 """
 
 import numpy as np
 import pandas as pd
-from scipy.stats import binomtest
+from scipy.stats import binomtest, norm
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss, roc_auc_score
 
@@ -67,6 +74,38 @@ def compare(y, p_new, p_old) -> dict:
     fixes, breaks = int((new_right & ~old_right).sum()), int((old_right & ~new_right).sum())
     p_value = binomtest(fixes, fixes + breaks, 0.5).pvalue if fixes + breaks else 1.0
     return {"fixes": fixes, "breaks": breaks, "p_value": float(p_value)}
+
+
+def per_fight_log_loss(y, p) -> np.ndarray:
+    """Each fight's own log loss: -log of the probability given to what happened."""
+    y = np.asarray(y, dtype=bool)
+    p = np.clip(np.asarray(p, dtype=float), 1e-6, 1 - 1e-6)
+    return -np.where(y, np.log(p), np.log(1 - p))
+
+
+def compare_log_loss(y, p_new, p_old) -> dict:
+    """Is the new set's log loss lower by more than luck? Measured fight by fight.
+
+    `compare` above only looks at fights whose pick changed, so it is blind to
+    a model that gets *more sure* about fights it already called right - which
+    is exactly what log loss rewards. This uses every fight:
+
+      1. for each fight, new log loss minus old log loss
+      2. `difference` is their average: below 0, the new set is better
+      3. `se` (standard error) is how much that average would wobble with a
+         different sample of the same number of fights
+      4. `p_value`: the chance of a difference at least this big, either way,
+         if the two sets were really equally good (normal approximation;
+         fine with hundreds of fights)
+
+    Paired on purpose: both sets are scored on the same fights, so how hard
+    the fights were cancels out and only the difference between the sets is
+    left. That makes it far more sensitive than comparing two totals.
+    """
+    d = per_fight_log_loss(y, p_new) - per_fight_log_loss(y, p_old)
+    se = d.std(ddof=1) / np.sqrt(len(d)) if len(d) > 1 else float("nan")
+    z = d.mean() / se if se > 0 else 0.0
+    return {"difference": float(d.mean()), "se": float(se), "p_value": float(2 * norm.sf(abs(z)))}
 
 
 # re-exported here so evaluation code has one obvious place to import it from;

@@ -11,7 +11,9 @@ from ufc_predictor.modeling.tune import (
     cv_log_loss,
     expanding_folds,
     load_params,
+    cv_predictions,
     out_of_fold_predictions,
+    seed_columns,
     save_params,
     suggest_params,
     tune,
@@ -37,6 +39,7 @@ def _toy(n_per_year: int = 120, years=(2014, 2015, 2016, 2017), seed: int = 0) -
     n = n_per_year * len(years)
     skill = rng.normal(0, 1, n)
     return pd.DataFrame({
+        "fights_url": [f"f/{i}" for i in range(n)],
         "event_date": pd.to_datetime(
             [f"{y}-{1 + i % 12:02d}-10" for y in years for i in range(n_per_year)]
         ),
@@ -168,6 +171,39 @@ def test_out_of_fold_predictions_match_cv_log_loss():
     expected = cv_log_loss(fights, SUBSAMPLED, n_folds=3, seeds=(0,))["log_loss"]
     assert log_loss(y, np.clip(p, 1e-6, 1 - 1e-6), labels=[False, True]) == pytest.approx(expected)
 
+
+
+def test_cv_predictions_keep_each_fight_and_each_seed():
+    fights = _toy()
+    cv = cv_predictions(fights, SUBSAMPLED, seeds=(0, 1), n_folds=3)
+    assert list(cv.columns) == ["fights_url", "year", "fighter_a_won", "p_seed_0", "p_seed_1"]
+    assert seed_columns(cv) == ["p_seed_0", "p_seed_1"]
+    assert cv["fights_url"].is_unique and len(cv) == 360
+    # the ids really are the scored fights: their years and labels match the table
+    table = fights.set_index("fights_url").loc[cv["fights_url"]]
+    assert (table["event_date"].dt.year.to_numpy() == cv["year"].to_numpy()).all()
+    assert (table["fighter_a_won"].astype(bool).to_numpy() == cv["fighter_a_won"].to_numpy()).all()
+
+
+def test_cv_predictions_score_what_cv_log_loss_reports_seed_by_seed():
+    from sklearn.metrics import log_loss
+    fights = _toy()
+    cv = cv_predictions(fights, SUBSAMPLED, seeds=(0, 1), n_folds=3)
+    expected = cv_log_loss(fights, SUBSAMPLED, n_folds=3, seeds=(0, 1))["log_loss_by_seed"]
+    for column, want in zip(seed_columns(cv), expected):
+        got = log_loss(cv["fighter_a_won"], np.clip(cv[column], 1e-6, 1 - 1e-6), labels=[False, True])
+        assert got == pytest.approx(want)
+
+
+def test_cv_predictions_of_a_subset_match_up_by_fight_id():
+    """A version trained on fewer rows scores fewer fights; the ids line them up."""
+    fights = _toy()
+    subset = fights[fights["diff_static_age"] > 0].reset_index(drop=True)
+    full = cv_predictions(fights, SUBSAMPLED, seeds=(0,), n_folds=3)
+    part = cv_predictions(subset, SUBSAMPLED, seeds=(0,), n_folds=3)
+    assert set(part["fights_url"]) <= set(full["fights_url"])
+    matched = full.set_index("fights_url").loc[part["fights_url"]]
+    assert (matched["fighter_a_won"].to_numpy() == part["fighter_a_won"].to_numpy()).all()
 
 # ------------------------------------------------------------- the search
 

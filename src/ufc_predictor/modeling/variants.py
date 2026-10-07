@@ -10,6 +10,12 @@ The model handles NaN natively, so "raw" is a genuine contender. Shrinkage was
 chosen because it predicts each fighter's *next fight* better; whether it also
 helps predict *who wins* is a separate question, and this is how it gets
 answered - on the validation years only.
+
+The answer with each version tuned (Day 9, 08_feature_questions.ipynb): a
+close call where the two tests disagree. Raw was better in cross-validation
+in 8 of 8 seeds, but by 0.0019 (well inside the noise); shrunk was better on
+validation by 0.0050 (p = 0.10). Validation contradicting cross-validation
+means the decision rule keeps shrinkage.
 """
 
 import pandas as pd

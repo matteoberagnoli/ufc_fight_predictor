@@ -1,0 +1,14 @@
+{
+  "by_kind": {
+    "archive": 6061,
+    "snapshot": 51
+  },
+  "dataset": "jerzyszocik/ufc-betting-odds-daily-dataset",
+  "downloaded_on": "2026-10-05",
+  "fights": 6112,
+  "first_event": "2010-03-21",
+  "last_event": "2025-09-06",
+  "raw_file": "UFC_betting_odds.csv",
+  "raw_sha256": "8905258dc4c4cb5839af2f65f85844af02cfbbbdff692c70f8d682716815497b",
+  "version": 259
+}

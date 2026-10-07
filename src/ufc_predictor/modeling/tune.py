@@ -204,6 +204,40 @@ def cv_log_loss(fights: pd.DataFrame, params: dict,
     }
 
 
+def cv_predictions(fights: pd.DataFrame, params: dict, seeds=range(8),
+                   n_folds: int = N_FOLDS) -> pd.DataFrame:
+    """Every scored fight of the expanding-window CV, with one prediction per model seed.
+
+    One row per scored fight: `fights_url`, `year`, `fighter_a_won`, then
+    `p_seed_0`, `p_seed_1`, ... Each prediction comes from a model that never
+    saw that fight's year.
+
+    Keeping the fight's id is what makes two versions comparable fight by
+    fight - even versions trained on different rows (men's fights only, say),
+    whose scored fights then have to be matched up by id rather than by
+    position. Keeping each seed separate lets a comparison count in how many
+    seeds one version beat the other.
+    """
+    check_no_test_years(fights)
+    folds = expanding_folds(fights, n_folds=n_folds)
+    rows = np.concatenate([score_rows for _, score_rows in folds])
+    out = pd.DataFrame({
+        "fights_url": fights["fights_url"].to_numpy()[rows],
+        "year": fights["event_date"].dt.year.to_numpy()[rows],
+    })
+    for i, s in enumerate(seeds):
+        actual, predicted, _ = _one_seed(fights, params | {"random_state": s}, folds)
+        if i == 0:
+            out["fighter_a_won"] = actual
+        out[f"p_seed_{s}"] = predicted
+    return out
+
+
+def seed_columns(predictions: pd.DataFrame) -> list[str]:
+    """The per-seed prediction columns of a cv_predictions frame."""
+    return [c for c in predictions.columns if c.startswith("p_seed_")]
+
+
 def out_of_fold_predictions(fights: pd.DataFrame, params: dict, seeds=range(8),
                             n_folds: int = N_FOLDS) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """(actual, predicted, year) for every scored fight of the expanding-window CV.
@@ -214,13 +248,10 @@ def out_of_fold_predictions(fights: pd.DataFrame, params: dict, seeds=range(8),
     model's own training fights look more confident and more correct than
     they really are, so they would teach a calibrator the wrong lesson.
     """
-    check_no_test_years(fights)
-    folds = expanding_folds(fights, n_folds=n_folds)
-    runs = [_one_seed(fights, params | {"random_state": s}, folds) for s in seeds]
-    actual = runs[0][0]
-    predicted = np.mean([p for _, p, _ in runs], axis=0)
-    year = np.concatenate([fights.iloc[rows]["event_date"].dt.year.to_numpy() for _, rows in folds])
-    return actual, predicted, year
+    predictions = cv_predictions(fights, params, seeds=seeds, n_folds=n_folds)
+    return (predictions["fighter_a_won"].to_numpy(),
+            predictions[seed_columns(predictions)].mean(axis=1).to_numpy(),
+            predictions["year"].to_numpy())
 
 
 def tune(fights: pd.DataFrame, n_trials: int = 60, n_folds: int = N_FOLDS,

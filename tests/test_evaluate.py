@@ -5,9 +5,11 @@ import pytest
 from ufc_predictor.modeling.evaluate import (
     calibration_table,
     compare,
+    compare_log_loss,
     fit_baseline,
     group_importance,
     is_womens_fight,
+    per_fight_log_loss,
     predict_baseline,
     score,
     scorecard,
@@ -113,3 +115,42 @@ def test_calibration_table_covers_every_fight_in_rising_order():
     assert table["fights"].sum() == 1_000
     assert table["predicted"].is_monotonic_increasing
     assert (table["actual"] - table["predicted"]).abs().max() < 0.1
+
+
+def test_per_fight_log_loss_averages_to_log_loss():
+    y = np.array([True, False, True, True])
+    p = np.array([0.7, 0.4, 0.2, 0.55])
+    assert per_fight_log_loss(y, p).mean() == pytest.approx(score(y, p)["log_loss"])
+    assert per_fight_log_loss(y, p)[0] == pytest.approx(-np.log(0.7))
+    assert per_fight_log_loss(y, p)[1] == pytest.approx(-np.log(0.6))   # B won: A's 40% means 60% on B
+
+
+def test_compare_log_loss_of_identical_predictions_is_no_difference():
+    rng = np.random.default_rng(0)
+    y, p = rng.random(200) < 0.5, rng.uniform(0.3, 0.7, 200)
+    result = compare_log_loss(y, p, p)
+    assert result["difference"] == 0 and result["p_value"] == 1.0
+
+
+def test_compare_log_loss_difference_is_the_log_loss_gap_and_flips_sign():
+    rng = np.random.default_rng(1)
+    truth = rng.uniform(0.2, 0.8, 500)
+    y = rng.random(500) < truth
+    sharp, vague = truth, np.full(500, 0.5)
+    better = compare_log_loss(y, sharp, vague)
+    assert better["difference"] == pytest.approx(score(y, sharp)["log_loss"] - score(y, vague)["log_loss"])
+    assert better["difference"] < 0 and better["p_value"] < 0.01
+    worse = compare_log_loss(y, vague, sharp)
+    assert worse["difference"] == pytest.approx(-better["difference"])
+    assert worse["p_value"] == pytest.approx(better["p_value"])
+
+
+def test_compare_log_loss_sees_what_compare_cannot():
+    """More confident on the same picks: no pick changes, so McNemar sees nothing,
+    but log loss - and this test - do."""
+    rng = np.random.default_rng(2)
+    truth = rng.uniform(0.55, 0.85, 400)
+    y = rng.random(400) < truth
+    timid, bold = np.full(400, 0.55), truth
+    assert compare(y, bold, timid) == {"fixes": 0, "breaks": 0, "p_value": 1.0}
+    assert compare_log_loss(y, bold, timid)["p_value"] < 0.05

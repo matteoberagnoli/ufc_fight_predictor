@@ -28,12 +28,27 @@ what matters for range control.
 `same_stance` is a fact about the *matchup*, not either fighter alone, so it
 isn't diffed the way a number would be - "is this an open-stance fight" is
 identical information regardless of which fighter got randomly labelled A or
-B. A directional flag like "is fighter_a the southpaw facing an orthodox
-opponent" was deliberately not built: it would bake in an assumed direction
-of advantage that should be left for the model to discover, not hard-coded.
+B. What it can't say is *which* corner holds the rarer stance in a mixed
+fight. A flag like "fighter_a is the southpaw facing an orthodox opponent"
+would bake in an assumed direction of advantage, so `attach_stance_features`
+uses signed differences instead (see there): they say who is the southpaw
+and leave the direction of any edge for the model to discover.
+
+Tested on Day 9 (08_feature_questions.ipynb) and **not adopted**: with its
+own tuned settings, the model with the stance columns was slightly worse in
+cross-validation (better in 1 of 8 seeds) and slightly better on validation,
+both by noise-sized amounts. That matches the raw data - southpaws beat
+orthodox fighters 52.2% of the time in 2014-2022, inside the coin-flip range.
+So `attach_stance_features` is not part of features/pipeline.py; it stays
+here so the comparison can be re-run.
 """
 
 import pandas as pd
+
+# The stances that give a corner something its opponent may rarely face.
+# Orthodox is the default (74% of appearances); "Open Stance" and "Sideways"
+# are too rare to learn from (30 appearances between them) and count as neither.
+SIDED_STANCES = ("Southpaw", "Switch")
 
 
 def attach_static_features(featured: pd.DataFrame, fighters: pd.DataFrame) -> pd.DataFrame:
@@ -59,4 +74,30 @@ def attach_static_features(featured: pd.DataFrame, fighters: pd.DataFrame) -> pd
     out["same_stance"] = (out["fighter_a_stance"] == out["fighter_b_stance"]).astype("boolean")
     out.loc[out["fighter_a_stance"].isna() | out["fighter_b_stance"].isna(), "same_stance"] = pd.NA
 
+    return out
+
+
+def attach_stance_features(featured: pd.DataFrame) -> pd.DataFrame:
+    """Add diff_static_southpaw and diff_static_switch: which corner has the rarer stance.
+
+    Each is fighter A's indicator minus fighter B's:
+
+        A southpaw, B orthodox    diff_static_southpaw = +1
+        A orthodox, B southpaw                         = -1
+        both or neither                                =  0
+
+    A signed difference carries the direction (*who* is the southpaw) without
+    assuming which way any edge goes: the model learns whether +1 helps. It
+    also flips sign when the corners swap, like every other diff_ column, so
+    model.mirror handles it with no special case. Unknown stance on either
+    side gives NaN, the same rule as same_stance.
+
+    Needs fighter_a_stance / fighter_b_stance, which attach_static_features adds.
+    """
+    out = featured.copy()
+    a, b = out["fighter_a_stance"], out["fighter_b_stance"]
+    known = a.notna() & b.notna()
+    for stance in SIDED_STANCES:
+        diff = a.eq(stance).astype("float64") - b.eq(stance).astype("float64")
+        out[f"diff_static_{stance.lower()}"] = diff.where(known)
     return out
