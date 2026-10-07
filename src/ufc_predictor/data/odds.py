@@ -6,25 +6,35 @@ bookmakers' odds into one market probability per fight, matched exactly to
 our fights. It is a yardstick only, never a model feature.
 
 Source: the Kaggle dataset `jerzyszocik/ufc-betting-odds-daily-dataset`,
-refreshed daily. Every row carries the ufcstats fight URL and both fighters'
-ufcstats URLs, so odds join our fights by id - no fuzzy name matching. Two
-kinds of rows:
+refreshed daily. Only the rows that carry the ufcstats fight URL and both
+fighters' ufcstats URLs are used (36% of the file), so odds join our fights
+by id - no fuzzy name matching. Those rows are of two kinds:
 
   * archive rows (source "zewnetrzne", Polish for "external"): one line per
-    fight for 2010 to mid-2025, imported in one batch. Checked on Day 9: 96%
-    are identical to the odds in Kaggle's mdabbert/ultimate-ufc-dataset,
+    fight from 2010-03 to 2024-12, imported in one batch. Checked on Day 9:
+    96% are identical to the odds in Kaggle's mdabbert/ultimate-ufc-dataset,
     which scrapes bestfightodds.com. Its documentation doesn't say when the
     line is taken, but on the fights both datasets cover, it matches the
     bookmakers' consensus from the final day before the fight best (2.2
     points apart on average, against 5.5 points two weeks out): near-closing
     lines, the standard benchmark. Their `adding_date` is the import date,
     not when the odds were quoted.
-  * snapshot rows: from mid-2025, many bookmakers' prices scraped again and
-    again as fight night approaches. Only quotes taken before the event's
+  * snapshot rows: many bookmakers' prices scraped again and again as fight
+    night approaches. With URLs they exist only for the August and
+    September 2025 events (51 fights). Only quotes taken before the event's
     date (UTC) count - a quote from fight day could already know a late
     withdrawal or the result - and each bookmaker's last such quote is used.
     When a fight has snapshots, their consensus is used rather than the
     archive line.
+
+The other 64% of the file - snapshots for events from 2025-09-13 on - has no
+URLs and is dropped here. (A single Polish bookmaker's 150 lines for
+2025-03 to 2025-07 were imported after those fights and are dropped too:
+their timing is unknown.) So this source covers 2010-2024 fully and almost
+nothing after: of the 925 test-year fights, 51 get odds. For the test years,
+mdabbert/ultimate-ufc-dataset has odds for 98% of its fights to 2026-03-28
+(about two thirds of the test fights); using it means matching on date and
+fighter names, which is not built yet.
 
 From odds to a probability, for one bookmaker's quote:
 
