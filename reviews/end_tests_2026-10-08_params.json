@@ -1,0 +1,46 @@
+{
+ "chosen_model": "B2 + significant faced",
+ "params": {
+  "learning_rate": 0.03354042540292952,
+  "max_iter": 850,
+  "max_leaf_nodes": 4,
+  "min_samples_leaf": 52,
+  "l2_regularization": 25.812431306819327,
+  "max_features": 0.39282873851184796
+ },
+ "all_option_B_params": {
+  "keep_one_window": {
+   "learning_rate": 0.017002753650137512,
+   "max_iter": 850,
+   "max_leaf_nodes": 4,
+   "min_samples_leaf": 23,
+   "l2_regularization": 0.24340706474925053,
+   "max_features": 0.5494193903350048
+  },
+  "keep_cluster_two_windows (C)": {
+   "learning_rate": 0.029973123273180337,
+   "max_iter": 350,
+   "max_leaf_nodes": 6,
+   "min_samples_leaf": 7,
+   "l2_regularization": 25.204081485057085,
+   "max_features": 0.33708751685435306
+  },
+  "B1 + total faced": {
+   "learning_rate": 0.013132254346827878,
+   "max_iter": 750,
+   "max_leaf_nodes": 6,
+   "min_samples_leaf": 11,
+   "l2_regularization": 21.139236865746327,
+   "max_features": 0.36060089354367314
+  },
+  "B2 + significant faced": {
+   "learning_rate": 0.03354042540292952,
+   "max_iter": 850,
+   "max_leaf_nodes": 4,
+   "min_samples_leaf": 52,
+   "l2_regularization": 25.812431306819327,
+   "max_features": 0.39282873851184796
+  }
+ },
+ "window": "fixed 8 fights, one window per stat (replaces career + last-3 columns)"
+}
