@@ -31,7 +31,7 @@ The other 64% of the file - snapshots for events from 2025-09-13 on - has no
 URLs and is dropped here. (A single Polish bookmaker's 150 lines for
 2025-03 to 2025-07 were imported after those fights and are dropped too:
 their timing is unknown.) So this source covers 2010-2024 fully and almost
-nothing after: of the 925 test-year fights, 51 get odds. For the test years,
+nothing after: of the 950 test-year fights (data v20), 51 get odds. For the test years,
 mdabbert/ultimate-ufc-dataset has odds for 98% of its fights to 2026-03-28
 (about two thirds of the test fights); using it means matching on date and
 fighter names, which is not built yet.

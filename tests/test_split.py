@@ -116,7 +116,7 @@ def test_real_data_split_sizes():
     train, validation, test = chronological_split(fights)
     # Day 9 split: train 2014-2022, validation 2023-2024. The test period runs
     # to the end of the data, so it grows with each refresh: 925 fights to
-    # 2026-09-26 (data source v18).
+    # 2026-09-26 (data source v18), 950 to 2026-10-10 (v20).
     assert (len(train), len(validation)) == (4309, 1017)
     assert len(test) >= 925
     assert test["event_date"].min() >= pd.Timestamp(TEST_START)

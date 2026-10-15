@@ -1,12 +1,12 @@
 {
   "dataset": "scarekrow/ufc-data",
-  "downloaded_on": "2026-10-05",
-  "events": 791,
-  "fighters": 2763,
-  "fights": 8911,
+  "downloaded_on": "2026-10-15",
+  "events": 793,
+  "fighters": 2767,
+  "fights": 8937,
   "file": "UFC_full_data_silver_v2.csv",
   "first_event": "1994-03-11",
-  "last_event": "2026-09-26",
-  "sha256": "e36ab4b08b89f4c987c6f06925721e3a10742a9eb4b1fdab25217f4ac7549087",
-  "version": 18
+  "last_event": "2026-10-10",
+  "sha256": "e5a70a38031b45e8fa277f8bf7969f66d9db9793ecde5a02c3d4fdb9cbd1c719",
+  "version": 20
 }

@@ -116,7 +116,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1446611559068713,http://www.ufcstats.com/fighter-details/523af801b3429015,Allan Zuniga,1992-04-04,170.18,155.0,177.8,Orthodox
 3074215264777938,http://www.ufcstats.com/fighter-details/aebfb84d1f6d2d8c,Allen Berube,1974-08-25,172.72,155.0,,Orthodox
 2987845614363786,http://www.ufcstats.com/fighter-details/a9d6e047ce48ab63,Allen Crowder,1989-11-08,190.5,245.0,193.04,Orthodox
-2034613807208601,http://www.ufcstats.com/fighter-details/73a78713bd899f4c,Allen Frye Jr.,1998-04-15,195.58,265.0,203.2,Orthodox
+2034613807208601,http://www.ufcstats.com/fighter-details/73a78713bd899f4c,Allen Frye Jr.,1998-04-15,195.58,255.0,203.2,Orthodox
 2895423641385078,http://www.ufcstats.com/fighter-details/a495f599e787614f,Alonzo Menifield,1987-10-18,182.88,205.0,193.04,Orthodox
 3967731858777079,http://www.ufcstats.com/fighter-details/e18a19001a3f7c7d,Alptekin Ozkilic,1986-03-27,165.1,125.0,165.1,Orthodox
 2055219089884838,http://www.ufcstats.com/fighter-details/74d35fbc9c6a61bd,Alvaro Herrera Mendoza,1990-05-14,182.88,155.0,187.96,Orthodox
@@ -180,6 +180,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1324315536083090,http://www.ufcstats.com/fighter-details/4b4753d19489297f,Anthony Perosh,1972-10-05,190.5,205.0,190.5,Orthodox
 3583755866328132,http://www.ufcstats.com/fighter-details/cbb682f5fcc44bfc,Anthony Pettis,1987-01-27,177.8,155.0,182.88,Orthodox
 1463566572323863,http://www.ufcstats.com/fighter-details/5331b25a60417ffb,Anthony Rocco Martin,1989-12-11,182.88,170.0,185.42,Orthodox
+1198033001899760,http://www.ufcstats.com/fighter-details/4419acb81e6f0ea4,Anthony Romero,,165.1,145.0,167.64,Southpaw
 3743415333487619,http://www.ufcstats.com/fighter-details/d4c9dcd330403612,Anthony Smith,1988-07-26,193.04,205.0,193.04,Orthodox
 2560598711553362,http://www.ufcstats.com/fighter-details/918d9d89d4d52acc,Anthony Torres,1978-07-31,172.72,170.0,,Orthodox
 3154049700604708,http://www.ufcstats.com/fighter-details/b34976c022b24568,Anthony Wint,1995-09-14,180.34,231.0,198.12,Orthodox
@@ -346,6 +347,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 2565658547663994,http://www.ufcstats.com/fighter-details/91d73ee59347ac16,Brodie Farber,1980-07-05,185.42,170.0,,Orthodox
 1182226497709682,http://www.ufcstats.com/fighter-details/4333a8e70a672eb7,Brogan Walker,1988-08-02,162.56,125.0,170.18,Switch
 2192397993405020,http://www.ufcstats.com/fighter-details/7c9f96f9a6a5cd50,Brok Weaver,1991-12-05,182.88,155.0,185.42,Southpaw
+1903928960635744,http://www.ufcstats.com/fighter-details/6c39d016053601ee,Bruce Whitehead,1996-12-14,177.8,170.0,185.42,Switch
 1991808618171819,http://www.ufcstats.com/fighter-details/7138a15258dabf20,Bruna Brasil,1993-09-07,167.64,115.0,165.1,Orthodox
 535573105637084,http://www.ufcstats.com/fighter-details/1e719d4b676dc19a,Brunno Ferreira,1992-11-04,177.8,185.0,182.88,Orthodox
 1900032301609578,http://www.ufcstats.com/fighter-details/6c011be66326ad97,Bruno Korea,1991-06-28,167.64,135.0,165.1,
@@ -811,7 +813,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 228231694898233,http://www.ufcstats.com/fighter-details/0cf935519d439ba6,Enson Inoue,1967-04-15,177.8,210.0,,Orthodox
 3021204483137752,http://www.ufcstats.com/fighter-details/abbc4fc02e0d84b3,Eric Martin,,,,,
 2621840339520690,http://www.ufcstats.com/fighter-details/9508cc6184cb2450,Eric McConico,1990-05-09,182.88,185.0,195.58,Southpaw
-1771394806431349,http://www.ufcstats.com/fighter-details/64b12fe31be7560c,Eric Nolan,1997-09-13,187.96,170.0,187.96,Orthodox
+1771394806431349,http://www.ufcstats.com/fighter-details/64b12fe31be7560c,Eric Nolan,1997-09-13,182.88,170.0,185.42,Orthodox
 4321019823324947,http://www.ufcstats.com/fighter-details/f59f1d3a2ff13edd,Eric Schafer,1977-09-20,190.5,185.0,193.04,Orthodox
 2828377470973533,http://www.ufcstats.com/fighter-details/a0c64f272b65d441,Eric Shelton,1991-02-02,167.64,125.0,172.72,Orthodox
 3261584925437045,http://www.ufcstats.com/fighter-details/b9664eae2ac75262,Eric Spicely,1986-09-29,185.42,185.0,185.42,Orthodox
@@ -855,7 +857,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1987929299842107,http://www.ufcstats.com/fighter-details/71002dbc1743b9a7,Felipe Arantes,1988-02-09,172.72,135.0,185.42,Orthodox
 1473414693796807,http://www.ufcstats.com/fighter-details/53c10176e3bc7416,Felipe Bunes,1989-10-29,170.18,125.0,175.26,Orthodox
 3864511246479204,http://www.ufcstats.com/fighter-details/dbac0a413af64bbe,Felipe Colares,1994-03-31,172.72,145.0,175.26,Orthodox
-4035488033394541,http://www.ufcstats.com/fighter-details/e564146b9cf6dbef,Felipe Franco,2001-01-22,185.42,205.0,193.04,Orthodox
+4035488033394541,http://www.ufcstats.com/fighter-details/e564146b9cf6dbef,Felipe Franco,2001-01-22,185.42,205.0,195.58,Orthodox
 2574434956947648,http://www.ufcstats.com/fighter-details/9256f591b30c073e,Felipe Lima,1998-05-07,167.64,145.0,172.72,Orthodox
 2613023943083807,http://www.ufcstats.com/fighter-details/948880beac71f028,Felipe Olivieri,1985-04-12,175.26,155.0,,Orthodox
 478880994000738,http://www.ufcstats.com/fighter-details/1b38a2b897f6209c,Felipe Silva,1984-05-08,182.88,155.0,195.58,Orthodox
@@ -877,7 +879,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1641115036040572,http://www.ufcstats.com/fighter-details/5d495dec23d7c68e,Francis Marshall,1999-03-03,175.26,155.0,182.88,Orthodox
 2480759830782286,http://www.ufcstats.com/fighter-details/8d03ce87ca14e778,Francis Ngannou,1986-09-05,193.04,250.0,210.82,Orthodox
 3618333403790182,http://www.ufcstats.com/fighter-details/cdadae5363b66eef,Francisco Figueiredo,1989-10-23,167.64,125.0,172.72,Southpaw
-1005009676437753,http://www.ufcstats.com/fighter-details/3920d0cc288f9b0d,Francisco Prado,2002-06-16,177.8,170.0,175.26,Orthodox
+1005009676437753,http://www.ufcstats.com/fighter-details/3920d0cc288f9b0d,Francisco Prado,2002-06-16,177.8,155.0,175.26,Orthodox
 2227931053547315,http://www.ufcstats.com/fighter-details/7ea4a9f07df33a45,Francisco Rivera,1981-10-08,172.72,135.0,177.8,Orthodox
 2667877965391206,http://www.ufcstats.com/fighter-details/97a6bbe6e6566a94,Francisco Trevino,1981-12-17,175.26,155.0,177.8,Orthodox
 2958251686893025,http://www.ufcstats.com/fighter-details/a8283a4f415e1eb9,Francisco Trinaldo,1978-08-24,175.26,170.0,177.8,Southpaw
@@ -927,7 +929,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1908624770287882,http://www.ufcstats.com/fighter-details/6c7e25571490aa3b,George Sullivan,1981-03-13,182.88,170.0,185.42,Orthodox
 1777275136957084,http://www.ufcstats.com/fighter-details/6506c1d34da9c013,Georges St-Pierre,1981-05-19,180.34,185.0,193.04,Orthodox
 3460720598242774,http://www.ufcstats.com/fighter-details/c4b81cdecd5d6abe,Gerald Harris,1979-11-19,180.34,185.0,195.58,Southpaw
-1878634844732487,http://www.ufcstats.com/fighter-details/6ac9bc2953c47345,Gerald Meerschaert,1987-12-18,185.42,185.0,195.58,Southpaw
+1878634844732487,http://www.ufcstats.com/fighter-details/6ac9bc2953c47345,Gerald Meerschaert,1987-12-18,185.42,205.0,195.58,Southpaw
 87548213907219,http://www.ufcstats.com/fighter-details/04f9fe830cf13482,Gerald Strebendt,1979-03-01,175.26,155.0,,Orthodox
 2761696961602045,http://www.ufcstats.com/fighter-details/9cfbfae5fa1fdd93,Geraldo de Freitas,1991-09-30,170.18,135.0,182.88,Orthodox
 512620812690242,http://www.ufcstats.com/fighter-details/1d239d571e342453,Germaine de Randamie,1984-04-24,175.26,135.0,180.34,Orthodox
@@ -1628,6 +1630,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 1415681848179154,http://www.ufcstats.com/fighter-details/5078e1dacf9d25f4,Luana Santos,2000-04-16,167.64,135.0,170.18,Orthodox
 305127734855111,http://www.ufcstats.com/fighter-details/11583163f45c7b31,Lucas Alexander,1995-07-28,180.34,145.0,185.42,Orthodox
 1988951988884937,http://www.ufcstats.com/fighter-details/710f0f8c5d5c9d41,Lucas Almeida,1991-01-31,180.34,145.0,180.34,Orthodox
+578361946166165,http://www.ufcstats.com/fighter-details/20e04625a5395a06,Lucas Armand,1995-10-26,187.96,264.0,198.12,Orthodox
 908776566979455,http://www.ufcstats.com/fighter-details/33a8708747b7f943,Lucas Brennan,2000-06-03,177.8,155.0,182.88,Southpaw
 1089763040472300,http://www.ufcstats.com/fighter-details/3df223aeaacecf3f,Lucas Fernando,1997-01-10,190.5,205.0,203.2,Orthodox
 2042048657731832,http://www.ufcstats.com/fighter-details/7413b80dbb0f8f9f,Lucas Martins,1988-11-11,182.88,145.0,182.88,Southpaw
@@ -2027,7 +2030,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 774127898735366,http://www.ufcstats.com/fighter-details/2c010b26a3306969,Orion Cosce,1994-07-15,180.34,170.0,180.34,Switch
 2933700287386997,http://www.ufcstats.com/fighter-details/a6c2f5381d575920,Orlando Wiet,1965-10-24,177.8,170.0,,Southpaw
 509609939084735,http://www.ufcstats.com/fighter-details/1cf7ccf64a5bf24e,Oskar Piechota,1990-01-24,182.88,185.0,193.04,Southpaw
-3255811820775198,http://www.ufcstats.com/fighter-details/b9124c308671e303,Otari Tanzilovi,1998-04-09,175.26,145.0,177.8,Orthodox
+3255811820775198,http://www.ufcstats.com/fighter-details/b9124c308671e303,Otari Tanzilovi,1998-04-09,175.26,135.0,177.8,Orthodox
 4188658066285335,http://www.ufcstats.com/fighter-details/ee18ff42063174df,Ottman Azaitar,1990-02-20,172.72,155.0,180.34,Switch
 1246983924294755,http://www.ufcstats.com/fighter-details/46e2011d92463b7e,Oumar Sy,1995-11-21,193.04,205.0,210.82,Orthodox
 1422460706385945,http://www.ufcstats.com/fighter-details/50db8711c70196cd,Ovince Saint Preux,1983-04-08,190.5,205.0,203.2,Southpaw
@@ -2118,7 +2121,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 152215805188356,http://www.ufcstats.com/fighter-details/08a7080ff5904661,Rafael Carino,,203.2,245.0,,Orthodox
 1620448419952025,http://www.ufcstats.com/fighter-details/5c1ca0c72b599a3c,Rafael Cavalcante,1980-04-14,185.42,205.0,187.96,Orthodox
 169618046279636,http://www.ufcstats.com/fighter-details/09a4447655fd4b7b,Rafael Cerqueira,1990-03-15,190.5,205.0,193.04,Southpaw
-1868034844197654,http://www.ufcstats.com/fighter-details/6a2f7c151031653d,Rafael Dos Anjos,1984-10-26,172.72,170.0,177.8,Southpaw
+1868034844197654,http://www.ufcstats.com/fighter-details/6a2f7c151031653d,Rafael Dos Anjos,1984-10-26,172.72,155.0,177.8,Southpaw
 2309342339628887,http://www.ufcstats.com/fighter-details/83455a9d17f57dae,Rafael Estevam,1996-08-10,172.72,135.0,175.26,Orthodox
 3519860127143827,http://www.ufcstats.com/fighter-details/c814b4c899793af6,Rafael Fiziev,1993-03-05,172.72,155.0,180.34,Switch
 241501168678101,http://www.ufcstats.com/fighter-details/0dba4df5f34d5ff0,Rafael Natal,1982-12-25,182.88,185.0,195.58,Orthodox
@@ -2219,6 +2222,7 @@ fighter_id,fighter_url,fighter_name,fighter_dob,fighter_height_cm,fighter_weight
 522254255563001,http://www.ufcstats.com/fighter-details/1dafccb62a0f98ec,Robert Whiteford,1983-04-12,175.26,145.0,175.26,Southpaw
 3959649868110526,http://www.ufcstats.com/fighter-details/e1147d3d2dabe1ce,Robert Whittaker,1990-12-20,182.88,205.0,185.42,Orthodox
 385531047325362,http://www.ufcstats.com/fighter-details/15ea371202eb25e1,Roberto Romero,2000-01-30,172.72,145.0,177.8,Orthodox
+1585675280960978,http://www.ufcstats.com/fighter-details/5a229cbd9cdd28ca,Roberto Soldic,1995-01-25,177.8,170.0,185.42,Southpaw
 579167851905047,http://www.ufcstats.com/fighter-details/20ec0061400178ca,Roberto Traven,1968-09-16,190.5,227.0,,Orthodox
 230628531504872,http://www.ufcstats.com/fighter-details/0d1c163b206e8c5f,Rocky Lee,1987-04-08,175.26,145.0,,Orthodox
 3259044578837484,http://www.ufcstats.com/fighter-details/b9415726dc3ec526,Rodney Wallace,1981-11-21,175.26,205.0,182.88,Switch
