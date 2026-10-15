@@ -66,7 +66,8 @@ def attach_static_features(featured: pd.DataFrame, fighters: pd.DataFrame) -> pd
         out = out.merge(side_static, on=f"{side}_id", how="left", validate="many_to_one")
         out[f"{side}_ape_index_cm"] = out[f"{side}_reach_cm"] - out[f"{side}_height_cm"]
 
-    out["diff_static_age"] = out["fighter_a_age_during"] - out["fighter_b_age_during"]
+    # named "age gap" (Day 12): it is a difference, and the model never sees either age itself
+    out["diff_static_age_gap"] = out["fighter_a_age_during"] - out["fighter_b_age_during"]
     out["diff_static_height_cm"] = out["fighter_a_height_cm"] - out["fighter_b_height_cm"]
     out["diff_static_reach_cm"] = out["fighter_a_reach_cm"] - out["fighter_b_reach_cm"]
     out["diff_static_ape_index_cm"] = out["fighter_a_ape_index_cm"] - out["fighter_b_ape_index_cm"]

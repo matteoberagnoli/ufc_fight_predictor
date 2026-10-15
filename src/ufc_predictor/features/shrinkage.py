@@ -42,7 +42,7 @@ from ufc_predictor.data.io import load_processed_json, save_processed_json
 class RatioFeature:
     """One shrunk column: shrink(total / evidence) over a fighter's earlier fights."""
 
-    name: str             # output column, e.g. "takedowns_absorbed_accuracy_career_avg"
+    name: str             # output column, e.g. "takedowns_success_rate_against_career_avg"
     total: str            # history column added up on top, e.g. "takedowns_absorbed"
     evidence: str         # history column added up underneath, e.g. "takedown_atts_absorbed"
     league_total: str     # the fighter's-own-side version of the same stat: league-wide,

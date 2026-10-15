@@ -21,7 +21,7 @@ means the decision rule keeps shrinkage.
 import pandas as pd
 
 from ufc_predictor.features.pipeline import build_featured_table
-from ufc_predictor.features.rolling import PAIRED_STATS, ROLLING_WINDOW, no_shrinkage
+from ufc_predictor.features.rolling import PAIRED_STATS, ROLLING_WINDOW, accuracy_column, no_shrinkage
 
 
 def zero_fill_undefined_accuracy(featured: pd.DataFrame) -> pd.DataFrame:
@@ -36,7 +36,7 @@ def zero_fill_undefined_accuracy(featured: pd.DataFrame) -> pd.DataFrame:
     for landed, attempted in PAIRED_STATS.items():
         for d in ("", "_absorbed"):
             for window in ("career_avg", f"last{ROLLING_WINDOW}_avg"):
-                accuracy = f"{landed}{d}_accuracy_{window}"
+                accuracy = accuracy_column(landed, bool(d), window)
                 attempts = f"{attempted}{d}_per_min_{window}"
                 for side in ("fighter_a", "fighter_b"):
                     a, r = f"{side}_prior_{accuracy}", f"{side}_prior_{attempts}"

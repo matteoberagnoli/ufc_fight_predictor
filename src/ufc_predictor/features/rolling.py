@@ -36,7 +36,30 @@ import pandas as pd
 from ufc_predictor.features import shrinkage
 from ufc_predictor.features.shrinkage import RatioFeature
 
-ROLLING_WINDOW = 3
+# The recent-form window, in fights. 3 until Day 11, when a window test (each
+# version tuned on its own, cross-validated over 8 seeds) found 3 fights the
+# worst choice: 8 fights scored 0.0040 better in log loss, in every seed, and
+# beat career-only and recency-weighted alternatives (reviews/end_tests_2026-10-08.md).
+# Most of these stats are noisy over a few fights (Day 10 repeatability check),
+# so more fights mostly means a steadier measurement. The model uses this window
+# as the ONE input per stat; the career window is still built, but not selected.
+ROLLING_WINDOW = 8
+
+
+def accuracy_column(landed: str, absorbed: bool, window: str) -> str:
+    """Name of a landed / attempted ratio column, in either direction.
+
+    A fighter's own ratio is his accuracy ("head_strikes_accuracy_..."). The same
+    ratio for what is thrown *at* him is not his accuracy at all, so it is named
+    for what it is: the hit rate against him ("head_strikes_hit_rate_against_...");
+    for takedowns, the success rate against him. Renamed on Day 12 from the old
+    "..._absorbed_accuracy_..." (the user's point: accuracy is the wrong word).
+    """
+    if not absorbed:
+        return f"{landed}_accuracy_{window}"
+    if landed == "takedowns":
+        return f"takedowns_success_rate_against_{window}"
+    return f"{landed}_hit_rate_against_{window}"
 
 # Stats that come as a landed/attempted pair, as {landed: attempted}.
 #
@@ -255,7 +278,7 @@ def _feature_names_for_window(window: str) -> list[str]:
         names.append(_volume_column_name(attempted, "", window))
         names.append(_volume_column_name(attempted, "_absorbed", window))
     for landed in PAIRED_STATS:
-        names += [f"{landed}_accuracy_{window}", f"{landed}_absorbed_accuracy_{window}"]
+        names += [accuracy_column(landed, False, window), accuracy_column(landed, True, window)]
     for stat in UNPAIRED_STATS:
         names.append(_volume_column_name(stat, "", window))
         names.append(_volume_column_name(stat, "_absorbed", window))
@@ -285,7 +308,7 @@ def ratio_features() -> list[RatioFeature]:
         for landed, attempted in PAIRED_STATS.items():
             for d in ("", "_absorbed"):
                 specs.append(RatioFeature(
-                    f"{landed}{d}_accuracy_{window}", f"{landed}{d}", f"{attempted}{d}",
+                    accuracy_column(landed, bool(d), window), f"{landed}{d}", f"{attempted}{d}",
                     landed, attempted, "attempts", last_n,
                 ))
         for stat in RATE_STATS:

@@ -30,10 +30,10 @@ def _toy(n_per_year: int = 120, years=(2014, 2015, 2016, 2017), seed: int = 0) -
     couple of diff features and a mirrorable pair - so the fold machinery is
     exercised against the same contract the real table meets.
 
-    The column names matter: `make_xy` builds `X` from an allow-list keyed on
-    stat stems, so a made-up name like `diff_prior_skill` is silently not a
-    feature at all. `win_rate` is a real RECORD_STEM, so this frame really
-    does reach the model.
+    The column names matter: `make_xy` builds `X` from the explicit allow-list
+    manifest.FEATURES, so a made-up name like `diff_prior_skill` is silently not
+    a feature at all. `diff_prior_win_rate` and `diff_static_age_gap` are real
+    model inputs, so this frame really does reach the model.
     """
     rng = np.random.default_rng(seed)
     n = n_per_year * len(years)
@@ -44,8 +44,8 @@ def _toy(n_per_year: int = 120, years=(2014, 2015, 2016, 2017), seed: int = 0) -
             [f"{y}-{1 + i % 12:02d}-10" for y in years for i in range(n_per_year)]
         ),
         "fighter_a_won": pd.array(rng.random(n) < 1 / (1 + np.exp(-2 * skill)), dtype="boolean"),
-        "diff_prior_win_rate_career_avg": skill,
-        "diff_static_age": rng.normal(0, 5, n),
+        "diff_prior_win_rate": skill,
+        "diff_static_age_gap": rng.normal(0, 5, n),
         "fighter_a_prior_is_debut": rng.random(n) < 0.2,
         "fighter_b_prior_is_debut": rng.random(n) < 0.2,
     })
@@ -56,7 +56,7 @@ def test_the_toy_frame_really_reaches_the_model():
     other test in this file pass against an empty-signal `X`."""
     from ufc_predictor.features.manifest import make_xy
     X, _ = make_xy(_toy(10, years=(2014,)))
-    assert "diff_prior_win_rate_career_avg" in X.columns
+    assert "diff_prior_win_rate" in X.columns
 
 
 # ------------------------------------------------------------------ the folds
@@ -198,7 +198,7 @@ def test_cv_predictions_score_what_cv_log_loss_reports_seed_by_seed():
 def test_cv_predictions_of_a_subset_match_up_by_fight_id():
     """A version trained on fewer rows scores fewer fights; the ids line them up."""
     fights = _toy()
-    subset = fights[fights["diff_static_age"] > 0].reset_index(drop=True)
+    subset = fights[fights["diff_static_age_gap"] > 0].reset_index(drop=True)
     full = cv_predictions(fights, SUBSAMPLED, seeds=(0,), n_folds=3)
     part = cv_predictions(subset, SUBSAMPLED, seeds=(0,), n_folds=3)
     assert set(part["fights_url"]) <= set(full["fights_url"])
@@ -263,7 +263,7 @@ def _toy_league(n_fighters=30, per_year=60, years=range(2014, 2020), seed=0) -> 
                 "fighter_a_id": a, "fighter_b_id": b,
                 "outcome": "fighter_a" if a_won else "fighter_b",
                 "fighter_a_won": a_won,
-                "diff_static_age": rng.normal(0, 5),        # a feature with no signal
+                "diff_static_age_gap": rng.normal(0, 5),        # a feature with no signal
             })
     table = pd.DataFrame(rows)
     table["fighter_a_won"] = table["fighter_a_won"].astype("boolean")

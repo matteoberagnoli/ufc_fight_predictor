@@ -5,7 +5,7 @@ from ufc_predictor.config import VALIDATION_START
 from ufc_predictor.data.build import build_fight_dataset
 from ufc_predictor.data.io import load_fighters, load_processed
 from ufc_predictor.features import manifest as m
-from ufc_predictor.features.rolling import attach_prior_features, fit_alphas
+from ufc_predictor.features.rolling import ROLLING_WINDOW, attach_prior_features, fit_alphas
 from ufc_predictor.features.static import attach_static_features
 from ufc_predictor.modeling.split import drop_undecided
 
@@ -113,6 +113,7 @@ def test_leakage_guard_fires_if_a_raw_column_is_ever_misclassified(featured, mon
         return real_group_of(column)
 
     monkeypatch.setattr(m, "_group_of", misclassifying)
+    monkeypatch.setattr(m, "FEATURES", m.FEATURES + ("fighter_a_sig_strikes",))
 
     with pytest.raises(ValueError, match="raw post-fight column"):
         m.feature_columns(featured)
@@ -135,7 +136,10 @@ def test_stem_decomposition_recovers_the_underlying_statistic():
     assert m._decompose("diff_prior_head_strike_atts_absorbed_per_min_career_avg") == (
         "head_strike_atts", True,
     )
-    assert m._decompose("diff_prior_leg_strikes_accuracy_last3_avg") == ("leg_strikes", False)
+    assert m._decompose(f"diff_prior_leg_strikes_accuracy_last{ROLLING_WINDOW}_avg") == ("leg_strikes", False)
+    # what is thrown at a fighter is the defending direction, however it is named
+    assert m._decompose("diff_prior_head_strikes_hit_rate_against_career_avg") == ("head_strikes", True)
+    assert m._decompose(f"diff_prior_takedowns_success_rate_against_last{ROLLING_WINDOW}_avg") == ("takedowns", True)
     assert m._decompose("diff_prior_ctrl_time_absorbed_frac_career_avg") == ("ctrl_time", True)
     # bare window suffix, no ratio decoration
     assert m._decompose("diff_prior_total_fight_time_career_avg") == ("total_fight_time", False)
@@ -144,5 +148,43 @@ def test_stem_decomposition_recovers_the_underlying_statistic():
 def test_absorbed_direction_always_lands_in_defence(featured):
     groups = m.feature_groups(featured)
     for column in m.feature_columns(featured):
-        if column.startswith("diff_prior_") and "_absorbed" in column:
+        if column.startswith("diff_prior_") and ("_absorbed" in column or "_against_" in column):
             assert column in groups["defence"], column
+
+
+# ------------------------------------------------------------ the explicit list
+
+def test_features_are_the_40_chosen_in_the_review():
+    """FEATURES and the review's record of the final model must never drift apart."""
+    import csv
+    from ufc_predictor.config import PROJECT_ROOT
+    with open(PROJECT_ROOT / "reviews" / "final_inputs_2026-10-08.csv") as f:
+        recorded = [row["final_name"] for row in csv.DictReader(f)]
+    assert len(m.FEATURES) == len(set(m.FEATURES)) == 40
+    assert set(m.FEATURES) == set(recorded)
+
+
+def test_every_feature_is_in_the_table_and_in_a_group(featured):
+    assert [c for c in m.FEATURES if c not in featured.columns] == []
+    grouped = [c for cols in m.feature_groups(featured).values() for c in cols]
+    assert sorted(grouped) == sorted(m.FEATURES)
+
+
+def test_x_is_exactly_the_chosen_features(featured):
+    X, _ = m.make_xy(drop_undecided(featured))
+    assert sorted(X.columns) == sorted(m.FEATURES)
+    assert not set(X.columns) & set(m.unselected_columns(featured))
+
+
+def test_unselected_columns_are_safe_and_not_features(featured):
+    unselected = set(m.unselected_columns(featured))
+    assert unselected                                       # the career windows, at least
+    assert not unselected & set(m.leaky_columns(featured))
+    assert "diff_prior_sig_strikes_accuracy_career_avg" in unselected
+    assert "diff_static_ape_index_cm" in unselected         # discarded in the review
+
+
+def test_a_feature_outside_every_group_fails_loudly(featured, monkeypatch):
+    monkeypatch.setattr(m, "FEATURES", m.FEATURES + ("fights_url",))
+    with pytest.raises(ValueError, match="belongs to no feature group"):
+        m.feature_groups(featured)

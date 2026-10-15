@@ -94,7 +94,7 @@ def test_missing_reach_stays_nan_not_dropped(toy_featured, toy_fighters):
 def test_diff_columns_are_a_minus_b(toy_featured, toy_fighters):
     out = attach_static_features(toy_featured, toy_fighters)
     row = out.iloc[0]
-    assert row["diff_static_age"] == 28.0 - 30.0
+    assert row["diff_static_age_gap"] == 28.0 - 30.0
     assert row["diff_static_height_cm"] == 180.0 - 175.0
     assert row["diff_static_reach_cm"] == 183.0 - 178.0
 

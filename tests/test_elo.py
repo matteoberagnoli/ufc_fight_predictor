@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -204,3 +206,15 @@ def test_saved_k_round_trips_inside_the_given_folder(tmp_path):
     save_elo_params(158.5, curve, seeds=range(5), processed_dir=tmp_path)
     assert (tmp_path / "elo_params.json").exists()
     assert load_elo_params(processed_dir=tmp_path) == 158.5
+
+
+def test_a_note_is_saved_with_k_when_given(tmp_path):
+    curve = [(39.81, 0.6587), (251.2, 0.6604)]
+    save_elo_params(251.2, curve, seeds=range(5), processed_dir=tmp_path,
+                    note="kept 251.2: the search's K lost the check")
+    saved = json.loads((tmp_path / "elo_params.json").read_text())
+    assert saved["k"] == 251.2
+    assert saved["chosen_by"]["note"] == "kept 251.2: the search's K lost the check"
+
+    save_elo_params(251.2, curve, seeds=range(5), processed_dir=tmp_path)
+    assert "note" not in json.loads((tmp_path / "elo_params.json").read_text())["chosen_by"]

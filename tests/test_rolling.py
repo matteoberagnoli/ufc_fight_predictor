@@ -248,7 +248,7 @@ def test_wide_table_keeps_attempts_and_accuracy_but_not_landed(toy_fights):
 def test_both_offensive_and_defensive_accuracy_are_built(toy_fights):
     featured = attach_prior_features(toy_fights, no_shrinkage())
     assert "fighter_a_prior_sig_strikes_accuracy_career_avg" in featured.columns
-    assert "fighter_a_prior_sig_strikes_absorbed_accuracy_career_avg" in featured.columns
+    assert "fighter_a_prior_sig_strikes_hit_rate_against_career_avg" in featured.columns
 
 
 def test_fight_time_has_no_absorbed_mirror(toy_fights):

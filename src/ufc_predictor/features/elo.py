@@ -133,23 +133,30 @@ def elo_forecast_log_loss(fights: pd.DataFrame, k: float,
 
 
 def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
-                    start: str = ERA_START, processed_dir=None) -> None:
+                    start: str = ERA_START, processed_dir=None, note: str | None = None) -> None:
     """Save K with how it was chosen, including the whole K -> score curve.
 
     The curve is kept because the choice sits on a broad plateau: seeing that
     neighbouring K values score within ~0.001 of each other is what tells you
     the exact K barely matters.
+
+    `note` records anything the curve alone would get wrong - e.g. on Day 12
+    the saved K is not the curve's minimum, because a check with the final
+    model's own settings overruled the search (05_elo.ipynb, section 4).
     """
+    chosen_by = {
+        "method": "model CV log loss, expanding window inside the training years",
+        "fitted_on": {"from": start, "until": until},
+        "model_seeds": list(seeds),
+    }
+    if note is not None:
+        chosen_by["note"] = note
     save_processed_json(
         {
             "k": float(k),
             "start_rating": ELO_START,
             "scale": ELO_SCALE,
-            "chosen_by": {
-                "method": "model CV log loss, expanding window inside the training years",
-                "fitted_on": {"from": start, "until": until},
-                "model_seeds": list(seeds),
-            },
+            "chosen_by": chosen_by,
             "curve": [[float(kk), float(score)] for kk, score in curve],
         },
         "elo_params",

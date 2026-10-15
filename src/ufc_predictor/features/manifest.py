@@ -1,36 +1,39 @@
 """Declares which columns may become model features, and which never may.
 
-`fights_featured.parquet` carries 366 columns and they are not interchangeable.
-46 of them are the raw per-fight statistics of the bout being predicted, and
-they sit one word away from their safe counterparts:
+`fights_featured.parquet` carries about 370 columns and they are not
+interchangeable. 46 of them are the raw per-fight statistics of the bout being
+predicted, and they sit one word away from their safe counterparts:
 
     fighter_a_sig_strikes                          <- the answer sheet
     fighter_a_prior_sig_strikes_accuracy_career_avg <- a feature
 
 So `X = df.drop(columns=[...])` is not a safe way to build a design matrix.
-Everything here exists so that `X` is built from an explicit allow-list
-instead, with two guards that fail loudly rather than silently:
+`X` is built from an explicit allow-list, FEATURES: the 40 inputs chosen in the
+Day 10-11 input review, each with a stated mechanism, tested as a model before
+it was adopted (reviews/final_inputs_2026-10-08.csv; reasons for every one of
+the 108 earlier candidates in reviews/input_review_2026-10-07.csv). Two guards
+fail loudly rather than silently:
 
   * leakage     - a raw post-fight column can never be selected
   * completeness - every column in the table must be classified, so adding a
                    column without classifying it breaks the tests rather than
                    letting it drift into or out of `X` unnoticed
 
-Note the two reasons a column is excluded are not the same thing. The 46 raw
-post-fight columns are a *safety* exclusion. The ~206 per-side columns are a
-*modelling* one - they are the fighter_a_*/fighter_b_* halves each `diff_*` is
-computed from, so carrying both the difference and its components is redundant,
-and per-side columns break the symmetry the diffs were built to give. Those are
-perfectly safe, and the choice is reversible by editing a group.
+Excluded columns are excluded for different reasons, and the buckets keep them
+apart. The 46 raw post-fight columns are a *safety* exclusion. The per-side
+fighter_a_*/fighter_b_* columns are a *modelling* one: the halves each `diff_*`
+is computed from. And the safe, model-ready columns the review did not select
+(the career windows, the strikes-faced cluster, fight length, the record
+counts...) are `unselected_columns`: still built, still classified by group,
+one edit to FEATURES away from coming back.
 
 Nothing is dropped from the parquet: this module only governs what reaches a
 model. The raw columns stay because they are what you check a row against by
 hand when a prediction looks wrong.
 """
-
 import pandas as pd
 
-from ufc_predictor.features.rolling import MIRRORED_STATS, SHARED_STATS
+from ufc_predictor.features.rolling import MIRRORED_STATS, ROLLING_WINDOW, SHARED_STATS
 
 LABEL_COLUMN = "fighter_a_won"
 
@@ -82,28 +85,34 @@ RECORD_STEMS = {
 # group_importance can measure them separately from the plain record
 STRENGTH_STEMS = {"elo"}
 
-# order matters: longer suffixes first, so "_accuracy_career_avg" is stripped
-# before the bare "_career_avg" can match part of it
-_SUFFIXES = (
-    "_accuracy_career_avg", "_accuracy_last3_avg",
-    "_per_min_career_avg", "_per_min_last3_avg",
-    "_frac_career_avg", "_frac_last3_avg",
-    "_career_avg", "_last3_avg",
-)
+_WINDOWS = ("_career_avg", f"_last{ROLLING_WINDOW}_avg")
+# a ratio of what is thrown *at* a fighter: the defending direction
+_AGAINST = ("_hit_rate_against", "_success_rate_against")
 
 _DIFF_PRIOR = "diff_prior_"
 _DIFF_STATIC = "diff_static_"
 
 
 def _decompose(column: str) -> tuple[str, bool]:
-    """A `diff_prior_*` column -> (stem, was it the absorbed direction)."""
+    """A `diff_prior_*` column -> (stem, is it the defending direction).
+
+    The defending direction is anything done *to* the fighter: "_absorbed"
+    rates and shares, and the hit / success rate against him.
+    """
     body = column[len(_DIFF_PRIOR):]
+    for window in _WINDOWS:
+        if body.endswith(window):
+            body = body[: -len(window)]
+            break
+    for against in _AGAINST:
+        if body.endswith(against):
+            return body[: -len(against)], True
     absorbed = "_absorbed" in body
-    stem = body.split("_absorbed")[0] if absorbed else body
-    for suffix in _SUFFIXES:
-        if stem.endswith(suffix):
-            return stem[: -len(suffix)], absorbed
-    return stem, absorbed
+    body = body.replace("_absorbed", "")
+    for decoration in ("_accuracy", "_per_min", "_frac"):
+        if body.endswith(decoration):
+            return body[: -len(decoration)], absorbed
+    return body, absorbed
 
 
 def _group_of(column: str) -> str | None:
@@ -137,6 +146,56 @@ def _group_of(column: str) -> str | None:
     return None
 
 
+# The model's inputs: the 40 chosen in the input review (Day 10-11). Each has a
+# stated mechanism; together they beat the previous 108 in cross-validation
+# (log loss 0.65767 vs 0.66258, better in 8 of 8 seeds). Every rolling stat is
+# ONE input over the last ROLLING_WINDOW fights. Order follows the review's
+# importance ranking. To change the model's inputs, change this list - and
+# reviews/final_inputs_2026-10-08.csv, which a test keeps in step with it.
+FEATURES = (
+    "diff_static_age_gap",
+    "diff_prior_elo",
+    "diff_prior_submissions_per_min_last8_avg",
+    "diff_prior_head_strikes_hit_rate_against_last8_avg",
+    "diff_prior_takedown_atts_per_min_last8_avg",
+    "diff_prior_head_strikes_accuracy_last8_avg",
+    "diff_prior_win_rate",
+    "diff_prior_knockdowns_absorbed_per_min_last8_avg",
+    "diff_static_reach_cm",
+    "diff_prior_body_strikes_hit_rate_against_last8_avg",
+    "diff_prior_body_strikes_accuracy_last8_avg",
+    "diff_prior_ctrl_time_absorbed_frac_last8_avg",
+    "diff_prior_ground_atts_per_min_last8_avg",
+    "diff_prior_dist_strikes_accuracy_last8_avg",
+    "diff_prior_knockdowns_per_min_last8_avg",
+    "fighter_b_prior_is_debut",
+    "fighter_a_prior_is_debut",
+    "diff_prior_takedowns_accuracy_last8_avg",
+    "diff_prior_clinchs_hit_rate_against_last8_avg",
+    "diff_static_height_cm",
+    "diff_prior_tot_strikes_hit_rate_against_last8_avg",
+    "diff_prior_grounds_hit_rate_against_last8_avg",
+    "diff_prior_leg_strike_atts_per_min_last8_avg",
+    "diff_prior_sig_strikes_accuracy_last8_avg",
+    "diff_prior_ctrl_time_frac_last8_avg",
+    "diff_prior_takedowns_success_rate_against_last8_avg",
+    "diff_prior_dist_strikes_hit_rate_against_last8_avg",
+    "diff_prior_clinch_atts_per_min_last8_avg",
+    "diff_prior_leg_strikes_accuracy_last8_avg",
+    "diff_prior_days_since_last_fight",
+    "diff_prior_sig_strike_atts_per_min_last8_avg",
+    "diff_prior_body_strike_atts_per_min_last8_avg",
+    "diff_prior_tot_strikes_accuracy_last8_avg",
+    "diff_prior_leg_strikes_hit_rate_against_last8_avg",
+    "diff_prior_streak",
+    "diff_prior_tot_strike_atts_per_min_last8_avg",
+    "diff_prior_grounds_accuracy_last8_avg",
+    "weight_class_lbs",
+    "is_womens_bout",
+    "diff_prior_sig_strike_atts_absorbed_per_min_last8_avg",
+)
+
+
 GROUP_NAMES = (
     "record", "strength", "physical", "cold_start", "pace",
     "striking", "grappling", "damage", "defence",
@@ -144,13 +203,29 @@ GROUP_NAMES = (
 
 
 def feature_groups(fights: pd.DataFrame) -> dict[str, list[str]]:
-    """Map each group name to the columns of `fights` belonging to it."""
+    """Map each group name to the FEATURES columns of `fights` in it.
+
+    Every selected input must belong to a group: one that doesn't is an error,
+    not something to drop silently.
+    """
     groups: dict[str, list[str]] = {name: [] for name in GROUP_NAMES}
-    for column in fights.columns:
+    for column in FEATURES:
+        if column not in fights.columns:
+            continue
         group = _group_of(column)
-        if group is not None:
-            groups[group].append(column)
+        if group is None:
+            raise ValueError(f"{column} is in FEATURES but belongs to no feature group")
+        groups[group].append(column)
     return {name: sorted(cols) for name, cols in groups.items()}
+
+
+def unselected_columns(fights: pd.DataFrame) -> list[str]:
+    """Safe, model-ready columns the input review did not select.
+
+    They are built and classified by group, so bringing one back is a single
+    edit to FEATURES - and the review files say why each was left out.
+    """
+    return sorted(c for c in fights.columns if _group_of(c) is not None and c not in FEATURES)
 
 
 def leaky_columns(fights: pd.DataFrame) -> list[str]:
@@ -195,6 +270,7 @@ def unclassified_columns(fights: pd.DataFrame) -> list[str]:
     `X` unnoticed.
     """
     classified = set(feature_columns(fights))
+    classified |= set(unselected_columns(fights))
     classified |= set(leaky_columns(fights))
     classified |= set(METADATA_COLUMNS)
     classified |= set(LABEL_COLUMNS)
