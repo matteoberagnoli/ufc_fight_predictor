@@ -54,7 +54,7 @@ from sklearn.metrics import log_loss
 
 from ufc_predictor.config import TEST_START, VALIDATION_START
 from ufc_predictor.data.io import load_processed_json, save_processed_json
-from ufc_predictor.features.elo import ELO_K_GRID, attach_elo_features
+from ufc_predictor.features.elo import ELO_K_GRID, ELO_SEARCH_KS, ELO_WEIGHT_PAIRS, attach_elo_features
 from ufc_predictor.features.manifest import make_xy
 from ufc_predictor.modeling.model import MODEL_PARAMS, fit_model, predict_proba
 from ufc_predictor.modeling.split import chronological_split
@@ -327,6 +327,50 @@ def choose_elo_k(featured: pd.DataFrame, params: dict, grid=ELO_K_GRID,
         curve.append((float(k), cv_log_loss(train, params, folds=folds, seeds=seeds)["log_loss"]))
     best_k = min(curve, key=lambda point: point[1])[0]
     return best_k, curve
+
+
+def choose_elo_settings(featured: pd.DataFrame, params: dict, ks=ELO_SEARCH_KS,
+                        weight_pairs=ELO_WEIGHT_PAIRS, seeds=range(5),
+                        n_folds: int = N_FOLDS) -> pd.DataFrame:
+    """Score every (K, unanimous weight, narrow weight) by expanding-window CV.
+
+    Like choose_elo_k, but each win is weighted by how it came (features.elo.
+    win_score), and judged with `params` - the settings of the model the
+    rating will serve. Day 12 showed why: a K judged by a differently shaped
+    model (the one tuned without Elo) lost to the previous K in 8 of 8 seeds
+    once the final model's settings were used. Returns one row per setting,
+    best first.
+    """
+    rows, folds = [], None
+    for k in ks:
+        for unanimous, narrow in weight_pairs:
+            table = attach_elo_features(featured, k, {"unanimous": unanimous, "narrow": narrow})
+            train, _, _ = chronological_split(table)
+            check_no_test_years(train)
+            folds = expanding_folds(train, n_folds=n_folds) if folds is None else folds
+            score = cv_log_loss(train, params, folds=folds, seeds=seeds)["log_loss"]
+            rows.append({"K": float(k), "unanimous": float(unanimous), "narrow": float(narrow),
+                         "cv_log_loss": score})
+    return pd.DataFrame(rows).sort_values("cv_log_loss").reset_index(drop=True)
+
+
+def pick_elo_setting(curve: pd.DataFrame, previous: dict, tolerance: float = 0.0005) -> dict:
+    """Among the settings within `tolerance` of the best, the one closest to `previous`.
+
+    Differences below about 0.001 are seed noise, so the exact minimum of the
+    curve is not a ranking. Inside half that band the choice moves as little
+    as possible from what the model already uses: distance is the change in
+    each weight plus the change in K on a log scale. `previous` is
+    {"k": ..., "weights": {...} or None}; None weights count as 1 (classic).
+    """
+    weights = previous.get("weights") or {"unanimous": 1.0, "narrow": 1.0}
+    near = curve[curve["cv_log_loss"] <= curve["cv_log_loss"].min() + tolerance].copy()
+    near["distance"] = ((near["unanimous"] - weights["unanimous"]).abs()
+                        + (near["narrow"] - weights["narrow"]).abs()
+                        + np.log(near["K"] / previous["k"]).abs())
+    best = near.sort_values(["distance", "cv_log_loss"]).iloc[0]
+    return {"k": float(best["K"]), "weights": {"unanimous": float(best["unanimous"]), "narrow": float(best["narrow"])},
+            "cv_log_loss": float(best["cv_log_loss"]), "near_best": int(len(near))}
 
 
 def tuning_table(study: optuna.Study, top: int = 10) -> pd.DataFrame:

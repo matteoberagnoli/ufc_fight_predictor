@@ -65,12 +65,26 @@ def expected_score(r_a, r_b):
     return 1.0 / (1.0 + 10.0 ** ((r_b - r_a) / ELO_SCALE))
 
 
-def elo_ratings(fights: pd.DataFrame, k: float) -> pd.DataFrame:
+def win_score(method: str, weights: dict | None) -> float:
+    """What a win is worth to the winner, by how it came; the loser gets 1 minus it.
+
+    Without `weights` every win is worth 1, the classic Elo. `weights` maps
+    "unanimous" and "narrow" (split or majority decision) to a value between
+    0.5 (no better than a draw) and 1 (as convincing as a finish). A finish,
+    and anything else (a DQ), is always worth 1.
+    """
+    if weights is None:
+        return 1.0
+    return float(weights.get(method, 1.0)) if method in ("unanimous", "narrow") else 1.0
+
+
+def elo_ratings(fights: pd.DataFrame, k: float, weights: dict | None = None) -> pd.DataFrame:
     """Both fighters' ratings going into every fight, aligned to `fights`' index.
 
     Needs `event_date`, `fights_url`, `fighter_a_id`, `fighter_b_id` and
     `outcome` on every row - all fights, not just the decided ones, since a
-    draw is history too. The input's row order does not matter.
+    draw is history too - and `method` when `weights` is given (see
+    win_score). The input's row order does not matter.
     """
     if not fights.index.is_unique:
         raise ValueError("elo_ratings needs a unique index to put each rating back on its row")
@@ -85,13 +99,18 @@ def elo_ratings(fights: pd.DataFrame, k: float) -> pd.DataFrame:
     before_a = np.empty(len(ordered))
     before_b = np.empty(len(ordered))
 
-    rows = zip(ordered["fighter_a_id"], ordered["fighter_b_id"], ordered["outcome"])
-    for i, (a, b, outcome) in enumerate(rows):
+    methods = ordered["method"] if weights is not None else pd.Series("other", index=ordered.index)
+    rows = zip(ordered["fighter_a_id"], ordered["fighter_b_id"], ordered["outcome"], methods)
+    for i, (a, b, outcome, method) in enumerate(rows):
         r_a, r_b = rating.get(a, ELO_START), rating.get(b, ELO_START)
         before_a[i], before_b[i] = r_a, r_b     # <- stored before this fight changes anything
         if outcome == "no_contest":
             continue
-        change = k * (SCORE_FOR_A[outcome] - expected_score(r_a, r_b))
+        score_a = SCORE_FOR_A[outcome]
+        if outcome != "draw":
+            w = win_score(method, weights)
+            score_a = w if outcome == "fighter_a" else 1.0 - w
+        change = k * (score_a - expected_score(r_a, r_b))
         rating[a] = r_a + change
         rating[b] = r_b - change                # whatever A gains, B loses
 
@@ -99,7 +118,7 @@ def elo_ratings(fights: pd.DataFrame, k: float) -> pd.DataFrame:
     return out.reindex(fights.index)
 
 
-def attach_elo_features(table: pd.DataFrame, k: float) -> pd.DataFrame:
+def attach_elo_features(table: pd.DataFrame, k: float, weights: dict | None = None) -> pd.DataFrame:
     """Add fighter_a_prior_elo, fighter_b_prior_elo and diff_prior_elo.
 
     Works on the fights table or the featured table - both keep every fight.
@@ -107,7 +126,7 @@ def attach_elo_features(table: pd.DataFrame, k: float) -> pd.DataFrame:
     different K.
     """
     out = table.copy()
-    ratings = elo_ratings(table, k)
+    ratings = elo_ratings(table, k, weights)
     for column in ELO_COLUMNS:
         out[column] = ratings[column]
     out["diff_prior_elo"] = out[ELO_COLUMNS[0]] - out[ELO_COLUMNS[1]]
@@ -132,8 +151,18 @@ def elo_forecast_log_loss(fights: pd.DataFrame, k: float,
     return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
+# The Elo settings searched by 05_elo.ipynb (modeling.tune.choose_elo_settings).
+# K from slow to fast; the two win weights from 1 (as convincing as a finish) down
+# to 0.5 (no better than a draw), a narrow win never counting more than a unanimous one.
+ELO_SEARCH_KS = (39.81, 63.1, 100.0, 125.9, 158.5, 199.5, 251.2, 316.2, 398.1)
+ELO_WEIGHT_PAIRS = tuple(
+    (u, n) for u in (1.0, 0.9, 0.8, 0.7, 0.6) for n in (1.0, 0.9, 0.75, 0.65, 0.55, 0.5) if n <= u
+)
+
+
 def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
-                    start: str = ERA_START, processed_dir=None, note: str | None = None) -> None:
+                    start: str = ERA_START, processed_dir=None, note: str | None = None,
+                    weights: dict | None = None) -> None:
     """Save K with how it was chosen, including the whole K -> score curve.
 
     The curve is kept because the choice sits on a broad plateau: seeing that
@@ -143,6 +172,8 @@ def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
     `note` records anything the curve alone would get wrong - e.g. on Day 12
     the saved K is not the curve's minimum, because a check with the final
     model's own settings overruled the search (05_elo.ipynb, section 4).
+    `weights` are the win weights (see win_score); None is the classic Elo.
+    The curve is a list of (K, score) pairs or of dicts (K, weights, score).
     """
     chosen_by = {
         "method": "model CV log loss, expanding window inside the training years",
@@ -156,8 +187,10 @@ def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
             "k": float(k),
             "start_rating": ELO_START,
             "scale": ELO_SCALE,
+            "weights": None if weights is None else {key: float(v) for key, v in weights.items()},
             "chosen_by": chosen_by,
-            "curve": [[float(kk), float(score)] for kk, score in curve],
+            "curve": [{key: float(v) for key, v in point.items()} if isinstance(point, dict)
+                      else [float(point[0]), float(point[1])] for point in curve],
         },
         "elo_params",
         processed_dir=processed_dir,
@@ -166,3 +199,8 @@ def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
 
 def load_elo_params(processed_dir=None) -> float:
     return load_processed_json("elo_params", processed_dir=processed_dir)["k"]
+
+
+def load_elo_weights(processed_dir=None) -> dict | None:
+    """The saved win weights, or None for the classic Elo (also for files saved before weights existed)."""
+    return load_processed_json("elo_params", processed_dir=processed_dir).get("weights")

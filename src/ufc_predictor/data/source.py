@@ -79,8 +79,18 @@ FIGHT_STATS_COLUMNS = [
     "f1_dist_strike_atts", "f2_dist_strike_atts", "f1_dist_strikes", "f2_dist_strikes",
     "f1_clinch_atts", "f2_clinch_atts", "f1_clinchs", "f2_clinchs",
     "f1_ground_atts", "f2_ground_atts", "f1_grounds", "f2_grounds",
-    "f1_total_fight_time", "f2_total_fight_time", "result", "fights_url", "event_url",
+    "f1_total_fight_time", "f2_total_fight_time", "result", "method", "fights_url", "event_url",
 ]
+
+# How a fight ended, in the four groups the Elo rating can weight differently
+# (features/elo.py). Post-fight information about the fight itself: it updates
+# ratings *after* a fight and must never be a model input (manifest.py lists
+# it with the raw post-fight columns). DQ and the winnerless endings stay "other".
+METHODS = {
+    "KO/TKO": "finish", "Submission": "finish", "TKO - Doctor's Stoppage": "finish",
+    "Decision - Unanimous": "unanimous",
+    "Decision - Split": "narrow", "Decision - Majority": "narrow",
+}
 
 # fight totals: our stat name -> the source's column suffix
 TOTALS = {
@@ -203,6 +213,7 @@ def to_pipeline_tables(wide: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, 
         [ids[1].astype(str), ids[2].astype(str), "d"],
         default="nc",
     )
+    out["method"] = wide["result"].map(METHODS).fillna("other")
     out["fights_url"] = _canonical_url(wide["fight_url"], "fight")
     out["event_url"] = _canonical_url(wide["event_url"], "event")
     fight_stats = out[FIGHT_STATS_COLUMNS]
@@ -241,7 +252,9 @@ def history_changes(new: pd.DataFrame, old: pd.DataFrame, ctrl_tolerance: float 
     key = "fights_url"
     new_i, old_i = new.set_index(key), old.set_index(key)
     shared = new_i.index.intersection(old_i.index)
-    compare = [c for c in FIGHT_STATS_COLUMNS if c not in (key, "f1_name", "f2_name")]
+    # a column the old tables don't have yet is new information, not a change to history
+    compare = [c for c in FIGHT_STATS_COLUMNS
+               if c not in (key, "f1_name", "f2_name") and c in new_i.columns and c in old_i.columns]
     changed = set()
     for column in compare:
         a, b = new_i.loc[shared, column], old_i.loc[shared, column]

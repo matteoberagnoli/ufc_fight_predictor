@@ -48,7 +48,7 @@ def zero_fill_undefined_accuracy(featured: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_variants(fights: pd.DataFrame, alphas: dict, fighters: pd.DataFrame,
-                   elo_k: float | None) -> dict:
+                   elo_k: float | None, elo_weights: dict | None) -> dict:
     """{"raw", "zero_fill", "shrunk"} -> a full featured table for each.
 
     Only the ratio-feature treatment differs between them. Both tables come
@@ -56,9 +56,9 @@ def build_variants(fights: pd.DataFrame, alphas: dict, fighters: pd.DataFrame,
     the main table, so static attributes, weight class and Elo are identical
     in all three and the comparison isolates shrinkage and nothing else.
     """
-    raw = build_featured_table(fights, fighters, no_shrinkage(), elo_k=elo_k)
+    raw = build_featured_table(fights, fighters, no_shrinkage(), elo_k=elo_k, elo_weights=elo_weights)
     return {
         "raw": raw,
         "zero_fill": zero_fill_undefined_accuracy(raw),
-        "shrunk": build_featured_table(fights, fighters, alphas, elo_k=elo_k),
+        "shrunk": build_featured_table(fights, fighters, alphas, elo_k=elo_k, elo_weights=elo_weights),
     }

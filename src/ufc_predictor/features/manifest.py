@@ -1,7 +1,7 @@
 """Declares which columns may become model features, and which never may.
 
 `fights_featured.parquet` carries about 370 columns and they are not
-interchangeable. 46 of them are the raw per-fight statistics of the bout being
+interchangeable. 47 of them are raw facts about the bout being
 predicted, and they sit one word away from their safe counterparts:
 
     fighter_a_sig_strikes                          <- the answer sheet
@@ -20,7 +20,7 @@ fail loudly rather than silently:
                    letting it drift into or out of `X` unnoticed
 
 Excluded columns are excluded for different reasons, and the buckets keep them
-apart. The 46 raw post-fight columns are a *safety* exclusion. The per-side
+apart. The 47 raw post-fight columns are a *safety* exclusion. The per-side
 fighter_a_*/fighter_b_* columns are a *modelling* one: the halves each `diff_*`
 is computed from. And the safe, model-ready columns the review did not select
 (the career windows, the strikes-faced cluster, fight length, the record
@@ -228,18 +228,25 @@ def unselected_columns(fights: pd.DataFrame) -> list[str]:
     return sorted(c for c in fights.columns if _group_of(c) is not None and c not in FEATURES)
 
 
-def leaky_columns(fights: pd.DataFrame) -> list[str]:
-    """Raw per-fight stats of the bout being predicted - never safe as features.
+# Facts about how the fight being predicted ended, kept on the table for the
+# Elo rating only (features/elo.py weights a win by how it came).
+POST_FIGHT_COLUMNS = ("method",)
 
-    Derived from rolling.py's own stat lists rather than restated here, so the
-    two cannot drift apart.
+
+def leaky_columns(fights: pd.DataFrame) -> list[str]:
+    """Raw facts about the bout being predicted - never safe as features.
+
+    The per-corner stats are derived from rolling.py's own stat lists rather
+    than restated here, so the two cannot drift apart; POST_FIGHT_COLUMNS adds
+    the fight-level ones.
     """
     raw_stems = set(MIRRORED_STATS) | set(SHARED_STATS)
-    return sorted(
+    per_corner = [
         c for c in fights.columns
         for side in ("fighter_a", "fighter_b")
         if c.startswith(f"{side}_") and c[len(side) + 1:] in raw_stems
-    )
+    ]
+    return sorted(per_corner + [c for c in POST_FIGHT_COLUMNS if c in fights.columns])
 
 
 def feature_columns(fights: pd.DataFrame, groups=None) -> list[str]:

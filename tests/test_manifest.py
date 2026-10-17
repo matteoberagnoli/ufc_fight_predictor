@@ -48,7 +48,8 @@ def test_buckets_do_not_overlap(featured):
 
 def test_leaky_columns_are_the_raw_per_fight_stats(featured):
     leaky = m.leaky_columns(featured)
-    assert len(leaky) == 46  # 23 stems x two corners
+    assert len(leaky) == 47  # 23 stems x two corners, plus how the fight ended
+    assert "method" in leaky
 
     # the footgun this module exists for: these two differ by one word
     assert "fighter_a_sig_strikes" in leaky

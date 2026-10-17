@@ -8,6 +8,8 @@ from ufc_predictor.modeling.model import MODEL_PARAMS, make_model
 from ufc_predictor.modeling.tune import (
     check_no_test_years,
     choose_elo_k,
+    choose_elo_settings,
+    pick_elo_setting,
     cv_log_loss,
     expanding_folds,
     load_params,
@@ -320,3 +322,26 @@ def test_make_model_without_params_is_unchanged():
     assert plain.get_params() == explicit.get_params()
     for key, value in MODEL_PARAMS.items():
         assert plain.get_params()[key] == value
+
+
+def test_choose_elo_settings_scores_every_combination_best_first():
+    table = _toy_league()
+    table["method"] = np.resize(["finish", "unanimous", "narrow"], len(table))
+    curve = choose_elo_settings(table, MODEL_PARAMS, ks=(16, 64), weight_pairs=((1.0, 1.0), (0.8, 0.6)),
+                                seeds=(0,), n_folds=2)
+    assert len(curve) == 4
+    assert curve["cv_log_loss"].is_monotonic_increasing
+
+
+def test_pick_elo_setting_moves_as_little_as_the_noise_allows():
+    curve = pd.DataFrame({"K": [158.5, 199.5, 251.2, 39.81],
+                          "unanimous": [0.7, 0.8, 1.0, 1.0], "narrow": [0.5, 0.55, 1.0, 1.0],
+                          "cv_log_loss": [0.6550, 0.6553, 0.6575, 0.6570]})
+    previous = {"k": 251.2, "weights": None}
+    choice = pick_elo_setting(curve, previous)
+    # 0.6553 is within 0.0005 of the best and closer to the classic K 251.2 with weights 1
+    assert choice["k"] == 199.5 and choice["weights"] == {"unanimous": 0.8, "narrow": 0.55}
+    assert choice["near_best"] == 2
+    # if the previous setting is itself within the band, nothing changes
+    curve.loc[2, "cv_log_loss"] = 0.6552
+    assert pick_elo_setting(curve, previous)["k"] == 251.2

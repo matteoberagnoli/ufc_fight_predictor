@@ -218,3 +218,48 @@ def test_a_note_is_saved_with_k_when_given(tmp_path):
 
     save_elo_params(251.2, curve, seeds=range(5), processed_dir=tmp_path)
     assert "note" not in json.loads((tmp_path / "elo_params.json").read_text())["chosen_by"]
+
+
+# ------------------------------------------------- weighting a win by how it came
+
+WEIGHTS = {"unanimous": 0.9, "narrow": 0.65}
+
+
+def _with_methods(fights, methods):
+    return fights.assign(method=methods)
+
+
+def test_a_narrow_decision_moves_ratings_less_than_a_finish():
+    one = lambda method: elo_ratings(_with_methods(_fights(
+        ("2020-01-01", "f/1", "A", "B", "fighter_a"),
+        ("2020-02-01", "f/2", "A", "C", "fighter_a")), [method, "finish"]), K, WEIGHTS)
+    gain = lambda method: one(method)["fighter_a_prior_elo"].iloc[1] - ELO_START
+    assert gain("finish") > gain("unanimous") > gain("narrow") > 0
+    # at equal ratings E = 0.5, so a win worth w moves K * (w - 0.5)
+    assert gain("narrow") == pytest.approx(K * (0.65 - 0.5))
+
+
+def test_the_loser_gets_the_mirror_of_the_winners_score():
+    f = _with_methods(_fights(("2020-01-01", "f/1", "A", "B", "fighter_b"),
+                              ("2020-02-01", "f/2", "A", "B", "draw")), ["narrow", "other"])
+    r = elo_ratings(f, K, WEIGHTS).iloc[1]
+    assert r["fighter_b_prior_elo"] - ELO_START == pytest.approx(K * 0.15)
+    assert r["fighter_a_prior_elo"] - ELO_START == pytest.approx(-K * 0.15)
+
+
+def test_weights_of_one_and_no_weights_give_the_classic_elo():
+    league = _made_up_league()
+    league["method"] = np.resize(["finish", "unanimous", "narrow", "other"], len(league))
+    classic = elo_ratings(league, K)
+    pd.testing.assert_frame_equal(elo_ratings(league, K, {"unanimous": 1.0, "narrow": 1.0}), classic)
+    # a DQ or anything outside the two decision groups is never discounted
+    assert elo_ratings(league.assign(method="other"), K, WEIGHTS).equals(classic)
+
+
+def test_weights_round_trip_and_default_to_classic(tmp_path):
+    from ufc_predictor.features.elo import load_elo_weights
+    save_elo_params(158.5, [{"K": 158.5, "unanimous": 0.7, "narrow": 0.55, "cv_log_loss": 0.655}],
+                    seeds=range(5), processed_dir=tmp_path, weights={"unanimous": 0.7, "narrow": 0.55})
+    assert load_elo_weights(processed_dir=tmp_path) == {"unanimous": 0.7, "narrow": 0.55}
+    save_elo_params(158.5, [(158.5, 0.655)], seeds=range(5), processed_dir=tmp_path)
+    assert load_elo_weights(processed_dir=tmp_path) is None
