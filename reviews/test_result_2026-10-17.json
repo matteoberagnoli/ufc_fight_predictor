@@ -1,0 +1,219 @@
+{
+ "code": "eceb919",
+ "data_version": 20,
+ "data_last_event": "2026-10-10",
+ "trained_until": "2025-01-01",
+ "training_fights": 5326,
+ "stretch": 1.2345536721701955,
+ "elo": {
+  "k": 158.5,
+  "weights": {
+   "narrow": 0.55,
+   "unanimous": 0.7
+  }
+ },
+ "params": {
+  "l2_regularization": 0.003419584609358948,
+  "learning_rate": 0.011268419355204862,
+  "max_features": 0.5457913921462134,
+  "max_iter": 950,
+  "max_leaf_nodes": 5,
+  "min_samples_leaf": 28
+ },
+ "mens": [
+  {
+   "group": "all",
+   "predictions": "coin flip",
+   "fights": 812,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "all",
+   "predictions": "win rate only",
+   "fights": 812,
+   "accuracy": 0.5739,
+   "log_loss": 0.6792,
+   "auc": 0.6008
+  },
+  {
+   "group": "all",
+   "predictions": "age only",
+   "fights": 812,
+   "accuracy": 0.6065,
+   "log_loss": 0.6614,
+   "auc": 0.6534
+  },
+  {
+   "group": "all",
+   "predictions": "our model",
+   "fights": 812,
+   "accuracy": 0.6404,
+   "log_loss": 0.6435,
+   "auc": 0.6816
+  },
+  {
+   "group": "no debutant",
+   "predictions": "coin flip",
+   "fights": 643,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "no debutant",
+   "predictions": "win rate only",
+   "fights": 643,
+   "accuracy": 0.5933,
+   "log_loss": 0.6755,
+   "auc": 0.6118
+  },
+  {
+   "group": "no debutant",
+   "predictions": "age only",
+   "fights": 643,
+   "accuracy": 0.6089,
+   "log_loss": 0.6596,
+   "auc": 0.659
+  },
+  {
+   "group": "no debutant",
+   "predictions": "our model",
+   "fights": 643,
+   "accuracy": 0.6485,
+   "log_loss": 0.6403,
+   "auc": 0.6882
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "coin flip",
+   "fights": 169,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "win rate only",
+   "fights": 169,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "age only",
+   "fights": 169,
+   "accuracy": 0.5976,
+   "log_loss": 0.6684,
+   "auc": 0.6319
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "our model",
+   "fights": 169,
+   "accuracy": 0.6095,
+   "log_loss": 0.6557,
+   "auc": 0.6512
+  }
+ ],
+ "all": [
+  {
+   "group": "all",
+   "predictions": "coin flip",
+   "fights": 950,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "all",
+   "predictions": "win rate only",
+   "fights": 950,
+   "accuracy": 0.5811,
+   "log_loss": 0.677,
+   "auc": 0.6094
+  },
+  {
+   "group": "all",
+   "predictions": "age only",
+   "fights": 950,
+   "accuracy": 0.6084,
+   "log_loss": 0.6607,
+   "auc": 0.6561
+  },
+  {
+   "group": "all",
+   "predictions": "our model",
+   "fights": 950,
+   "accuracy": 0.6474,
+   "log_loss": 0.6345,
+   "auc": 0.6958
+  },
+  {
+   "group": "no debutant",
+   "predictions": "coin flip",
+   "fights": 764,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "no debutant",
+   "predictions": "win rate only",
+   "fights": 764,
+   "accuracy": 0.6008,
+   "log_loss": 0.673,
+   "auc": 0.6202
+  },
+  {
+   "group": "no debutant",
+   "predictions": "age only",
+   "fights": 764,
+   "accuracy": 0.6099,
+   "log_loss": 0.6579,
+   "auc": 0.6635
+  },
+  {
+   "group": "no debutant",
+   "predictions": "our model",
+   "fights": 764,
+   "accuracy": 0.6531,
+   "log_loss": 0.6298,
+   "auc": 0.7039
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "coin flip",
+   "fights": 186,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "win rate only",
+   "fights": 186,
+   "accuracy": 0.5,
+   "log_loss": 0.6931,
+   "auc": 0.5
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "age only",
+   "fights": 186,
+   "accuracy": 0.6022,
+   "log_loss": 0.6722,
+   "auc": 0.6256
+  },
+  {
+   "group": "with a debutant",
+   "predictions": "our model",
+   "fights": 186,
+   "accuracy": 0.6237,
+   "log_loss": 0.6538,
+   "auc": 0.6563
+  }
+ ]
+}

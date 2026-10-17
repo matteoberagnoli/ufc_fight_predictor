@@ -1,0 +1,951 @@
+fights_url,event_date,fighter_a_name,fighter_b_name,fighter_a_won,p_fighter_a,mens,has_debutant
+http://www.ufcstats.com/fight-details/f46308108eb9261a,2025-01-11,Mackenzie Dern,Amanda Ribas,True,0.476007,False,False
+http://www.ufcstats.com/fight-details/ce4fc800a7456d18,2025-01-11,Santiago Ponzinibbio,Carlston Harris,True,0.596426,True,False
+http://www.ufcstats.com/fight-details/a2a5809ed8a01b45,2025-01-11,Cesar Almeida,Abdul Razak Alhassan,True,0.615327,True,False
+http://www.ufcstats.com/fight-details/aa38e39397dbea72,2025-01-11,Roman Kopylov,Chris Curtis,True,0.703075,True,False
+http://www.ufcstats.com/fight-details/03c1865919daeaa4,2025-01-11,Christian Rodriguez,Austin Bashi,True,0.566939,True,True
+http://www.ufcstats.com/fight-details/32cc31b76b32ade1,2025-01-11,Uros Medic,Punahele Soriano,False,0.667174,True,False
+http://www.ufcstats.com/fight-details/192619174bd1ad77,2025-01-11,Joe Solecki,Nurullo Aliev,False,0.512554,True,False
+http://www.ufcstats.com/fight-details/8d68863242695224,2025-01-11,Marco Tulio,Ihor Potieria,True,0.569428,True,True
+http://www.ufcstats.com/fight-details/54fa6e32330a8cca,2025-01-11,Trey Ogden,Thiago Moises,False,0.514727,True,False
+http://www.ufcstats.com/fight-details/58eda5a58a89f739,2025-01-11,Preston Parsons,Jacobe Smith,False,0.514247,True,True
+http://www.ufcstats.com/fight-details/b33e3a6d15700bb1,2025-01-11,Nicolle Caliari,Ernesta Kareckaite,False,0.452199,False,True
+http://www.ufcstats.com/fight-details/817cd15077a9419e,2025-01-11,Magomed Gadzhiyasulov,Bruno Lopes,False,0.49381,True,True
+http://www.ufcstats.com/fight-details/f01851055b8309e0,2025-01-11,Viktoriia Dudakova,Fatima Kline,False,0.52971,False,False
+http://www.ufcstats.com/fight-details/8a3281b0d7c168af,2025-01-11,Jose Johnson,Felipe Bunes,False,0.736728,True,False
+http://www.ufcstats.com/fight-details/69d63c057aebffaf,2025-01-18,Kevin Holland,Reinier de Ridder,False,0.375257,True,False
+http://www.ufcstats.com/fight-details/daef1691c7d6b1e4,2025-01-18,Islam Makhachev,Renato Moicano,True,0.870779,True,False
+http://www.ufcstats.com/fight-details/f39941b3743bf18c,2025-01-18,Umar Nurmagomedov,Merab Dvalishvili,False,0.461874,True,False
+http://www.ufcstats.com/fight-details/959fea398ffa5778,2025-01-18,Jamahal Hill,Jiri Prochazka,False,0.613938,True,False
+http://www.ufcstats.com/fight-details/54d48b33e7240452,2025-01-18,Serghei Spivac,Jailton Almeida,False,0.452992,True,False
+http://www.ufcstats.com/fight-details/d14f98b24691d082,2025-01-18,Payton Talbott,Raoni Barcelos,False,0.725176,True,False
+http://www.ufcstats.com/fight-details/aa3fca085d476636,2025-01-18,Diego Ferreira,Grant Dawson,False,0.161672,True,False
+http://www.ufcstats.com/fight-details/a6db8eb1fb3eebf2,2025-01-18,Bogdan Guskov,Billy Elekana,True,0.688191,True,True
+http://www.ufcstats.com/fight-details/e294a1e5723011db,2025-01-18,Clayton Carpenter,Tagir Ulanbekov,False,0.478046,True,False
+http://www.ufcstats.com/fight-details/340fcdcabc49f142,2025-01-18,Karol Rosa,Ailin Perez,False,0.262785,False,False
+http://www.ufcstats.com/fight-details/e5e3d396a9b1c5ae,2025-01-18,Muin Gafurov,Rinya Nakamura,True,0.31594,True,False
+http://www.ufcstats.com/fight-details/95ba27bea09cd84e,2025-01-18,Benardo Sopaj,Ricky Turcios,True,0.633738,True,False
+http://www.ufcstats.com/fight-details/938081fae11dcbbf,2025-01-18,Azamat Bekoev,Zach Reese,True,0.369903,True,True
+http://www.ufcstats.com/fight-details/85e79748b75eb30e,2025-02-01,Israel Adesanya,Nassourdine Imavov,False,0.277033,True,False
+http://www.ufcstats.com/fight-details/426e7a3de68117b0,2025-02-01,Shara Magomedov,Michael Page,False,0.6523,True,False
+http://www.ufcstats.com/fight-details/3c00f34f20c8a189,2025-02-01,Sergei Pavlovich,Jairzinho Rozenstruik,True,0.631447,True,False
+http://www.ufcstats.com/fight-details/70b8dca3addcf4de,2025-02-01,Said Nurmagomedov,Vinicius Oliveira,False,0.661143,True,False
+http://www.ufcstats.com/fight-details/775788423f5eeb99,2025-02-01,Mike Davis,Fares Ziam,False,0.265438,True,False
+http://www.ufcstats.com/fight-details/940f586104bf8bc8,2025-02-01,Kaan Ofli,Muhammad Naimov,False,0.335146,True,False
+http://www.ufcstats.com/fight-details/43bbaf06603b0f0c,2025-02-01,Thomas Petersen,Shamil Gaziev,False,0.61079,True,False
+http://www.ufcstats.com/fight-details/e97e71a593e4c28d,2025-02-01,Damir Hadzovic,Terrance McKinney,False,0.369493,True,False
+http://www.ufcstats.com/fight-details/91bf33ada75d6061,2025-02-01,Mayra Bueno Silva,Jasmine Jasudavicius,False,0.406819,False,False
+http://www.ufcstats.com/fight-details/750257171ad29a2c,2025-02-01,Lucas Alexander,Bogdan Grad,False,0.397263,True,True
+http://www.ufcstats.com/fight-details/984ce1062186f3ce,2025-02-01,Jamal Pogues,Hamdy Abdelwahab,False,0.557374,True,False
+http://www.ufcstats.com/fight-details/d13849f49f99bf01,2025-02-08,Dricus Du Plessis,Sean Strickland,True,0.728873,True,False
+http://www.ufcstats.com/fight-details/03c2a836d033be8f,2025-02-08,Tatiana Suarez,Zhang Weili,False,0.582998,False,False
+http://www.ufcstats.com/fight-details/8435f90fbd50c7a5,2025-02-08,Tallison Teixeira,Justin Tafa,True,0.403269,True,True
+http://www.ufcstats.com/fight-details/4ce53d8a26693f06,2025-02-08,Jake Matthews,Francisco Prado,True,0.638426,True,False
+http://www.ufcstats.com/fight-details/4218d1d1ce6d322c,2025-02-08,Quillan Salkilld,Anshul Jubli,True,0.582719,True,True
+http://www.ufcstats.com/fight-details/64641156360b1b81,2025-02-08,Viacheslav Borshchev,Tom Nolan,False,0.404622,True,False
+http://www.ufcstats.com/fight-details/946cae1beed2baec,2025-02-08,Wang Cong,Bruna Brasil,True,0.360442,False,False
+http://www.ufcstats.com/fight-details/c7fadbdfdc14c282,2025-02-08,Colby Thicknesse,Aleksandre Topuria,False,0.555688,True,True
+http://www.ufcstats.com/fight-details/1f70a4516a70abf2,2025-02-08,Rongzhu,Kody Steele,True,0.441111,True,True
+http://www.ufcstats.com/fight-details/8bc8bb0021337de7,2025-02-08,Kevin Jousset,Jonathan Micallef,False,0.558045,True,True
+http://www.ufcstats.com/fight-details/c35a53be30bfd066,2025-02-08,Jack Jenkins,Gabriel Santos,False,0.543358,True,False
+http://www.ufcstats.com/fight-details/365e2d891b98b86d,2025-02-15,Gregory Rodrigues,Jared Cannonier,False,0.66918,True,False
+http://www.ufcstats.com/fight-details/68913a422f548ccc,2025-02-15,Youssef Zalal,Calvin Kattar,True,0.808,True,False
+http://www.ufcstats.com/fight-details/f5386c98fea7f5d4,2025-02-15,Edmen Shahbazyan,Dylan Budka,True,0.54103,True,False
+http://www.ufcstats.com/fight-details/ce1436a9b58902a7,2025-02-15,Nazim Sadykhov,Ismael Bonfim,True,0.359616,True,False
+http://www.ufcstats.com/fight-details/875b249ebe45a66b,2025-02-15,Andre Petroski,Rodolfo Vieira,True,0.37633,True,False
+http://www.ufcstats.com/fight-details/7b9f169016746f81,2025-02-15,Khaos Williams,Gabriel Bonfim,False,0.524473,True,False
+http://www.ufcstats.com/fight-details/f4817d5cbe9be532,2025-02-15,Angela Hill,Ketlen Souza,True,0.293994,False,False
+http://www.ufcstats.com/fight-details/2ae33fce63a75df9,2025-02-15,Rafael Estevam,Jesus Aguilar,True,0.613293,True,False
+http://www.ufcstats.com/fight-details/07b357090cc91c2c,2025-02-15,Elijah Smith,Vince Morales,True,0.659187,True,True
+http://www.ufcstats.com/fight-details/3b2a24db4eeaeede,2025-02-15,Don'Tale Mayes,Valter Walker,False,0.294833,True,False
+http://www.ufcstats.com/fight-details/58668a0736602842,2025-02-15,Jacqueline Cavalcanti,Julia Avila,True,0.736629,False,False
+http://www.ufcstats.com/fight-details/2a493f15e079a7ff,2025-02-15,Connor Matthews,Jose Delgado,False,0.349929,True,True
+http://www.ufcstats.com/fight-details/b959e2c1d16ff832,2025-02-22,Henry Cejudo,Song Yadong,False,0.360118,True,False
+http://www.ufcstats.com/fight-details/19c8092496e94b85,2025-02-22,Rob Font,Jean Matsumoto,True,0.557606,True,False
+http://www.ufcstats.com/fight-details/8ef7723b6a8b45e1,2025-02-22,Melsik Baghdasaryan,Jean Silva,False,0.249583,True,False
+http://www.ufcstats.com/fight-details/c0d8a231d2f1d1af,2025-02-22,Alonzo Menifield,Julius Walker,True,0.538603,True,True
+http://www.ufcstats.com/fight-details/08763e87e10b9709,2025-02-22,Ibo Aslan,Ion Cutelaba,False,0.616028,True,False
+http://www.ufcstats.com/fight-details/0cdca4c22b8d3ab5,2025-02-22,Anthony Hernandez,Brendan Allen,True,0.685342,True,False
+http://www.ufcstats.com/fight-details/e011819e721c4a2a,2025-02-22,Nick Klein,Mansur Abdul-Malik,False,0.282725,True,True
+http://www.ufcstats.com/fight-details/bc6d70ab959dce70,2025-02-22,Ricky Simon,Javid Basharat,True,0.502177,True,False
+http://www.ufcstats.com/fight-details/615f7f894bafad82,2025-02-22,Nikolay Veretennikov,Austin Vanderford,False,0.573842,True,True
+http://www.ufcstats.com/fight-details/b6475543ab6d20c9,2025-02-22,Rafael Cerqueira,Modestas Bukauskas,False,0.366439,True,False
+http://www.ufcstats.com/fight-details/e9dfc2f009a77a8d,2025-02-22,Eric McConico,Nursulton Ruziboev,False,0.259283,True,True
+http://www.ufcstats.com/fight-details/3ded9bfdfb75f39b,2025-02-22,Melquizael Costa,Andre Fili,True,0.679855,True,False
+http://www.ufcstats.com/fight-details/9d8a37f130db13e5,2025-03-01,Manel Kape,Asu Almabayev,True,0.491314,True,False
+http://www.ufcstats.com/fight-details/6bdf0756fb57aced,2025-03-01,Cody Brundage,Julian Marquez,True,0.757012,True,False
+http://www.ufcstats.com/fight-details/061990783b9bdb36,2025-03-01,Nasrat Haqparast,Esteban Ribovics,True,0.561386,True,False
+http://www.ufcstats.com/fight-details/0dfdc94c1da32e20,2025-03-01,William Gomis,Hyder Amil,False,0.679968,True,False
+http://www.ufcstats.com/fight-details/a857acedb53ee959,2025-03-01,Mario Pinto,Austen Lane,True,0.688503,True,True
+http://www.ufcstats.com/fight-details/dd1df7f5a54fd9fc,2025-03-01,Chepe Mariscal,Ricardo Ramos,True,0.699905,True,False
+http://www.ufcstats.com/fight-details/1de799f17556b501,2025-03-01,Danny Silva,Lucas Almeida,True,0.71261,True,False
+http://www.ufcstats.com/fight-details/1ada4b9ee5810e0f,2025-03-01,JJ Aldrich,Andrea Lee,True,0.567162,False,False
+http://www.ufcstats.com/fight-details/206b8c14546d71f1,2025-03-01,Charles Johnson,Ramazan Temirov,False,0.595443,True,False
+http://www.ufcstats.com/fight-details/d6c3b730dc9f21a5,2025-03-01,Danny Barlow,Sam Patterson,False,0.522584,True,False
+http://www.ufcstats.com/fight-details/9e05fe95a4fc63bc,2025-03-08,Magomed Ankalaev,Alex Pereira,True,0.552367,True,False
+http://www.ufcstats.com/fight-details/a2f31cf3a28a7730,2025-03-08,Justin Gaethje,Rafael Fiziev,True,0.550624,True,False
+http://www.ufcstats.com/fight-details/79f1c9f97d83ec83,2025-03-08,Iasmin Lucindo,Amanda Lemos,False,0.84559,False,False
+http://www.ufcstats.com/fight-details/231968c02cdfe65e,2025-03-08,King Green,Mauricio Ruffy,False,0.391139,True,False
+http://www.ufcstats.com/fight-details/a3cd6a65aaa9f104,2025-03-08,Jalin Turner,Ignacio Bahamondes,False,0.423213,True,False
+http://www.ufcstats.com/fight-details/e61cb905f6152183,2025-03-08,Armen Petrosyan,Brunno Ferreira,False,0.38017,True,False
+http://www.ufcstats.com/fight-details/cab4937435d081d0,2025-03-08,Carlos Leal,Alex Morono,True,0.46123,True,False
+http://www.ufcstats.com/fight-details/19fe7177254802d1,2025-03-08,Mairon Santos,Francis Marshall,True,0.673932,True,False
+http://www.ufcstats.com/fight-details/96c2f85b46e98e91,2025-03-08,Djorden Santos,Ozzy Diaz,False,0.599255,True,True
+http://www.ufcstats.com/fight-details/af3e43049bc86fe9,2025-03-08,Joshua Van,Rei Tsuruya,True,0.692181,True,False
+http://www.ufcstats.com/fight-details/67f7163e536d62e2,2025-03-15,Marvin Vettori,Roman Dolidze,False,0.54169,True,False
+http://www.ufcstats.com/fight-details/c83133ee114945ed,2025-03-15,Chidi Njokuani,Elizeu Zaleski dos Santos,True,0.47221,True,False
+http://www.ufcstats.com/fight-details/d8f40b82364b6411,2025-03-15,Alexander Hernandez,Kurt Holobaugh,True,0.731627,True,False
+http://www.ufcstats.com/fight-details/ab1aa23060d4e87b,2025-03-15,Da'Mon Blackshear,Cody Gibson,True,0.65337,True,False
+http://www.ufcstats.com/fight-details/e56403718205b494,2025-03-15,Diyar Nurgozhay,Brendson Ribeiro,False,0.547184,True,True
+http://www.ufcstats.com/fight-details/36db86c39ed09997,2025-03-15,Kevin Vallejos,SeungWoo Choi,True,0.642212,True,True
+http://www.ufcstats.com/fight-details/29d9c5a3f2b78903,2025-03-15,SuYoung You,AJ Cunningham,True,0.735061,True,False
+http://www.ufcstats.com/fight-details/cb3eb07b7152366e,2025-03-15,Josias Musasa,Carlos Vera,False,0.666368,True,True
+http://www.ufcstats.com/fight-details/5fa6543868367f4b,2025-03-15,Stephanie Luciano,Sam Hughes,False,0.714938,False,False
+http://www.ufcstats.com/fight-details/5d8af316413ea2f7,2025-03-15,Andre Lima,Daniel Barez,True,0.782591,True,False
+http://www.ufcstats.com/fight-details/1c62a7444808d97f,2025-03-15,Josiane Nunes,Priscila Cachoeira,False,0.717884,False,False
+http://www.ufcstats.com/fight-details/a8f8245096eaf0cd,2025-03-15,Yuneisy Duben,Carli Judice,False,0.450876,False,True
+http://www.ufcstats.com/fight-details/74bc22b367cca118,2025-03-15,Ryan Spann,Waldo Cortes Acosta,False,0.447468,True,False
+http://www.ufcstats.com/fight-details/8e6640c007ad603d,2025-03-22,Jordan Vucenic,Chris Duncan,False,0.375192,True,False
+http://www.ufcstats.com/fight-details/371ed8497799998e,2025-03-22,Sean Brady,Leon Edwards,True,0.516187,True,False
+http://www.ufcstats.com/fight-details/6d9ea9f436ed354d,2025-03-22,Jan Blachowicz,Carlos Ulberg,False,0.420301,True,False
+http://www.ufcstats.com/fight-details/96c6be6b22385967,2025-03-22,Gunnar Nelson,Kevin Holland,False,0.695086,True,False
+http://www.ufcstats.com/fight-details/b5b4b69bccb9ff4a,2025-03-22,Alexia Thainara,Molly McCann,True,0.555552,False,True
+http://www.ufcstats.com/fight-details/9779eb1aae1d4654,2025-03-22,Morgan Charriere,Nathaniel Wood,False,0.637034,True,False
+http://www.ufcstats.com/fight-details/265dbd9be8caa7de,2025-03-22,Kaue Fernandes,Guram Kutateladze,True,0.667631,True,False
+http://www.ufcstats.com/fight-details/e5a88f5c686173c4,2025-03-22,Lone'er Kavanagh,Felipe dos Santos,True,0.690017,True,False
+http://www.ufcstats.com/fight-details/dd229687cb62c871,2025-03-22,Marcin Tybura,Mick Parkin,True,0.258616,True,False
+http://www.ufcstats.com/fight-details/8af2b589d5e9c1ae,2025-03-22,Christian Leroy Duncan,Andrey Pulyaev,True,0.661066,True,True
+http://www.ufcstats.com/fight-details/a693622ad8c0d672,2025-03-22,Puja Tomar,Shauna Bannon,False,0.603155,False,False
+http://www.ufcstats.com/fight-details/1b02588149d126bf,2025-03-22,Nathan Fletcher,Caolan Loughran,False,0.745079,True,False
+http://www.ufcstats.com/fight-details/2a1071689c3af9df,2025-03-22,Chris Padilla,Jai Herbert,True,0.705674,True,False
+http://www.ufcstats.com/fight-details/55376d5c205fa844,2025-03-29,Saimon Oliveira,David Martinez,False,0.356333,True,True
+http://www.ufcstats.com/fight-details/33e301872e2b5680,2025-03-29,Steve Erceg,Brandon Moreno,False,0.318713,True,False
+http://www.ufcstats.com/fight-details/8fc8d66ad0074ab0,2025-03-29,Drew Dober,Manuel Torres,False,0.247826,True,False
+http://www.ufcstats.com/fight-details/ab4a91a59c01d6b6,2025-03-29,Edgar Chairez,CJ Vergara,True,0.528483,True,False
+http://www.ufcstats.com/fight-details/5ba7dd466e30169f,2025-03-29,Kevin Borjas,Ronaldo Rodriguez,True,0.265821,True,False
+http://www.ufcstats.com/fight-details/0f20c1d7c44fa5fe,2025-03-29,Raul Rosas Jr.,Vince Morales,True,0.884562,True,False
+http://www.ufcstats.com/fight-details/41cdbcc0f3635b8f,2025-03-29,Melquizael Costa,Christian Rodriguez,True,0.492037,True,False
+http://www.ufcstats.com/fight-details/9f66d450af690df5,2025-03-29,MarQuel Mederos,Austin Hubbard,True,0.628749,True,False
+http://www.ufcstats.com/fight-details/7efca050bc7be8ac,2025-03-29,Loopy Godinez,Julia Polastri,True,0.651295,False,False
+http://www.ufcstats.com/fight-details/7e3fc760b26b6ae4,2025-03-29,Vinc Pichel,Rafa Garcia,False,0.258364,True,False
+http://www.ufcstats.com/fight-details/e2e2537a345367d4,2025-03-29,Gabriel Miranda,Jamall Emmers,False,0.341992,True,False
+http://www.ufcstats.com/fight-details/64fe6e61a24dbf39,2025-03-29,Ateba Gautier,Jose Daniel Medina,True,0.668767,True,True
+http://www.ufcstats.com/fight-details/86a1be10255eea4e,2025-04-05,Lerone Murphy,Josh Emmett,True,0.739106,True,False
+http://www.ufcstats.com/fight-details/a160e94fdb66de17,2025-04-05,Joanderson Brito,Pat Sabatini,False,0.568624,True,False
+http://www.ufcstats.com/fight-details/fc3825dd1b67e39d,2025-04-05,Cortavious Romious,ChangHo Lee,False,0.341327,True,False
+http://www.ufcstats.com/fight-details/0c80eef2f4570543,2025-04-05,Brad Tavares,Gerald Meerschaert,True,0.372592,True,False
+http://www.ufcstats.com/fight-details/de9422207df2de64,2025-04-05,Luis Gurule,Ode Osbourne,False,0.608866,True,True
+http://www.ufcstats.com/fight-details/d1368ca941c1fefc,2025-04-05,Robert Valentin,Torrez Finney,False,0.375011,True,True
+http://www.ufcstats.com/fight-details/76641669c1607b7a,2025-04-05,Diana Belbita,Dione Barbosa,False,0.251582,False,False
+http://www.ufcstats.com/fight-details/58811a4e36c53b89,2025-04-05,Rhys McKee,Daniel Frunza,True,0.404117,True,True
+http://www.ufcstats.com/fight-details/fd088ce1481315a5,2025-04-05,Loma Lookboonmee,Istela Nunes,True,0.790138,False,False
+http://www.ufcstats.com/fight-details/4b1aec2395ebca14,2025-04-05,Victor Henry,Pedro Falcao,True,0.501275,True,False
+http://www.ufcstats.com/fight-details/96cc199d78732d11,2025-04-05,Martin Buday,Uran Satybaldiev,True,0.462003,True,True
+http://www.ufcstats.com/fight-details/cca4d763b1c6de0a,2025-04-05,Talita Alencar,Vanessa Demopoulos,True,0.56974,False,False
+http://www.ufcstats.com/fight-details/e733f148060bef2a,2025-04-12,Diego Lopes,Alexander Volkanovski,False,0.419001,True,False
+http://www.ufcstats.com/fight-details/d05cb4c4135ce402,2025-04-12,Michael Chandler,Paddy Pimblett,False,0.275392,True,False
+http://www.ufcstats.com/fight-details/d3be5a4e0ec273e2,2025-04-12,Yair Rodriguez,Patricio Pitbull,True,0.79048,True,True
+http://www.ufcstats.com/fight-details/8c540eb4afe8c43e,2025-04-12,Bryce Mitchell,Jean Silva,False,0.595751,True,False
+http://www.ufcstats.com/fight-details/b2d731415bd367df,2025-04-12,Dominick Reyes,Nikita Krylov,True,0.349213,True,False
+http://www.ufcstats.com/fight-details/fc43d60cbd6b0e6a,2025-04-12,Dan Ige,Sean Woodson,True,0.27993,True,False
+http://www.ufcstats.com/fight-details/b87d6f71d901355b,2025-04-12,Marco Tulio,Tresean Gore,True,0.492833,True,False
+http://www.ufcstats.com/fight-details/11eb27a1ac74d225,2025-04-12,Jim Miller,Chase Hooper,False,0.266063,True,False
+http://www.ufcstats.com/fight-details/08e7a39eb7482ebf,2025-04-12,Julian Erosa,Darren Elkins,True,0.461062,True,False
+http://www.ufcstats.com/fight-details/4bbda6c1f6cf9d4e,2025-04-12,Michal Oleksiejczuk,Sedriques Dumas,True,0.505839,True,False
+http://www.ufcstats.com/fight-details/fd98843926965cbd,2025-04-12,Sumudaerji,Mitch Raposo,True,0.531937,True,False
+http://www.ufcstats.com/fight-details/0e71e69359db4d1e,2025-04-12,Hailey Cowan,Nora Cornolle,False,0.327179,False,False
+http://www.ufcstats.com/fight-details/0eccebee160137b1,2025-04-12,Yan Xiaonan,Virna Jandiroba,False,0.455855,False,False
+http://www.ufcstats.com/fight-details/fbf83609dc96f32e,2025-04-26,Randy Brown,Nicolas Dalby,True,0.750688,True,False
+http://www.ufcstats.com/fight-details/633f4b5ec767769d,2025-04-26,Ian Machado Garry,Carlos Prates,True,0.685334,True,False
+http://www.ufcstats.com/fight-details/a526a72ade275f46,2025-04-26,Anthony Smith,Zhang Mingyang,False,0.241934,True,False
+http://www.ufcstats.com/fight-details/4072abf0b0c179f2,2025-04-26,Giga Chikadze,David Onama,False,0.541886,True,False
+http://www.ufcstats.com/fight-details/9bbd45774fb4a6eb,2025-04-26,Abus Magomedov,Michel Pereira,True,0.404443,True,False
+http://www.ufcstats.com/fight-details/62fbdd4f0bcd3c2a,2025-04-26,Andre Muniz,Ikram Aliskerov,False,0.597159,True,False
+http://www.ufcstats.com/fight-details/97770b38df67b276,2025-04-26,Evan Elder,Gauge Young,True,0.482967,True,True
+http://www.ufcstats.com/fight-details/6f3cb7ce84185dd3,2025-04-26,Chris Gutierrez,John Castaneda,True,0.767429,True,False
+http://www.ufcstats.com/fight-details/7d51649373d42571,2025-04-26,Da'Mon Blackshear,Alatengheili,True,0.573011,True,False
+http://www.ufcstats.com/fight-details/c2c20a04a78d9143,2025-04-26,Cameron Saaiman,Malcolm Wellmaker,False,0.631043,True,True
+http://www.ufcstats.com/fight-details/e7b3ca036835b7c2,2025-04-26,Polyana Viana,Jaqueline Amorim,False,0.186922,False,False
+http://www.ufcstats.com/fight-details/23201d09a78d446d,2025-04-26,Roberto Romero,Timmy Cuamba,False,0.56283,True,False
+http://www.ufcstats.com/fight-details/d8d22dcc1f6912e7,2025-04-26,Jimmy Flick,Matt Schnell,False,0.602686,True,False
+http://www.ufcstats.com/fight-details/7fd6770fe2d4f258,2025-04-26,Chelsea Chandler,Joselyne Edwards,False,0.264768,False,False
+http://www.ufcstats.com/fight-details/9b3bade95e1dd484,2025-05-03,Cory Sandhagen,Deiveson Figueiredo,True,0.58453,True,False
+http://www.ufcstats.com/fight-details/380242601a2c5991,2025-05-03,Bo Nickal,Reinier de Ridder,False,0.673484,True,False
+http://www.ufcstats.com/fight-details/5ce29056e0cd2df9,2025-05-03,Daniel Marcos,Montel Jackson,False,0.307786,True,False
+http://www.ufcstats.com/fight-details/6ccd10adc968e1f0,2025-05-03,Cameron Smotherman,Serhiy Sidey,False,0.629007,True,False
+http://www.ufcstats.com/fight-details/9039959b41901412,2025-05-03,Jeremy Stephens,Mason Jones,False,0.379554,True,False
+http://www.ufcstats.com/fight-details/191ee545160a4e09,2025-05-03,Santiago Ponzinibbio,Daniel Rodriguez,False,0.59958,True,False
+http://www.ufcstats.com/fight-details/77ed474dfc5359ea,2025-05-03,Azamat Bekoev,Ryan Loder,True,0.569042,True,False
+http://www.ufcstats.com/fight-details/6e26a6293ea6ba62,2025-05-03,Gillian Robertson,Marina Rodriguez,True,0.797634,False,False
+http://www.ufcstats.com/fight-details/97b32ff27fd457a8,2025-05-03,Gaston Bolanos,Quang Le,False,0.644693,True,False
+http://www.ufcstats.com/fight-details/c445401709421fa4,2025-05-03,Don'Tale Mayes,Thomas Petersen,False,0.335304,True,False
+http://www.ufcstats.com/fight-details/469f887278324e63,2025-05-03,Ivana Petrovic,Juliana Miller,False,0.636018,False,False
+http://www.ufcstats.com/fight-details/2707dc2245335cc1,2025-05-03,Yana Santos,Miesha Tate,True,0.561572,False,False
+http://www.ufcstats.com/fight-details/b873c116e39c9920,2025-05-10,Belal Muhammad,Jack Della Maddalena,False,0.37398,True,False
+http://www.ufcstats.com/fight-details/9e9d1764a015f313,2025-05-10,Valentina Shevchenko,Manon Fiorot,True,0.487422,False,False
+http://www.ufcstats.com/fight-details/891b2faf1bff38ee,2025-05-10,Jose Aldo,Aiemann Zahabi,False,0.549205,True,False
+http://www.ufcstats.com/fight-details/0f53eb509d0ffeb9,2025-05-10,Natalia Silva,Alexa Grasso,True,0.725274,False,False
+http://www.ufcstats.com/fight-details/c7190cd03e53fb61,2025-05-10,Benoit Saint Denis,Kyle Prepolec,True,0.84889,True,False
+http://www.ufcstats.com/fight-details/c812457a810dde39,2025-05-10,Modestas Bukauskas,Ion Cutelaba,True,0.349089,True,False
+http://www.ufcstats.com/fight-details/4db2d86ebe8c8abd,2025-05-10,Jessica Andrade,Jasmine Jasudavicius,False,0.40428,False,False
+http://www.ufcstats.com/fight-details/99aa1f28e22bb6dd,2025-05-10,Ivan Erslan,Navajo Stirling,False,0.327185,True,False
+http://www.ufcstats.com/fight-details/6ecfa439ef900bcc,2025-05-10,Marc-Andre Barriault,Bruno Silva,True,0.453272,True,False
+http://www.ufcstats.com/fight-details/0e0a4282cd6c86d7,2025-05-10,Daniel Santos,JeongYeong Lee,True,0.436968,True,False
+http://www.ufcstats.com/fight-details/c20bd12ae7f04eff,2025-05-10,Bekzat Almakhan,Brad Katona,True,0.58102,True,False
+http://www.ufcstats.com/fight-details/2521234a4bf7c615,2025-05-10,Charles Radtke,Mike Malott,False,0.456368,True,False
+http://www.ufcstats.com/fight-details/b3044bf646306e7f,2025-05-17,Nursulton Ruziboev,Dustin Stoltzfus,True,0.703053,True,False
+http://www.ufcstats.com/fight-details/fe2acfdaaaec3dba,2025-05-17,Julian Erosa,Melquizael Costa,False,0.410929,True,False
+http://www.ufcstats.com/fight-details/a81ad236a2f221f2,2025-05-17,Michael Morales,Gilbert Burns,True,0.782735,True,False
+http://www.ufcstats.com/fight-details/dcb27eef6441268c,2025-05-17,Mairon Santos,Sodiq Yusuff,True,0.575073,True,False
+http://www.ufcstats.com/fight-details/a9a6cca4bbf7a5db,2025-05-17,Matheus Camilo,Gabe Green,False,0.569968,True,True
+http://www.ufcstats.com/fight-details/f75fe8b384b0db11,2025-05-17,Luana Santos,Tainara Lisboa,True,0.665454,False,False
+http://www.ufcstats.com/fight-details/d6e2bc6e6c0cc4fe,2025-05-17,Connor Matthews,Yadier del Valle,False,0.337544,True,True
+http://www.ufcstats.com/fight-details/afdd95ae7b7cdb0c,2025-05-17,Luana Pinheiro,Tecia Pennington,False,0.329902,False,False
+http://www.ufcstats.com/fight-details/8ba31cf0b3164b72,2025-05-17,Thiago Moises,Jared Gordon,False,0.549919,True,False
+http://www.ufcstats.com/fight-details/66887532be2de5ee,2025-05-17,Denise Gomes,Elise Reed,True,0.751148,False,False
+http://www.ufcstats.com/fight-details/18a7dc86279066f8,2025-05-17,HyunSung Park,Carlos Hernandez,True,0.68871,True,False
+http://www.ufcstats.com/fight-details/212527d462690304,2025-05-31,Ludovit Klein,Mateusz Gamrot,False,0.399448,True,False
+http://www.ufcstats.com/fight-details/7aaa810540132a4b,2025-05-31,Bruno Lopes,Dustin Jacoby,False,0.646694,True,False
+http://www.ufcstats.com/fight-details/106918bfbe24335d,2025-05-31,Ketlen Vieira,Macy Chiasson,True,0.398594,False,False
+http://www.ufcstats.com/fight-details/305d8c85b35a7d4e,2025-05-31,Billy Ray Goff,Ramiz Brahimaj,False,0.562715,True,False
+http://www.ufcstats.com/fight-details/baa2ee0bf7f97079,2025-05-31,Jafel Filho,Allan Nascimento,False,0.461418,True,False
+http://www.ufcstats.com/fight-details/2521fed000747f47,2025-05-31,Jordan Leavitt,Kurt Holobaugh,True,0.80349,True,False
+http://www.ufcstats.com/fight-details/ae89ba793121fe0c,2025-05-31,Michael Aswell Jr.,Bolaji Oki,False,0.61831,True,True
+http://www.ufcstats.com/fight-details/73240bea13ed5e71,2025-05-31,Alice Ardelean,Rayanne dos Santos,True,0.308865,False,False
+http://www.ufcstats.com/fight-details/ad68450307a21ab1,2025-05-31,Zach Reese,Dusko Todorovic,True,0.662634,True,False
+http://www.ufcstats.com/fight-details/2129acab2280bd29,2025-06-07,Vicente Luque,Kevin Holland,False,0.582794,True,False
+http://www.ufcstats.com/fight-details/e61d83e4e1f9c4d7,2025-06-07,Merab Dvalishvili,Sean O'Malley,True,0.450362,True,False
+http://www.ufcstats.com/fight-details/81b84b34f0357fa5,2025-06-07,Kayla Harrison,Julianna Pena,True,0.510337,False,False
+http://www.ufcstats.com/fight-details/e28e829800466aca,2025-06-07,Kelvin Gastelum,Joe Pyfer,False,0.289555,True,False
+http://www.ufcstats.com/fight-details/df5dac45fc585fb0,2025-06-07,Patchy Mix,Mario Bautista,False,0.210134,True,True
+http://www.ufcstats.com/fight-details/b6a87389bdc36a00,2025-06-07,Joshua Van,Bruno Silva,True,0.787886,True,False
+http://www.ufcstats.com/fight-details/f0488a4486a64af0,2025-06-07,Khaos Williams,Andreas Gustafsson,False,0.73835,True,True
+http://www.ufcstats.com/fight-details/ac977a0389682124,2025-06-07,Waldo Cortes Acosta,Serghei Spivac,True,0.518473,True,False
+http://www.ufcstats.com/fight-details/d078e9046aa86307,2025-06-07,Ariane da Silva,Wang Cong,False,0.506274,False,False
+http://www.ufcstats.com/fight-details/2e4064e0e6d4d92e,2025-06-07,Quillan Salkilld,Yanal Ashmouz,True,0.658611,True,False
+http://www.ufcstats.com/fight-details/0e8599eca8ccfa32,2025-06-07,MarQuel Mederos,Mark Choinski,True,0.624134,True,True
+http://www.ufcstats.com/fight-details/01100a90b584215d,2025-06-07,Brendson Ribeiro,Azamat Murzakanov,False,0.376786,True,False
+http://www.ufcstats.com/fight-details/9f4a0de31375ba04,2025-06-07,Jeka Saragih,JooSang Yoo,False,0.389241,True,True
+http://www.ufcstats.com/fight-details/d75b3d3c2b209b75,2025-06-14,Kamaru Usman,Joaquin Buckley,True,0.36169,True,False
+http://www.ufcstats.com/fight-details/79dfbbdd14fbbd11,2025-06-14,Miranda Maverick,Rose Namajunas,False,0.436359,False,False
+http://www.ufcstats.com/fight-details/e5bd7e6e2a50a843,2025-06-14,Edmen Shahbazyan,Andre Petroski,True,0.502359,True,False
+http://www.ufcstats.com/fight-details/1714950933f88ab9,2025-06-14,Cody Garbrandt,Raoni Barcelos,False,0.391026,True,False
+http://www.ufcstats.com/fight-details/ec2034b134ae71cd,2025-06-14,Oumar Sy,Alonzo Menifield,False,0.813135,True,False
+http://www.ufcstats.com/fight-details/e861e9cc0118c670,2025-06-14,Court McGee,Michael Chiesa,False,0.246287,True,False
+http://www.ufcstats.com/fight-details/f6454f2e508626ec,2025-06-14,Kris Moutinho,Malcolm Wellmaker,False,0.124289,True,False
+http://www.ufcstats.com/fight-details/b39b8ff0d7de211a,2025-06-14,Cody Durden,Jose Ochoa,False,0.288083,True,False
+http://www.ufcstats.com/fight-details/59c4fdb3c0673066,2025-06-14,Ricky Simon,Cameron Smotherman,True,0.758863,True,False
+http://www.ufcstats.com/fight-details/2ae7404681deb3b3,2025-06-14,Ange Loosa,Phil Rowe,False,0.342171,True,False
+http://www.ufcstats.com/fight-details/ab325ea526824723,2025-06-14,Jamey-Lyn Horth,Vanessa Demopoulos,True,0.838111,False,False
+http://www.ufcstats.com/fight-details/a1afc16e21d1a807,2025-06-21,Rafael Fiziev,Ignacio Bahamondes,True,0.293621,True,False
+http://www.ufcstats.com/fight-details/8e5744c664fec3e9,2025-06-21,Curtis Blaydes,Rizvan Kuniev,True,0.779355,True,True
+http://www.ufcstats.com/fight-details/36ec204f47e4d613,2025-06-21,Myktybek Orolbai,Tofiq Musayev,True,0.722965,True,True
+http://www.ufcstats.com/fight-details/7513a00037094075,2025-06-21,Nikolas Motta,Nazim Sadykhov,False,0.366428,True,False
+http://www.ufcstats.com/fight-details/19764211af05674c,2025-06-21,Bogdan Grad,Muhammad Naimov,False,0.531316,True,False
+http://www.ufcstats.com/fight-details/03bc32bdb5a33496,2025-06-21,Khalil Rountree Jr.,Jamahal Hill,True,0.401437,True,False
+http://www.ufcstats.com/fight-details/5fcf18bcd2a020f1,2025-06-21,JunYong Park,Ismail Naurdiev,True,0.374726,True,False
+http://www.ufcstats.com/fight-details/fff3218758c513b8,2025-06-21,Melissa Mullins,Daria Zhelezniakova,False,0.522594,False,False
+http://www.ufcstats.com/fight-details/2bfc0212f2cae65b,2025-06-21,Irina Alekseeva,Klaudia Sygula,False,0.477258,False,False
+http://www.ufcstats.com/fight-details/8c140756bf43dcc2,2025-06-21,Tagir Ulanbekov,Azat Maksum,True,0.725439,True,False
+http://www.ufcstats.com/fight-details/a12d3a6c8aaf87ca,2025-06-21,Mohammed Usman,Hamdy Abdelwahab,True,0.362222,True,False
+http://www.ufcstats.com/fight-details/e512b80bbaea36c2,2025-06-21,Seokhyeon Ko,Oban Elliott,True,0.287405,True,True
+http://www.ufcstats.com/fight-details/7a64d63e12618ba7,2025-06-28,Charles Oliveira,Ilia Topuria,False,0.343536,True,False
+http://www.ufcstats.com/fight-details/8308464729ea7c40,2025-06-28,Alexandre Pantoja,Kai Kara-France,True,0.59788,True,False
+http://www.ufcstats.com/fight-details/f722b96ae6862843,2025-06-28,Joshua Van,Brandon Royval,True,0.780187,True,False
+http://www.ufcstats.com/fight-details/1ea9ad3b6e1cba79,2025-06-28,Renato Moicano,Beneil Dariush,False,0.594327,True,False
+http://www.ufcstats.com/fight-details/f6a3c78f15ff26c7,2025-06-28,Payton Talbott,Felipe Lima,True,0.456718,True,False
+http://www.ufcstats.com/fight-details/958522de54ccc536,2025-06-28,Jack Hermansson,Gregory Rodrigues,False,0.559049,True,False
+http://www.ufcstats.com/fight-details/815ff62ca8e217be,2025-06-28,Tracy Cortez,Viviane Araujo,True,0.608897,False,False
+http://www.ufcstats.com/fight-details/d7be78c400e7e0f9,2025-06-28,Viacheslav Borshchev,Terrance McKinney,False,0.219239,True,False
+http://www.ufcstats.com/fight-details/9bff9fe298e63357,2025-06-28,Niko Price,Jacobe Smith,False,0.269495,True,False
+http://www.ufcstats.com/fight-details/043172689e415438,2025-06-28,Alvin Hines,Jhonata Diniz,False,0.379226,True,True
+http://www.ufcstats.com/fight-details/2f523b757f7f33a2,2025-06-28,Hyder Amil,Jose Delgado,False,0.557764,True,False
+http://www.ufcstats.com/fight-details/0adfc21045c02555,2025-07-12,Tallison Teixeira,Derrick Lewis,False,0.715003,True,False
+http://www.ufcstats.com/fight-details/2a03bc4c491b4c9a,2025-07-12,Stephen Thompson,Gabriel Bonfim,False,0.253126,True,False
+http://www.ufcstats.com/fight-details/f368475c366c6d85,2025-07-12,Steve Garcia,Calvin Kattar,True,0.838577,True,False
+http://www.ufcstats.com/fight-details/4e5d4a36eaaa3a78,2025-07-12,Nate Landwehr,Morgan Charriere,False,0.273524,True,False
+http://www.ufcstats.com/fight-details/4b75d3b7738cb278,2025-07-12,Vitor Petrino,Austen Lane,True,0.713586,True,False
+http://www.ufcstats.com/fight-details/d5e3be7a07c48b08,2025-07-12,Chidi Njokuani,Jake Matthews,False,0.349867,True,False
+http://www.ufcstats.com/fight-details/236f811290163dca,2025-07-12,Chris Curtis,Max Griffin,True,0.498211,True,False
+http://www.ufcstats.com/fight-details/46bc1338a50cbeac,2025-07-12,Eduarda Moura,Lauren Murphy,True,0.794346,False,False
+http://www.ufcstats.com/fight-details/5c650ae2193ab1bc,2025-07-12,Kennedy Nzechukwu,Valter Walker,False,0.519821,True,False
+http://www.ufcstats.com/fight-details/7f33fbdc35afd721,2025-07-12,Mike Davis,Mitch Ramirez,True,0.798651,True,False
+http://www.ufcstats.com/fight-details/120d66cb0da0f3c3,2025-07-12,Fatima Kline,Melissa Martinez,True,0.665808,False,False
+http://www.ufcstats.com/fight-details/b19bf99c7eb796bc,2025-07-12,Tuco Tokkos,Junior Tafa,True,0.283056,True,False
+http://www.ufcstats.com/fight-details/23c963be9de38205,2025-07-19,Paulo Costa,Roman Kopylov,True,0.408102,True,False
+http://www.ufcstats.com/fight-details/5dde61734080ac4a,2025-07-19,Kevin Holland,Daniel Rodriguez,False,0.520129,True,False
+http://www.ufcstats.com/fight-details/acc961fd5cf5c62e,2025-07-19,Patricio Pitbull,Dan Ige,True,0.219307,True,False
+http://www.ufcstats.com/fight-details/a95b03e9b5a91e47,2025-07-19,Daniel Zellhuber,Michael Johnson,False,0.715447,True,False
+http://www.ufcstats.com/fight-details/d2cb92fdf6a497e9,2025-07-19,Kyler Phillips,Vinicius Oliveira,False,0.586794,True,False
+http://www.ufcstats.com/fight-details/8e1feda9141602f1,2025-07-19,Brendan Allen,Marvin Vettori,True,0.574462,True,False
+http://www.ufcstats.com/fight-details/d7507e2741fd4d05,2025-07-19,Dustin Poirier,Max Holloway,False,0.25043,True,False
+http://www.ufcstats.com/fight-details/72e477b41f44e358,2025-07-19,Robert Valentin,Ateba Gautier,False,0.251907,True,False
+http://www.ufcstats.com/fight-details/37bc72d5d211b189,2025-07-19,Adam Fugitt,Islam Dulatov,False,0.337087,True,True
+http://www.ufcstats.com/fight-details/798652dbea086910,2025-07-19,Marcin Prachnio,Jimmy Crute,False,0.259984,True,False
+http://www.ufcstats.com/fight-details/182ee320edb1b5ed,2025-07-19,Lukasz Brzeski,Ryan Spann,False,0.412187,True,False
+http://www.ufcstats.com/fight-details/74099d470e8d2765,2025-07-19,Jackson McVey,Brunno Ferreira,False,0.39703,True,True
+http://www.ufcstats.com/fight-details/a602c68147b752b2,2025-07-19,Nicolle Caliari,Carli Judice,False,0.292426,False,False
+http://www.ufcstats.com/fight-details/df2ed8b509fbdbdc,2025-07-19,Francisco Prado,Nikolay Veretennikov,False,0.68765,True,False
+http://www.ufcstats.com/fight-details/6b8be0ee3e569ad2,2025-07-26,Reinier de Ridder,Robert Whittaker,True,0.517385,True,False
+http://www.ufcstats.com/fight-details/d4d4ee045b0ca695,2025-07-26,Petr Yan,Marcus McGhee,True,0.679371,True,False
+http://www.ufcstats.com/fight-details/582d66ce97309e29,2025-07-26,Marc-Andre Barriault,Shara Magomedov,False,0.199584,True,False
+http://www.ufcstats.com/fight-details/887c61da1a78a5e1,2025-07-26,Jose Ochoa,Asu Almabayev,False,0.444851,True,False
+http://www.ufcstats.com/fight-details/77f960d82cda0b76,2025-07-26,Nikita Krylov,Bogdan Guskov,False,0.587011,True,False
+http://www.ufcstats.com/fight-details/7c075e3383198e14,2025-07-26,Carlos Leal,Muslim Salikhov,False,0.506964,True,False
+http://www.ufcstats.com/fight-details/017a825c7820d12e,2025-07-26,Davey Grant,Da'Mon Blackshear,True,0.278169,True,False
+http://www.ufcstats.com/fight-details/3e6067763978d862,2025-07-26,Amanda Ribas,Tabatha Ricci,False,0.36707,False,False
+http://www.ufcstats.com/fight-details/f9dac7702609669f,2025-07-26,Ibo Aslan,Billy Elekana,False,0.660629,True,False
+http://www.ufcstats.com/fight-details/23ddf51ce630028d,2025-07-26,Steven Nguyen,Mohammad Yahya,True,0.516993,True,False
+http://www.ufcstats.com/fight-details/0a598768f5c8d540,2025-07-26,Martin Buday,Marcus Buchecha,True,0.629616,True,True
+http://www.ufcstats.com/fight-details/e72c691b7c68b03a,2025-07-26,Bryce Mitchell,Said Nurmagomedov,True,0.639446,True,False
+http://www.ufcstats.com/fight-details/c62ed8a6002b5360,2025-08-02,Karol Rosa,Nora Cornolle,True,0.449998,False,False
+http://www.ufcstats.com/fight-details/282c8c6c1ed82bfb,2025-08-02,Tatsuro Taira,HyunSung Park,True,0.727579,True,False
+http://www.ufcstats.com/fight-details/426a69e343822ab3,2025-08-02,Mateusz Rebecki,Chris Duncan,False,0.418396,True,False
+http://www.ufcstats.com/fight-details/878941394f9e3538,2025-08-02,Elves Brener,Esteban Ribovics,False,0.525582,True,False
+http://www.ufcstats.com/fight-details/ac57250e3de89d5d,2025-08-02,Neil Magny,Elizeu Zaleski dos Santos,True,0.540609,True,False
+http://www.ufcstats.com/fight-details/111e66eb922449e4,2025-08-02,Kevin Vallejos,Danny Silva,True,0.548343,True,False
+http://www.ufcstats.com/fight-details/eeeffa7f514e0c0e,2025-08-02,Rinya Nakamura,Nathan Fletcher,True,0.455048,True,False
+http://www.ufcstats.com/fight-details/45781930d64da456,2025-08-02,Rodolfo Vieira,Tresean Gore,True,0.720822,True,False
+http://www.ufcstats.com/fight-details/b3c695728e177fd4,2025-08-02,Andrey Pulyaev,Nick Klein,True,0.532614,True,False
+http://www.ufcstats.com/fight-details/07c2af68b6dbc4ec,2025-08-02,Austin Bashi,John Yannis,True,0.575885,True,True
+http://www.ufcstats.com/fight-details/b47db03affb279c3,2025-08-02,Rafael Estevam,Felipe Bunes,True,0.751665,True,False
+http://www.ufcstats.com/fight-details/d98d6b2c13557a87,2025-08-02,Ketlen Souza,Piera Rodriguez,False,0.587243,False,False
+http://www.ufcstats.com/fight-details/68fe62bac7fd8bb0,2025-08-09,Roman Dolidze,Anthony Hernandez,False,0.141204,True,False
+http://www.ufcstats.com/fight-details/37d58369782cb86b,2025-08-09,Ode Osbourne,Steve Erceg,False,0.331452,True,False
+http://www.ufcstats.com/fight-details/646c79a7ecd12e5f,2025-08-09,Iasmin Lucindo,Angela Hill,True,0.771072,False,False
+http://www.ufcstats.com/fight-details/98d6771af9b0ebe5,2025-08-09,Christian Rodriguez,Andre Fili,False,0.769648,True,False
+http://www.ufcstats.com/fight-details/ed5383b50ffcdded,2025-08-09,Jean Matsumoto,Miles Johns,True,0.556823,True,False
+http://www.ufcstats.com/fight-details/75a84211f50c53f5,2025-08-09,Eryk Anders,Christian Leroy Duncan,False,0.41998,True,False
+http://www.ufcstats.com/fight-details/3d6571790c21527c,2025-08-09,Rafael Cerqueira,Julius Walker,False,0.230257,True,False
+http://www.ufcstats.com/fight-details/ae7a8f19743e8154,2025-08-09,Elijah Smith,Toshiomi Kazama,True,0.720239,True,False
+http://www.ufcstats.com/fight-details/aef44145740741b3,2025-08-09,Joselyne Edwards,Priscila Cachoeira,True,0.865064,False,False
+http://www.ufcstats.com/fight-details/7d923267c44dd93b,2025-08-09,Uros Medic,Gilbert Urbina,True,0.59644,True,False
+http://www.ufcstats.com/fight-details/6ef50ed03b116b60,2025-08-09,Gabriella Fernandes,Julija Stoliarenko,True,0.677609,False,False
+http://www.ufcstats.com/fight-details/857e8facd8ff7c36,2025-08-09,Eric McConico,Cody Brundage,True,0.396452,True,False
+http://www.ufcstats.com/fight-details/12cedec11b37ddc0,2025-08-16,Khamzat Chimaev,Dricus Du Plessis,True,0.652551,True,False
+http://www.ufcstats.com/fight-details/9fa6a029f7f8241c,2025-08-16,Aaron Pico,Lerone Murphy,False,0.26259,True,True
+http://www.ufcstats.com/fight-details/42585ce706c086de,2025-08-16,Carlos Prates,Geoff Neal,True,0.494467,True,False
+http://www.ufcstats.com/fight-details/9939d7073462e07e,2025-08-16,Michael Page,Jared Cannonier,True,0.50125,True,False
+http://www.ufcstats.com/fight-details/82338ba457fbe87f,2025-08-16,Kai Asakura,Tim Elliott,False,0.545107,True,False
+http://www.ufcstats.com/fight-details/88020d22cf905792,2025-08-16,Karine Silva,Dione Barbosa,True,0.503076,False,False
+http://www.ufcstats.com/fight-details/5b880d10b0ed7acc,2025-08-16,Michal Oleksiejczuk,Gerald Meerschaert,True,0.634177,True,False
+http://www.ufcstats.com/fight-details/a2eafd9e1d5031b1,2025-08-16,Loopy Godinez,Jessica Andrade,True,0.694401,False,False
+http://www.ufcstats.com/fight-details/1d8dc0fb5d47357f,2025-08-16,Chase Hooper,Alexander Hernandez,False,0.829022,True,False
+http://www.ufcstats.com/fight-details/bc63f1b2e52f603e,2025-08-16,Edson Barboza,Drakkar Klose,False,0.432354,True,False
+http://www.ufcstats.com/fight-details/68c423c7119004f3,2025-08-16,Joseph Morales,Alibi Idiris,True,0.492268,True,True
+http://www.ufcstats.com/fight-details/5efd13a12be06706,2025-08-16,Eric Nolan,Baisangur Susurkaev,False,0.443158,True,True
+http://www.ufcstats.com/fight-details/16523b1bec3cd7b0,2025-08-22,Terrance Saeteurn,Nyamjargal Tumendemberel,False,0.46798,True,True
+http://www.ufcstats.com/fight-details/abf5f4d6f777cf7b,2025-08-22,Bruna Brasil,Shi Ming,True,0.438646,False,False
+http://www.ufcstats.com/fight-details/ce6bd165bef82bd7,2025-08-23,Kevin Borjas,Sumudaerji,False,0.462033,True,False
+http://www.ufcstats.com/fight-details/2eecf0c36192e40c,2025-08-23,Zhang Mingyang,Johnny Walker,False,0.618509,True,False
+http://www.ufcstats.com/fight-details/58080e8989927500,2025-08-23,Brian Ortega,Aljamain Sterling,False,0.42543,True,False
+http://www.ufcstats.com/fight-details/5538d15c4eeac3b3,2025-08-23,Waldo Cortes Acosta,Sergei Pavlovich,False,0.520367,True,False
+http://www.ufcstats.com/fight-details/1452c20d964c0a63,2025-08-23,Taiyilake Nueraji,Kiefer Crosbie,True,0.742192,True,True
+http://www.ufcstats.com/fight-details/7fc5f1dc2df84ac7,2025-08-23,Diyar Nurgozhay,Uran Satybaldiev,False,0.540331,True,False
+http://www.ufcstats.com/fight-details/1ab1ed99a4bc5494,2025-08-23,Charles Johnson,Lone'er Kavanagh,True,0.405024,True,False
+http://www.ufcstats.com/fight-details/f55749e32ce5c6f3,2025-08-23,Austin Hubbard,Rongzhu,False,0.420861,True,False
+http://www.ufcstats.com/fight-details/130e622d4d2aee3e,2025-08-23,Kyle Daukaus,Michel Pereira,True,0.443963,True,False
+http://www.ufcstats.com/fight-details/f0b7caa90faf47e5,2025-08-23,Yizha,Westin Wilson,True,0.581619,True,False
+http://www.ufcstats.com/fight-details/2f6065fe0804d1d8,2025-08-23,SuYoung You,Xiao Long,True,0.567469,True,False
+http://www.ufcstats.com/fight-details/0b1460c666e66d39,2025-08-23,Gauge Young,Maheshate,True,0.621899,True,False
+http://www.ufcstats.com/fight-details/5bcd8abf6da01dae,2025-09-06,Caio Borralho,Nassourdine Imavov,False,0.409523,True,False
+http://www.ufcstats.com/fight-details/d14fea43712707f0,2025-09-06,Mauricio Ruffy,Benoit Saint Denis,False,0.379467,True,False
+http://www.ufcstats.com/fight-details/0149e875b31e57f8,2025-09-06,Modestas Bukauskas,Paul Craig,True,0.7528,True,False
+http://www.ufcstats.com/fight-details/69b31593175f77ec,2025-09-06,Bolaji Oki,Mason Jones,False,0.574995,True,False
+http://www.ufcstats.com/fight-details/a47123ae6e048f11,2025-09-06,Axel Sola,Rhys McKee,True,0.450948,True,True
+http://www.ufcstats.com/fight-details/b53031bf4bd0a330,2025-09-06,William Gomis,Robert Ruchala,True,0.72126,True,True
+http://www.ufcstats.com/fight-details/23dbe713c4294c66,2025-09-06,Ante Delija,Marcin Tybura,True,0.254467,True,True
+http://www.ufcstats.com/fight-details/5cd2dd6075fadcce,2025-09-06,Kaue Fernandes,Harry Hardwick,True,0.692834,True,True
+http://www.ufcstats.com/fight-details/420211200a35c1d1,2025-09-06,Trey Waters,Sam Patterson,False,0.418216,True,False
+http://www.ufcstats.com/fight-details/b3253e2c2d111030,2025-09-06,Brad Tavares,Robert Bryczek,False,0.567846,True,False
+http://www.ufcstats.com/fight-details/d56a59a4c79cf515,2025-09-06,Andreas Gustafsson,Rinat Fakhretdinov,False,0.343172,True,False
+http://www.ufcstats.com/fight-details/a38010639e61885c,2025-09-06,Sam Hughes,Shauna Bannon,True,0.488421,False,False
+http://www.ufcstats.com/fight-details/4080b4310d82b42d,2025-09-06,Oumar Sy,Brendson Ribeiro,True,0.695848,True,False
+http://www.ufcstats.com/fight-details/8a884a7930d75ca9,2025-09-13,Santiago Luna,Quang Le,True,0.586713,True,True
+http://www.ufcstats.com/fight-details/944b929130b23c2a,2025-09-13,Rob Font,David Martinez,False,0.488582,True,False
+http://www.ufcstats.com/fight-details/7cbfeba85f86d1bf,2025-09-13,Rafa Garcia,Jared Gordon,True,0.597993,True,False
+http://www.ufcstats.com/fight-details/114d2f6fcd3f6f00,2025-09-13,Kelvin Gastelum,Dustin Stoltzfus,True,0.602635,True,False
+http://www.ufcstats.com/fight-details/202c47db69768356,2025-09-13,Diego Ferreira,Alexander Hernandez,False,0.366647,True,False
+http://www.ufcstats.com/fight-details/07a378b257aad5a9,2025-09-13,Jose Daniel Medina,Dusko Todorovic,False,0.461326,True,False
+http://www.ufcstats.com/fight-details/de1a3734be60e6a1,2025-09-13,Diego Lopes,Jean Silva,True,0.266974,True,False
+http://www.ufcstats.com/fight-details/9474f64347aade7a,2025-09-13,Amanda Lemos,Tatiana Suarez,False,0.137574,False,False
+http://www.ufcstats.com/fight-details/3dc1a6335d890650,2025-09-13,Luis Gurule,Jesus Aguilar,False,0.306111,True,False
+http://www.ufcstats.com/fight-details/a1e193425e716b42,2025-09-13,Alessandro Costa,Alden Coria,False,0.649693,True,True
+http://www.ufcstats.com/fight-details/c4a6174b0698652e,2025-09-13,Alice Pereira,Montse Rendon,False,0.666882,False,True
+http://www.ufcstats.com/fight-details/3dd2fde7bff79c51,2025-09-13,Daniil Donchenko,Rodrigo Sezinando,True,0.547656,True,True
+http://www.ufcstats.com/fight-details/352839a03b428e74,2025-09-13,Joaquim Silva,Claudio Puelles,True,0.253298,True,False
+http://www.ufcstats.com/fight-details/a3ee907c77544cde,2025-09-27,Dominick Reyes,Carlos Ulberg,False,0.351597,True,False
+http://www.ufcstats.com/fight-details/f5fb8b182020c59d,2025-09-27,Jimmy Crute,Ivan Erslan,True,0.678735,True,False
+http://www.ufcstats.com/fight-details/38248c5d13f273e6,2025-09-27,Ramon Taveras,Jack Jenkins,False,0.471203,True,False
+http://www.ufcstats.com/fight-details/1ff24d5f760e0491,2025-09-27,Jake Matthews,Neil Magny,False,0.688582,True,False
+http://www.ufcstats.com/fight-details/8abad36b4c5e4070,2025-09-27,Charlie Campbell,Tom Nolan,False,0.544702,True,False
+http://www.ufcstats.com/fight-details/dc31d3260dea7dcf,2025-09-27,Rodolfo Bellato,Navajo Stirling,False,0.393533,True,False
+http://www.ufcstats.com/fight-details/93a0a19c2c1cfe66,2025-09-27,Andre Petroski,Cam Rowston,False,0.563514,True,True
+http://www.ufcstats.com/fight-details/e2dc4fb7b5c0ce76,2025-09-27,Rolando Bedoya,Jamie Mullarkey,False,0.474058,True,False
+http://www.ufcstats.com/fight-details/81127436605d3c88,2025-09-27,Colby Thicknesse,Josias Musasa,True,0.502052,True,False
+http://www.ufcstats.com/fight-details/44cd8c9f622e155f,2025-09-27,Luana Carolina,Michelle Montague,False,0.681885,False,True
+http://www.ufcstats.com/fight-details/140937779a2466a7,2025-09-27,Elisha Ellison,Brando Pericic,False,0.541652,True,True
+http://www.ufcstats.com/fight-details/e35f7504d83b8b07,2025-09-27,Alexia Thainara,Loma Lookboonmee,True,0.553259,False,False
+http://www.ufcstats.com/fight-details/0de1ef0b9f3a79c0,2025-10-04,Alex Pereira,Magomed Ankalaev,True,0.365035,True,False
+http://www.ufcstats.com/fight-details/a8511df8285f5c91,2025-10-04,Merab Dvalishvili,Cory Sandhagen,True,0.729389,True,False
+http://www.ufcstats.com/fight-details/2560ea97b2cce4ef,2025-10-04,Jiri Prochazka,Khalil Rountree Jr.,True,0.722175,True,False
+http://www.ufcstats.com/fight-details/84ebd144d5e79c88,2025-10-04,Josh Emmett,Youssef Zalal,False,0.163198,True,False
+http://www.ufcstats.com/fight-details/d006dd2513bd376d,2025-10-04,Joe Pyfer,Abus Magomedov,True,0.660164,True,False
+http://www.ufcstats.com/fight-details/9418ebb3db2a4bae,2025-10-04,Ateba Gautier,Tre'ston Vines,True,0.723801,True,True
+http://www.ufcstats.com/fight-details/98883348ddb3be33,2025-10-04,Veronica Hardy,Brogan Walker,True,0.789861,False,False
+http://www.ufcstats.com/fight-details/b09ecdc8ef0f0d20,2025-10-04,Jakub Wiklacz,Patchy Mix,True,0.452234,True,True
+http://www.ufcstats.com/fight-details/1c7cc3a22ab7d907,2025-10-04,Andre Muniz,Edmen Shahbazyan,False,0.400295,True,False
+http://www.ufcstats.com/fight-details/a951090fb402fd20,2025-10-04,Punahele Soriano,Nikolay Veretennikov,True,0.68075,True,False
+http://www.ufcstats.com/fight-details/8353b491afa7bc32,2025-10-04,Macy Chiasson,Yana Santos,False,0.534254,False,False
+http://www.ufcstats.com/fight-details/e53fd165a3bc1f8e,2025-10-04,Chris Gutierrez,Farid Basharat,False,0.433307,True,False
+http://www.ufcstats.com/fight-details/b98bc1ecb94ef4a5,2025-10-04,Austin Vanderford,Ramiz Brahimaj,False,0.528345,True,False
+http://www.ufcstats.com/fight-details/7b34aa1eb09b8301,2025-10-04,Daniel Santos,JooSang Yoo,True,0.530276,True,False
+http://www.ufcstats.com/fight-details/03377f7bf8a2d5ff,2025-10-11,Jhonata Diniz,Mario Pinto,False,0.416306,True,False
+http://www.ufcstats.com/fight-details/79865287be90e4be,2025-10-11,Mateusz Gamrot,Charles Oliveira,False,0.680602,True,False
+http://www.ufcstats.com/fight-details/f295eb2a7b0ba4b7,2025-10-11,Montel Jackson,Deiveson Figueiredo,False,0.824704,True,False
+http://www.ufcstats.com/fight-details/6188b7fb3f8daacc,2025-10-11,Vicente Luque,Joel Alvarez,False,0.253866,True,False
+http://www.ufcstats.com/fight-details/2aef1a91d26dde42,2025-10-11,Ricardo Ramos,Kaan Ofli,False,0.576296,True,False
+http://www.ufcstats.com/fight-details/0f9e7d0d04e24b74,2025-10-11,Saimon Oliveira,Luan Lacerda,False,0.355509,True,False
+http://www.ufcstats.com/fight-details/766b0b26c40525de,2025-10-11,Jafel Filho,Clayton Carpenter,True,0.43449,True,False
+http://www.ufcstats.com/fight-details/a815dafc89adf33b,2025-10-11,Thomas Petersen,Vitor Petrino,False,0.415661,True,False
+http://www.ufcstats.com/fight-details/546f971f9d8e0a33,2025-10-11,Bia Mesquita,Irina Alekseeva,True,0.519041,False,True
+http://www.ufcstats.com/fight-details/434abaea90ccd299,2025-10-11,Lucas Rocha,Stewart Nicoll,True,0.586784,True,False
+http://www.ufcstats.com/fight-details/c547b3e95bcc5f24,2025-10-11,Julia Polastri,Karolina Kowalkiewicz,True,0.629696,False,False
+http://www.ufcstats.com/fight-details/cff0abc02974fb4a,2025-10-11,Lucas Almeida,Michael Aswell Jr.,False,0.275953,True,False
+http://www.ufcstats.com/fight-details/d61373d9fdf01a12,2025-10-18,Reinier de Ridder,Brendan Allen,False,0.393923,True,False
+http://www.ufcstats.com/fight-details/cdd565a16975c711,2025-10-18,Mike Malott,Kevin Holland,True,0.482635,True,False
+http://www.ufcstats.com/fight-details/857d274e47aa8c4e,2025-10-18,Aiemann Zahabi,Marlon Vera,True,0.529679,True,False
+http://www.ufcstats.com/fight-details/c82acd7b17915591,2025-10-18,Manon Fiorot,Jasmine Jasudavicius,True,0.644015,False,False
+http://www.ufcstats.com/fight-details/a18edcb638ba7e39,2025-10-18,Charles Jourdain,Davey Grant,True,0.63994,True,False
+http://www.ufcstats.com/fight-details/3af1bdc5a510bba9,2025-10-18,Kyle Nelson,Matt Frevola,True,0.579729,True,False
+http://www.ufcstats.com/fight-details/970f083af8368f57,2025-10-18,Cody Gibson,Aoriqileng,False,0.457092,True,False
+http://www.ufcstats.com/fight-details/668a44403a130043,2025-10-18,HyunSung Park,Bruno Silva,False,0.710243,True,False
+http://www.ufcstats.com/fight-details/096e00355c8c84ac,2025-10-18,Djorden Santos,Danny Barlow,True,0.399649,True,False
+http://www.ufcstats.com/fight-details/8d9458121f0c4b95,2025-10-18,Ravena Oliveira,Stephanie Luciano,False,0.398824,False,False
+http://www.ufcstats.com/fight-details/87ac0e5face106b4,2025-10-18,Yousri Belgaroui,Azamat Bekoev,True,0.235104,True,True
+http://www.ufcstats.com/fight-details/dec301fd5e99ca46,2025-10-18,Melissa Croden,Tainara Lisboa,True,0.501576,False,True
+http://www.ufcstats.com/fight-details/ecdbb3a5216b815e,2025-10-18,Kyle Prepolec,Drew Dober,False,0.476631,True,False
+http://www.ufcstats.com/fight-details/ef12d2aaaadaf6d0,2025-10-25,Aleksandar Rakic,Azamat Murzakanov,False,0.382603,True,False
+http://www.ufcstats.com/fight-details/7d3da3c4153717de,2025-10-25,Mackenzie Dern,Virna Jandiroba,True,0.36258,False,False
+http://www.ufcstats.com/fight-details/e69f9b4b9cae12a4,2025-10-25,Umar Nurmagomedov,Mario Bautista,True,0.74329,True,False
+http://www.ufcstats.com/fight-details/b42a3386a7dccb3d,2025-10-25,Jailton Almeida,Alexander Volkov,False,0.689832,True,False
+http://www.ufcstats.com/fight-details/cb902d73389ed34b,2025-10-25,Quillan Salkilld,Nasrat Haqparast,True,0.682433,True,False
+http://www.ufcstats.com/fight-details/ef1519c8c1d20977,2025-10-25,Mizuki,Jaqueline Amorim,True,0.163649,False,False
+http://www.ufcstats.com/fight-details/e9c034cec33b3479,2025-10-25,Ludovit Klein,Mateusz Rebecki,True,0.729455,True,False
+http://www.ufcstats.com/fight-details/f2c2a49fed32bd75,2025-10-25,Valter Walker,Louie Sutherland,True,0.78859,True,True
+http://www.ufcstats.com/fight-details/bd7394f07247d9ca,2025-10-25,Nathaniel Wood,Jose Delgado,True,0.431861,True,False
+http://www.ufcstats.com/fight-details/3fdb4c4b39218cf4,2025-10-25,Chris Barnett,Hamdy Abdelwahab,False,0.234856,True,False
+http://www.ufcstats.com/fight-details/22dd728012944f0a,2025-10-25,Mitch Raposo,Azat Maksum,True,0.592621,True,False
+http://www.ufcstats.com/fight-details/0230a9dd2739add4,2025-10-25,Ikram Aliskerov,JunYong Park,True,0.532287,True,False
+http://www.ufcstats.com/fight-details/767b78b67c7da17c,2025-11-01,Yadier del Valle,Isaac Dulgarian,True,0.294691,True,False
+http://www.ufcstats.com/fight-details/747d922b329b7f30,2025-11-01,Steve Garcia,David Onama,True,0.582957,True,False
+http://www.ufcstats.com/fight-details/9d9390b550d77e06,2025-11-01,Waldo Cortes Acosta,Ante Delija,True,0.698831,True,False
+http://www.ufcstats.com/fight-details/b0f68344e01884ff,2025-11-01,Jeremiah Wells,Themba Gorimbo,True,0.355934,True,False
+http://www.ufcstats.com/fight-details/71c8ca7442bcb757,2025-11-01,Daniel Frunza,Charles Radtke,False,0.36793,True,False
+http://www.ufcstats.com/fight-details/f41c2c82d5117230,2025-11-01,Cody Durden,Allan Nascimento,False,0.25511,True,False
+http://www.ufcstats.com/fight-details/58f6248da3cdf3ce,2025-11-01,ChangHo Lee,Timmy Cuamba,False,0.425365,True,False
+http://www.ufcstats.com/fight-details/c245be6698c1e378,2025-11-01,Donte Johnson,Sedriques Dumas,True,0.621395,True,True
+http://www.ufcstats.com/fight-details/760150e9951e65fa,2025-11-01,Norma Dumont,Ketlen Vieira,True,0.724865,False,False
+http://www.ufcstats.com/fight-details/32927d50acedb507,2025-11-01,Montserrat Conejo Ruiz,Alice Ardelean,False,0.312538,False,False
+http://www.ufcstats.com/fight-details/e6031b5937294176,2025-11-01,Seokhyeon Ko,Phil Rowe,True,0.501266,True,False
+http://www.ufcstats.com/fight-details/f063bcccbbb9edc5,2025-11-01,Kevin Christian,Billy Elekana,False,0.479263,True,True
+http://www.ufcstats.com/fight-details/7add5901fac6ab82,2025-11-01,Talita Alencar,Ariane Carnelossi,True,0.46683,False,False
+http://www.ufcstats.com/fight-details/4e224ebb6394611d,2025-11-08,Gabriel Bonfim,Randy Brown,True,0.581916,True,False
+http://www.ufcstats.com/fight-details/f7e9bd2d6f81aeae,2025-11-08,Matt Schnell,Joseph Morales,False,0.238793,True,False
+http://www.ufcstats.com/fight-details/b23fa678cc65cf5b,2025-11-08,Muslim Salikhov,Uros Medic,False,0.591382,True,False
+http://www.ufcstats.com/fight-details/20971ed9a842b0cb,2025-11-08,Chris Padilla,Ismael Bonfim,True,0.582531,True,False
+http://www.ufcstats.com/fight-details/ac4343150638b635,2025-11-08,Christian Leroy Duncan,Marco Tulio,True,0.586959,True,False
+http://www.ufcstats.com/fight-details/e3d657dd88864ba7,2025-11-08,Jamall Emmers,Hyder Amil,True,0.525071,True,False
+http://www.ufcstats.com/fight-details/c6d56aad93f98249,2025-11-08,Raoni Barcelos,Ricky Simon,True,0.369831,True,False
+http://www.ufcstats.com/fight-details/80eae31bc0a94a65,2025-11-08,Mayra Bueno Silva,Jacqueline Cavalcanti,False,0.239338,False,False
+http://www.ufcstats.com/fight-details/87dcb3eab20f6ac1,2025-11-08,Max Gimenis,Josh Hokit,False,0.441432,True,True
+http://www.ufcstats.com/fight-details/9126633d921afb57,2025-11-08,Tecia Pennington,Denise Gomes,False,0.418217,False,False
+http://www.ufcstats.com/fight-details/238c274c90587e21,2025-11-08,Miles Johns,Daniel Marcos,False,0.468642,True,False
+http://www.ufcstats.com/fight-details/84b66bf7fba2d59d,2025-11-08,Zach Reese,Jackson McVey,True,0.488419,True,False
+http://www.ufcstats.com/fight-details/856f6ee049373843,2025-11-15,Jack Della Maddalena,Islam Makhachev,False,0.331841,True,False
+http://www.ufcstats.com/fight-details/7606f6b6c19f2d73,2025-11-15,Zhang Weili,Valentina Shevchenko,False,0.549441,False,False
+http://www.ufcstats.com/fight-details/477af74ea3cbba8b,2025-11-15,Sean Brady,Michael Morales,False,0.542287,True,False
+http://www.ufcstats.com/fight-details/3c60884853766487,2025-11-15,Leon Edwards,Carlos Prates,False,0.524902,True,False
+http://www.ufcstats.com/fight-details/9b5f190cd3f5ce16,2025-11-15,Benoit Saint Denis,Beneil Dariush,True,0.688728,True,False
+http://www.ufcstats.com/fight-details/292b83afa418635f,2025-11-15,Bo Nickal,Rodolfo Vieira,True,0.557638,True,False
+http://www.ufcstats.com/fight-details/c037cf1f7b429d5e,2025-11-15,Eric McConico,Baisangur Susurkaev,False,0.210354,True,False
+http://www.ufcstats.com/fight-details/909cd8633507a0c8,2025-11-15,Tracy Cortez,Erin Blanchfield,False,0.306438,False,False
+http://www.ufcstats.com/fight-details/e313286b307334a7,2025-11-15,Malcolm Wellmaker,Ethyn Ewing,False,0.66597,True,True
+http://www.ufcstats.com/fight-details/9bbdc2a2ab334541,2025-11-15,Kyle Daukaus,Gerald Meerschaert,True,0.599114,True,False
+http://www.ufcstats.com/fight-details/e3cbd663732f4a98,2025-11-15,Pat Sabatini,Chepe Mariscal,True,0.512098,True,False
+http://www.ufcstats.com/fight-details/6c2c6a6e3f4d04db,2025-11-15,Fatima Kline,Angela Hill,True,0.748243,False,False
+http://www.ufcstats.com/fight-details/1a5378e32e8519ef,2025-11-15,Matheus Camilo,Viacheslav Borshchev,True,0.57204,True,False
+http://www.ufcstats.com/fight-details/ebb012c5f3fd0cbb,2025-11-15,Roman Kopylov,Gregory Rodrigues,False,0.437814,True,False
+http://www.ufcstats.com/fight-details/8ed609d80e135d94,2025-11-22,Jack Hermansson,Myktybek Orolbai,False,0.200606,True,False
+http://www.ufcstats.com/fight-details/870d374f8d9af65a,2025-11-22,Volkan Oezdemir,Alonzo Menifield,True,0.624086,True,False
+http://www.ufcstats.com/fight-details/e8307c7686c42d8c,2025-11-22,Waldo Cortes Acosta,Shamil Gaziev,True,0.770859,True,False
+http://www.ufcstats.com/fight-details/5f5b626e67529056,2025-11-22,Dan Hooker,Arman Tsarukyan,False,0.216347,True,False
+http://www.ufcstats.com/fight-details/b2218930b982d9b6,2025-11-22,Ian Machado Garry,Belal Muhammad,True,0.729833,True,False
+http://www.ufcstats.com/fight-details/00ee51bba08b7a08,2025-11-22,Kyoji Horiguchi,Tagir Ulanbekov,True,0.391898,True,False
+http://www.ufcstats.com/fight-details/9027e156c6f1988a,2025-11-22,Marek Bujlo,Denzel Freeman,False,0.523659,True,True
+http://www.ufcstats.com/fight-details/c49485cedb878cf0,2025-11-22,Saygid Izagakhmaev,Nicolas Dalby,False,0.433658,True,True
+http://www.ufcstats.com/fight-details/443f30a4a856584a,2025-11-22,Alex Perez,Asu Almabayev,False,0.274343,True,False
+http://www.ufcstats.com/fight-details/f5564a9eeebd4ea0,2025-11-22,Rafael Cerqueira,Abdul Rakhman Yakhyaev,False,0.278095,True,True
+http://www.ufcstats.com/fight-details/6f0231915cc28507,2025-11-22,Aleksandre Topuria,Bekzat Almakhan,True,0.540402,True,False
+http://www.ufcstats.com/fight-details/335064c3380e2f10,2025-11-22,Ismail Naurdiev,Ryan Loder,True,0.718639,True,False
+http://www.ufcstats.com/fight-details/46f81d5ecd974c1c,2025-11-22,Shem Rock,Nurullo Aliev,False,0.300954,True,True
+http://www.ufcstats.com/fight-details/5e6a74db89f5410c,2025-11-22,Luke Riley,Bogdan Grad,True,0.457998,True,True
+http://www.ufcstats.com/fight-details/4a0db214d9721d6e,2025-12-06,Petr Yan,Merab Dvalishvili,True,0.395596,True,False
+http://www.ufcstats.com/fight-details/dfa692db6d39330c,2025-12-06,Joshua Van,Alexandre Pantoja,True,0.676012,True,False
+http://www.ufcstats.com/fight-details/fbbb9e72900b71f5,2025-12-06,Tatsuro Taira,Brandon Moreno,True,0.621059,True,False
+http://www.ufcstats.com/fight-details/1dc29f4c6fcdd356,2025-12-06,Payton Talbott,Henry Cejudo,True,0.617036,True,False
+http://www.ufcstats.com/fight-details/c797b58d85c840a4,2025-12-06,Grant Dawson,Manuel Torres,False,0.631902,True,False
+http://www.ufcstats.com/fight-details/2417cc7bc1eea75b,2025-12-06,Maycee Barber,Karine Silva,True,0.648433,False,False
+http://www.ufcstats.com/fight-details/10a57b983e59f727,2025-12-06,Nazim Sadykhov,Fares Ziam,False,0.207476,True,False
+http://www.ufcstats.com/fight-details/3c683da1924b6c44,2025-12-06,Brunno Ferreira,Marvin Vettori,True,0.464901,True,False
+http://www.ufcstats.com/fight-details/7af407397532f7cf,2025-12-06,Edson Barboza,Jalin Turner,False,0.347289,True,False
+http://www.ufcstats.com/fight-details/ea660db65bfa998f,2025-12-06,Iwo Baraniewski,Ibo Aslan,True,0.55239,True,True
+http://www.ufcstats.com/fight-details/964ea1777695851b,2025-12-06,Antonio Trocoli,Mansur Abdul-Malik,False,0.19908,True,False
+http://www.ufcstats.com/fight-details/40fa4f8b4b93884e,2025-12-06,Muhammad Naimov,Mairon Santos,False,0.315926,True,False
+http://www.ufcstats.com/fight-details/b3d2ac2244e4f791,2025-12-06,Terrance McKinney,Chris Duncan,False,0.556055,True,False
+http://www.ufcstats.com/fight-details/24bb03f0a3415fbe,2025-12-13,Kevin Vallejos,Giga Chikadze,True,0.561262,True,False
+http://www.ufcstats.com/fight-details/d000cb692343cdcd,2025-12-13,Cezary Oleksiejczuk,Cesar Almeida,True,0.436508,True,True
+http://www.ufcstats.com/fight-details/93ca562453f65b8d,2025-12-13,Melquizael Costa,Morgan Charriere,True,0.526867,True,False
+http://www.ufcstats.com/fight-details/fc4ab243d21b795d,2025-12-13,King Green,Lance Gibson Jr.,True,0.604974,True,True
+http://www.ufcstats.com/fight-details/a5a81a39ccf9b680,2025-12-13,Manel Kape,Brandon Royval,True,0.784778,True,False
+http://www.ufcstats.com/fight-details/225e93ebed9b71b8,2025-12-13,Joanderson Brito,Isaac Thomson,True,0.726063,True,True
+http://www.ufcstats.com/fight-details/a2523a8565fe4361,2025-12-13,Sean Sharaf,Steven Asplund,False,0.366403,True,True
+http://www.ufcstats.com/fight-details/ceb5b0f1f6daddf6,2025-12-13,Luana Santos,Melissa Croden,True,0.723206,False,False
+http://www.ufcstats.com/fight-details/ac56a1052c4c8f63,2025-12-13,Allen Frye Jr.,Guilherme Pat,False,0.554668,True,True
+http://www.ufcstats.com/fight-details/71170fb7ade3e1f4,2025-12-13,Jamey-Lyn Horth,Tereza Bleda,True,0.492889,False,False
+http://www.ufcstats.com/fight-details/0fca825e14429c1f,2025-12-13,Yaroslav Amosov,Neil Magny,True,0.282708,True,True
+http://www.ufcstats.com/fight-details/fa4b3f5ce8055921,2026-01-24,Paddy Pimblett,Justin Gaethje,False,0.609648,True,False
+http://www.ufcstats.com/fight-details/007e8e0d4a39d82c,2026-01-24,Song Yadong,Sean O'Malley,False,0.420309,True,False
+http://www.ufcstats.com/fight-details/d93ee3860196c4ae,2026-01-24,Derrick Lewis,Waldo Cortes Acosta,False,0.264746,True,False
+http://www.ufcstats.com/fight-details/d63c9aa4f4873001,2026-01-24,Rose Namajunas,Natalia Silva,False,0.343473,False,False
+http://www.ufcstats.com/fight-details/836a188a90e479a5,2026-01-24,Jean Silva,Arnold Allen,True,0.413651,True,False
+http://www.ufcstats.com/fight-details/33be2456161c14c3,2026-01-24,Andrey Pulyaev,Ateba Gautier,False,0.288406,True,False
+http://www.ufcstats.com/fight-details/780cab0cd07589e4,2026-01-24,Modestas Bukauskas,Nikita Krylov,False,0.511895,True,False
+http://www.ufcstats.com/fight-details/b5aafe149bec4306,2026-01-24,Charles Johnson,Alex Perez,False,0.639026,True,False
+http://www.ufcstats.com/fight-details/abfb3ed6dcb0e1f0,2026-01-24,Josh Hokit,Denzel Freeman,True,0.574461,True,False
+http://www.ufcstats.com/fight-details/210fc45074fba464,2026-01-24,Ty Miller,Adam Fugitt,True,0.725226,True,True
+http://www.ufcstats.com/fight-details/6c9f4799990c3c33,2026-01-24,Umar Nurmagomedov,Deiveson Figueiredo,True,0.859381,True,False
+http://www.ufcstats.com/fight-details/32e9bc4d0a19a923,2026-01-31,Jamie Mullarkey,Quillan Salkilld,False,0.220988,True,False
+http://www.ufcstats.com/fight-details/b06b43670238c2d8,2026-01-31,Alexander Volkanovski,Diego Lopes,True,0.542854,True,False
+http://www.ufcstats.com/fight-details/a7ae8f6eb5fc3a79,2026-01-31,Benoit Saint Denis,Dan Hooker,True,0.844572,True,False
+http://www.ufcstats.com/fight-details/57d7a683b85bb87b,2026-01-31,Rafael Fiziev,Mauricio Ruffy,False,0.464484,True,False
+http://www.ufcstats.com/fight-details/67765535bd0b6bdf,2026-01-31,Tallison Teixeira,Tai Tuivasa,True,0.780464,True,False
+http://www.ufcstats.com/fight-details/d94f1b32a81e3fa1,2026-01-31,Billy Elekana,Junior Tafa,True,0.662935,True,False
+http://www.ufcstats.com/fight-details/780bae82bdfc7112,2026-01-31,Keiichiro Nakamura,Sebastian Szalay,True,0.573924,True,True
+http://www.ufcstats.com/fight-details/0047f8aadca1936f,2026-01-31,Jacob Malkoun,Torrez Finney,True,0.601636,True,False
+http://www.ufcstats.com/fight-details/78912b78aa946375,2026-01-31,Jonathan Micallef,Oban Elliott,True,0.543183,True,False
+http://www.ufcstats.com/fight-details/4c1e7e1765a5438a,2026-01-31,Kaan Ofli,Yizha,True,0.39492,True,False
+http://www.ufcstats.com/fight-details/ad14c502c9c5a7e9,2026-01-31,Sangwook Kim,Dom Mar Fan,False,0.410873,True,True
+http://www.ufcstats.com/fight-details/5c73e0013b859664,2026-01-31,Sulangrangbo,Lawrence Lui,False,0.580973,True,True
+http://www.ufcstats.com/fight-details/47362cae6ba0e077,2026-01-31,Cam Rowston,Cody Brundage,True,0.641908,True,False
+http://www.ufcstats.com/fight-details/2a26c0cfa06265b7,2026-02-07,Farid Basharat,Jean Matsumoto,True,0.718929,True,False
+http://www.ufcstats.com/fight-details/fb4b1754d510b0d0,2026-02-07,Mario Bautista,Vinicius Oliveira,True,0.492039,True,False
+http://www.ufcstats.com/fight-details/dbbf8334a2600895,2026-02-07,Kyoji Horiguchi,Amir Albazi,True,0.581519,True,False
+http://www.ufcstats.com/fight-details/a5c5f76cf0a7c784,2026-02-07,Rizvan Kuniev,Jailton Almeida,True,0.161943,True,False
+http://www.ufcstats.com/fight-details/8fea32ab0445859c,2026-02-07,Marc-Andre Barriault,Michal Oleksiejczuk,False,0.159848,True,False
+http://www.ufcstats.com/fight-details/6cca11f353a2b42d,2026-02-07,Julius Walker,Dustin Jacoby,False,0.502233,True,False
+http://www.ufcstats.com/fight-details/2bbfbb234c255249,2026-02-07,Priscila Cachoeira,Klaudia Sygula,False,0.187697,False,False
+http://www.ufcstats.com/fight-details/abefaf1807941ee4,2026-02-07,Niko Price,Nikolay Veretennikov,False,0.417244,True,False
+http://www.ufcstats.com/fight-details/cc5c5a8cff4c1ae9,2026-02-07,Ketlen Souza,Bruna Brasil,True,0.598632,False,False
+http://www.ufcstats.com/fight-details/86df0e75f41784d8,2026-02-07,Javid Basharat,Gianni Vazquez,True,0.556671,True,True
+http://www.ufcstats.com/fight-details/84e8ccc3c97c2b4c,2026-02-07,Eduarda Moura,Wang Cong,False,0.607293,False,False
+http://www.ufcstats.com/fight-details/9d30c887e8bd8824,2026-02-07,Jakub Wiklacz,Muin Gafurov,True,0.414394,True,False
+http://www.ufcstats.com/fight-details/f964d2dda87f25f0,2026-02-07,Alex Morono,Daniil Donchenko,False,0.241103,True,False
+http://www.ufcstats.com/fight-details/dd12bf51c5ed7f1e,2026-02-21,Geoff Neal,Uros Medic,False,0.522054,True,False
+http://www.ufcstats.com/fight-details/dc6f6c8228390ebb,2026-02-21,Dan Ige,Melquizael Costa,False,0.259668,True,False
+http://www.ufcstats.com/fight-details/04b7bcc0e8488604,2026-02-21,Serghei Spivac,Ante Delija,True,0.620888,True,False
+http://www.ufcstats.com/fight-details/54437b8dba3a6110,2026-02-21,Jacobe Smith,Josiah Harrell,True,0.688139,True,True
+http://www.ufcstats.com/fight-details/372d1dee0db8dbee,2026-02-21,Michel Pereira,Zach Reese,True,0.358096,True,False
+http://www.ufcstats.com/fight-details/202d3277e569ad03,2026-02-21,Chidi Njokuani,Carlos Leal,False,0.512182,True,False
+http://www.ufcstats.com/fight-details/8d740c844353ae0e,2026-02-21,Sean Strickland,Anthony Hernandez,True,0.193339,True,False
+http://www.ufcstats.com/fight-details/ac39c1f00ae31e58,2026-02-21,Luis Gurule,Alden Coria,False,0.217628,True,False
+http://www.ufcstats.com/fight-details/fd56a469e4589ebc,2026-02-21,Joselyne Edwards,Nora Cornolle,True,0.735491,False,False
+http://www.ufcstats.com/fight-details/8f9896e60047007f,2026-02-21,Punahele Soriano,Ramiz Brahimaj,True,0.529265,True,False
+http://www.ufcstats.com/fight-details/508e622130b0a84d,2026-02-21,Phil Rowe,Jean-Paul Lebosnoyani,False,0.641439,True,True
+http://www.ufcstats.com/fight-details/5b97f47cdd355cbe,2026-02-21,Yadier del Valle,Jordan Leavitt,False,0.591915,True,False
+http://www.ufcstats.com/fight-details/6e78d874097a3d22,2026-02-21,Juliana Miller,Carli Judice,False,0.267779,False,False
+http://www.ufcstats.com/fight-details/1330b5c21269fe92,2026-02-28,Lone'er Kavanagh,Brandon Moreno,True,0.397552,True,False
+http://www.ufcstats.com/fight-details/36d12b31957e94db,2026-02-28,David Martinez,Marlon Vera,True,0.674369,True,False
+http://www.ufcstats.com/fight-details/81f3d28d30d17378,2026-02-28,Daniel Zellhuber,King Green,False,0.732333,True,False
+http://www.ufcstats.com/fight-details/7df505d8260ba680,2026-02-28,Edgar Chairez,Felipe Bunes,True,0.619084,True,False
+http://www.ufcstats.com/fight-details/15068d7b095ca9bd,2026-02-28,Imanol Rodriguez,Kevin Borjas,True,0.618274,True,True
+http://www.ufcstats.com/fight-details/3b76a00f5d0400eb,2026-02-28,Angel Pacheco,Santiago Luna,False,0.175241,True,False
+http://www.ufcstats.com/fight-details/45ec0c5f19c9adbe,2026-02-28,Jose Daniel Medina,Ryan Gandra,False,0.273414,True,True
+http://www.ufcstats.com/fight-details/25ab195cefbce1d0,2026-02-28,Kris Moutinho,Cristian Quinonez,False,0.191593,True,False
+http://www.ufcstats.com/fight-details/6154ee95d3f4fc32,2026-02-28,Javier Reyes,Douglas Silva de Andrade,True,0.400304,True,True
+http://www.ufcstats.com/fight-details/44d58943ac8e47e1,2026-02-28,Ernesta Kareckaite,Regina Tarin,False,0.434186,False,True
+http://www.ufcstats.com/fight-details/581292ffe5b09344,2026-02-28,Francis Marshall,Erik Silva,True,0.777327,True,False
+http://www.ufcstats.com/fight-details/c6a85b67fdd2ef3d,2026-02-28,Wes Schultz,Damian Pinas,False,0.420477,True,True
+http://www.ufcstats.com/fight-details/c40b934d2666e351,2026-02-28,Ailin Perez,Macy Chiasson,True,0.685815,False,False
+http://www.ufcstats.com/fight-details/f02c0adc4ae629c6,2026-03-07,Michael Johnson,Drew Dober,False,0.612116,True,False
+http://www.ufcstats.com/fight-details/f030febede41c661,2026-03-07,Charles Oliveira,Max Holloway,True,0.254156,True,False
+http://www.ufcstats.com/fight-details/d564db29997e1371,2026-03-07,Caio Borralho,Reinier de Ridder,True,0.705019,True,False
+http://www.ufcstats.com/fight-details/bed89a91da9d04c1,2026-03-07,Rob Font,Raul Rosas Jr.,False,0.262513,True,False
+http://www.ufcstats.com/fight-details/6a4738656c493ee9,2026-03-07,Gregory Rodrigues,Brunno Ferreira,True,0.605628,True,False
+http://www.ufcstats.com/fight-details/a5abdc461cb1538e,2026-03-07,Luke Fernandez,Rodolfo Bellato,False,0.392707,True,True
+http://www.ufcstats.com/fight-details/9c8d5dbd8905a715,2026-03-07,Cody Brundage,Donte Johnson,False,0.295505,True,False
+http://www.ufcstats.com/fight-details/6feb49a6b7e8433c,2026-03-07,Alberto Montes,Ricky Turcios,True,0.632015,True,True
+http://www.ufcstats.com/fight-details/f661ef429055f8c1,2026-03-07,Nyamjargal Tumendemberel,Cody Durden,True,0.766757,True,False
+http://www.ufcstats.com/fight-details/a22fd3735819d858,2026-03-07,Sumudaerji,Jesus Aguilar,True,0.53318,True,False
+http://www.ufcstats.com/fight-details/cc03e698c4b7da52,2026-03-07,Diyar Nurgozhay,Rafael Tobias,True,0.324194,True,True
+http://www.ufcstats.com/fight-details/ecd16d14a138d7fb,2026-03-07,Cody Garbrandt,Xiao Long,True,0.529745,True,False
+http://www.ufcstats.com/fight-details/f594fc5c2bc6237e,2026-03-14,Kevin Vallejos,Josh Emmett,True,0.811935,True,False
+http://www.ufcstats.com/fight-details/3b7b771b9578383d,2026-03-14,Gillian Robertson,Amanda Lemos,True,0.81991,False,False
+http://www.ufcstats.com/fight-details/8bee5192baec71d8,2026-03-14,Jose Delgado,Andre Fili,True,0.740564,True,False
+http://www.ufcstats.com/fight-details/e0acd0cf4930671b,2026-03-14,Harry Hardwick,Marwan Rahiki,False,0.374965,True,True
+http://www.ufcstats.com/fight-details/db7694f4513120d5,2026-03-14,Oumar Sy,Ion Cutelaba,False,0.761959,True,False
+http://www.ufcstats.com/fight-details/fc9168fd102e2e66,2026-03-14,Charles Johnson,Bruno Silva,True,0.488439,True,False
+http://www.ufcstats.com/fight-details/f26c0bdf7689aea2,2026-03-14,Chris Curtis,Myktybek Orolbai,False,0.209211,True,False
+http://www.ufcstats.com/fight-details/f44b4e998b6829f6,2026-03-14,SuYoung You,Elijah Smith,False,0.434098,True,False
+http://www.ufcstats.com/fight-details/c769dd861357af9f,2026-03-14,Bolaji Oki,Manoel Sousa,False,0.373985,True,True
+http://www.ufcstats.com/fight-details/cff81d681a01ae18,2026-03-14,Brad Tavares,Eryk Anders,False,0.308132,True,False
+http://www.ufcstats.com/fight-details/8cab057e6549afd0,2026-03-14,Bia Mesquita,Montse Rendon,True,0.700934,False,False
+http://www.ufcstats.com/fight-details/32d371462c539bee,2026-03-14,Hecher Sosa,Luan Lacerda,True,0.568926,True,True
+http://www.ufcstats.com/fight-details/244285b7fd0ddece,2026-03-14,Piera Rodriguez,Sam Hughes,True,0.389491,False,False
+http://www.ufcstats.com/fight-details/2c330a6f7f1e55f0,2026-03-14,Vitor Petrino,Steven Asplund,True,0.623063,True,False
+http://www.ufcstats.com/fight-details/346e3897c2ead99a,2026-03-21,Lerone Murphy,Movsar Evloev,False,0.349446,True,False
+http://www.ufcstats.com/fight-details/fa534aaa5b997a69,2026-03-21,Luke Riley,Michael Aswell Jr.,True,0.570753,True,False
+http://www.ufcstats.com/fight-details/5ee11b727e89e8ad,2026-03-21,Sam Patterson,Michael Page,False,0.481568,True,False
+http://www.ufcstats.com/fight-details/43e26b46cbb51985,2026-03-21,Iwo Baraniewski,Austen Lane,True,0.735543,True,False
+http://www.ufcstats.com/fight-details/562d916f55918901,2026-03-21,Christian Leroy Duncan,Roman Dolidze,True,0.742648,True,False
+http://www.ufcstats.com/fight-details/4e58bcc0d27042fd,2026-03-21,Danny Silva,Kurtis Campbell,True,0.443752,True,True
+http://www.ufcstats.com/fight-details/3b9f50f07d9a1601,2026-03-21,Losene Keita,Nathaniel Wood,False,0.259647,True,True
+http://www.ufcstats.com/fight-details/90187edeeda7e6d6,2026-03-21,Felipe Franco,Mario Pinto,False,0.307909,True,True
+http://www.ufcstats.com/fight-details/8817bd21b6d0a989,2026-03-21,Mantas Kondratavicius,Antonio Trocoli,True,0.667412,True,True
+http://www.ufcstats.com/fight-details/bfd17ed83ec5b598,2026-03-21,Louie Sutherland,Brando Pericic,False,0.309119,True,False
+http://www.ufcstats.com/fight-details/bbe0f3653de9f6a8,2026-03-21,Shem Rock,Abdul-Kareem Al-Selwady,False,0.519266,True,False
+http://www.ufcstats.com/fight-details/216bc9b661485017,2026-03-21,Ravena Oliveira,Shanelle Dyer,False,0.366025,False,True
+http://www.ufcstats.com/fight-details/3ee578ddd071ad4c,2026-03-21,Axel Sola,Mason Jones,False,0.622394,True,False
+http://www.ufcstats.com/fight-details/85e94a6c071fd9fa,2026-03-28,Joe Pyfer,Israel Adesanya,True,0.644051,True,False
+http://www.ufcstats.com/fight-details/9a0ecee6e8ca173f,2026-03-28,Alexa Grasso,Maycee Barber,True,0.256256,False,False
+http://www.ufcstats.com/fight-details/6102e7a6dcbc62f0,2026-03-28,Niko Price,Michael Chiesa,False,0.191222,True,False
+http://www.ufcstats.com/fight-details/f9f5071b993a5f4b,2026-03-28,Julian Erosa,Lerryan Douglas,False,0.710115,True,True
+http://www.ufcstats.com/fight-details/e32dc26b11d1f81d,2026-03-28,Yousri Belgaroui,Mansur Abdul-Malik,True,0.381864,True,False
+http://www.ufcstats.com/fight-details/a76e14495e61cf19,2026-03-28,Kyle Nelson,Terrance McKinney,False,0.402838,True,False
+http://www.ufcstats.com/fight-details/fa96d6252579b51e,2026-03-28,Ignacio Bahamondes,Tofiq Musayev,False,0.823538,True,False
+http://www.ufcstats.com/fight-details/689384b01b40ef5c,2026-03-28,Chase Hooper,Lance Gibson Jr.,False,0.776631,True,False
+http://www.ufcstats.com/fight-details/08d4e3864c44f8a5,2026-03-28,Tyrell Fortune,Marcin Tybura,True,0.346345,True,True
+http://www.ufcstats.com/fight-details/1c50e43770ba84fc,2026-03-28,Casey O'Neill,Gabriella Fernandes,True,0.750639,False,False
+http://www.ufcstats.com/fight-details/dbf1ee1a1912c735,2026-03-28,Navajo Stirling,Bruno Lopes,True,0.720853,True,False
+http://www.ufcstats.com/fight-details/796e1151896195aa,2026-03-28,Bruna Brasil,Alexia Thainara,False,0.342788,False,False
+http://www.ufcstats.com/fight-details/721642e7de112e9e,2026-04-04,Virna Jandiroba,Tabatha Ricci,True,0.499544,False,False
+http://www.ufcstats.com/fight-details/ad487d1c6141d90a,2026-04-04,Brendson Ribeiro,Abdul Rakhman Yakhyaev,False,0.277409,True,False
+http://www.ufcstats.com/fight-details/fef80c98b2fba70c,2026-04-04,Rafael Estevam,Ethyn Ewing,False,0.650089,True,False
+http://www.ufcstats.com/fight-details/c27bec45d5a29a2c,2026-04-04,Manolo Zecchini,Tommy McMillen,False,0.371108,True,True
+http://www.ufcstats.com/fight-details/7924f10aac3543de,2026-04-04,Jose Delano,Robert Ruchala,True,0.418972,True,True
+http://www.ufcstats.com/fight-details/d69bd8e53ec858dc,2026-04-04,Renato Moicano,Chris Duncan,True,0.520789,True,False
+http://www.ufcstats.com/fight-details/af2a9d47ca8115e4,2026-04-04,Stewart Nicoll,Alessandro Costa,False,0.477007,True,False
+http://www.ufcstats.com/fight-details/9c9c26679701b84d,2026-04-04,Darrius Flowers,Lando Vannata,True,0.388676,True,False
+http://www.ufcstats.com/fight-details/74bb036ef0493bf7,2026-04-04,Hailey Cowan,Alice Pereira,False,0.17124,False,False
+http://www.ufcstats.com/fight-details/e284a194fb4648a9,2026-04-04,Azamat Bekoev,Tresean Gore,False,0.695392,True,False
+http://www.ufcstats.com/fight-details/caf13346cbcfdb03,2026-04-04,Melissa Gatto,Dione Barbosa,False,0.622536,False,False
+http://www.ufcstats.com/fight-details/a5a749aa0061fdb4,2026-04-04,Dakota Hope,Kai Kamaka III,False,0.629687,True,True
+http://www.ufcstats.com/fight-details/0760bc02280574dd,2026-04-04,Guilherme Pat,Thomas Petersen,False,0.588619,True,False
+http://www.ufcstats.com/fight-details/aade9d76ac6c6aef,2026-04-11,Paulo Costa,Azamat Murzakanov,True,0.352576,True,False
+http://www.ufcstats.com/fight-details/903552edaba48f4a,2026-04-11,Josh Hokit,Curtis Blaydes,True,0.415709,True,False
+http://www.ufcstats.com/fight-details/c4d060cff018979a,2026-04-11,Dominick Reyes,Johnny Walker,True,0.42199,True,False
+http://www.ufcstats.com/fight-details/60949f33201415ca,2026-04-11,Nate Landwehr,Cub Swanson,False,0.374322,True,False
+http://www.ufcstats.com/fight-details/10ab34056720b6b4,2026-04-11,Aaron Pico,Patricio Pitbull,True,0.509034,True,False
+http://www.ufcstats.com/fight-details/a031f062b7ffefee,2026-04-11,Carlos Ulberg,Jiri Prochazka,True,0.631806,True,False
+http://www.ufcstats.com/fight-details/62b5ce408c150fa8,2026-04-11,Esteban Ribovics,Mateusz Gamrot,False,0.261809,True,False
+http://www.ufcstats.com/fight-details/f506977877074aa6,2026-04-11,Tatiana Suarez,Loopy Godinez,True,0.578976,False,False
+http://www.ufcstats.com/fight-details/20868a67bea63129,2026-04-11,Kelvin Gastelum,Vicente Luque,False,0.449531,True,False
+http://www.ufcstats.com/fight-details/5b49c3d36907c6df,2026-04-11,Francisco Prado,Charles Radtke,False,0.439449,True,False
+http://www.ufcstats.com/fight-details/b4e16fb13153efdc,2026-04-11,Randy Brown,Kevin Holland,False,0.477543,True,False
+http://www.ufcstats.com/fight-details/32054bf2b36b0e47,2026-04-18,Gilbert Burns,Mike Malott,False,0.277895,True,False
+http://www.ufcstats.com/fight-details/b5299e5b946015e5,2026-04-18,Kyler Phillips,Charles Jourdain,False,0.446084,True,False
+http://www.ufcstats.com/fight-details/e644218737c1a778,2026-04-18,Jai Herbert,Mandel Nallo,True,0.578883,True,True
+http://www.ufcstats.com/fight-details/5a209522211d7530,2026-04-18,Karine Silva,Jasmine Jasudavicius,False,0.517268,False,False
+http://www.ufcstats.com/fight-details/a661c0bee7c8d5af,2026-04-18,Thiago Moises,Gauge Young,False,0.462886,True,False
+http://www.ufcstats.com/fight-details/678440bd8274a18e,2026-04-18,Marcio Barbosa,Dennis Buzukja,True,0.525928,True,True
+http://www.ufcstats.com/fight-details/85c7a0f44aa3e10a,2026-04-18,Gokhan Saricam,Tanner Boser,True,0.374526,True,True
+http://www.ufcstats.com/fight-details/bae4de7ef8c0769e,2026-04-18,Melissa Croden,Daria Zhelezniakova,True,0.429849,False,False
+http://www.ufcstats.com/fight-details/0b6c13ab8ad7f82b,2026-04-18,JJ Aldrich,Jamey-Lyn Horth,True,0.543171,False,False
+http://www.ufcstats.com/fight-details/32087c183dffcae0,2026-04-18,Jamie Siraj,John Yannis,False,0.597266,True,True
+http://www.ufcstats.com/fight-details/9fab4b0ad082f670,2026-04-18,Robert Valentin,Julien Leblanc,True,0.435039,True,True
+http://www.ufcstats.com/fight-details/348de8e364ecf041,2026-04-25,Raoni Barcelos,Montel Jackson,True,0.279259,True,False
+http://www.ufcstats.com/fight-details/cb745968bd16bf56,2026-04-25,Norma Dumont,Joselyne Edwards,False,0.520282,False,False
+http://www.ufcstats.com/fight-details/84951374e4cdc679,2026-04-25,Rafa Garcia,Alexander Hernandez,True,0.634647,True,False
+http://www.ufcstats.com/fight-details/f5aff2f858311fbc,2026-04-25,Davey Grant,Adrian Luna Martinetti,True,0.538279,True,True
+http://www.ufcstats.com/fight-details/7e551ddb1494a45f,2026-04-25,Ryan Spann,Marcus Buchecha,True,0.474114,True,False
+http://www.ufcstats.com/fight-details/f524e42c36028de0,2026-04-25,Youssef Zalal,Aljamain Sterling,False,0.62567,True,False
+http://www.ufcstats.com/fight-details/ef1cd6371a3f18e0,2026-04-25,Jackson McVey,Sedriques Dumas,True,0.53964,True,False
+http://www.ufcstats.com/fight-details/dcfd594b68ff5ae1,2026-04-25,Michelle Montague,Mayra Bueno Silva,True,0.620955,False,False
+http://www.ufcstats.com/fight-details/d421f3cd158fd055,2026-04-25,Jafel Filho,Cody Durden,False,0.805304,True,False
+http://www.ufcstats.com/fight-details/c7fb90f1355291e4,2026-04-25,Lucas Brennan,Francis Marshall,False,0.417682,True,True
+http://www.ufcstats.com/fight-details/2e7f8d0ad385876d,2026-04-25,Max Griffin,Victor Valenzuela,False,0.60418,True,True
+http://www.ufcstats.com/fight-details/0df4f4ac27cf2d26,2026-04-25,Talita Alencar,Julia Polastri,True,0.516779,False,False
+http://www.ufcstats.com/fight-details/67f24cf244134661,2026-04-25,Eric McConico,Rodolfo Vieira,True,0.275389,True,False
+http://www.ufcstats.com/fight-details/eb6d9fef6c374830,2026-05-02,Jack Della Maddalena,Carlos Prates,False,0.587524,True,False
+http://www.ufcstats.com/fight-details/5c7c38dece435cde,2026-05-02,Quillan Salkilld,Beneil Dariush,True,0.772206,True,False
+http://www.ufcstats.com/fight-details/afec383a96893ec5,2026-05-02,Tim Elliott,Steve Erceg,False,0.402539,True,False
+http://www.ufcstats.com/fight-details/cfc884a249141cba,2026-05-02,Ollie Schmid,Marwan Rahiki,False,0.299754,True,True
+http://www.ufcstats.com/fight-details/a564219e7a964aa6,2026-05-02,Shamil Gaziev,Brando Pericic,False,0.309943,True,False
+http://www.ufcstats.com/fight-details/2afaa97901d5587c,2026-05-02,Tai Tuivasa,Louie Sutherland,False,0.461898,True,False
+http://www.ufcstats.com/fight-details/46181797eb543a0b,2026-05-02,Cam Rowston,Robert Bryczek,True,0.729947,True,False
+http://www.ufcstats.com/fight-details/1cb0711cd49dd95e,2026-05-02,Junior Tafa,Kevin Christian,True,0.417711,True,False
+http://www.ufcstats.com/fight-details/edff38661bf2866b,2026-05-02,Jacob Malkoun,Gerald Meerschaert,True,0.866514,True,False
+http://www.ufcstats.com/fight-details/00bde62cac38e5e9,2026-05-02,Vince Morales,Colby Thicknesse,False,0.116946,True,False
+http://www.ufcstats.com/fight-details/827c64369b374989,2026-05-02,Ben Johnston,Wes Schultz,False,0.538549,True,True
+http://www.ufcstats.com/fight-details/7ac4ae301ed699ab,2026-05-02,Jonathan Micallef,Themba Gorimbo,True,0.630404,True,False
+http://www.ufcstats.com/fight-details/610a640a0cd81ce5,2026-05-02,Kody Steele,Dom Mar Fan,True,0.219232,True,False
+http://www.ufcstats.com/fight-details/70f1621080b3435c,2026-05-09,Khamzat Chimaev,Sean Strickland,False,0.767801,True,False
+http://www.ufcstats.com/fight-details/c85b530861145935,2026-05-09,Tatsuro Taira,Joshua Van,False,0.472321,True,False
+http://www.ufcstats.com/fight-details/22ba4f1b0aafbf82,2026-05-09,Waldo Cortes Acosta,Alexander Volkov,False,0.50836,True,False
+http://www.ufcstats.com/fight-details/845b8653f9cf839c,2026-05-09,Joaquin Buckley,Sean Brady,False,0.636546,True,False
+http://www.ufcstats.com/fight-details/1158a27a1a04b971,2026-05-09,Jeremy Stephens,King Green,False,0.165973,True,False
+http://www.ufcstats.com/fight-details/770c5302e32916ea,2026-05-09,Ateba Gautier,Ozzy Diaz,True,0.792412,True,False
+http://www.ufcstats.com/fight-details/e92d89cb2d69235e,2026-05-09,Clayton Carpenter,Jose Ochoa,False,0.401386,True,False
+http://www.ufcstats.com/fight-details/ffcb47e17eebe6a6,2026-05-09,Mateusz Rebecki,Grant Dawson,False,0.290937,True,False
+http://www.ufcstats.com/fight-details/e50857173607d631,2026-05-09,Jared Gordon,Jim Miller,False,0.588294,True,False
+http://www.ufcstats.com/fight-details/9d35723a53749931,2026-05-09,Marco Tulio,Roman Kopylov,False,0.598289,True,False
+http://www.ufcstats.com/fight-details/303018d7459323b4,2026-05-09,Pat Sabatini,William Gomis,True,0.476393,True,False
+http://www.ufcstats.com/fight-details/1f5d0b106385b2ac,2026-05-09,Baisangur Susurkaev,Djorden Santos,True,0.810636,True,False
+http://www.ufcstats.com/fight-details/f88dc6e0c29cff1d,2026-05-09,Joel Alvarez,Yaroslav Amosov,False,0.782112,True,False
+http://www.ufcstats.com/fight-details/a6ec8573a9d38c51,2026-05-16,Benardo Sopaj,Timmy Cuamba,True,0.375177,True,False
+http://www.ufcstats.com/fight-details/e4aa608124896794,2026-05-16,Arnold Allen,Melquizael Costa,True,0.346575,True,False
+http://www.ufcstats.com/fight-details/fc1266e2892ed111,2026-05-16,Daniel Santos,Dooho Choi,False,0.442494,True,False
+http://www.ufcstats.com/fight-details/ecb7ff543dd41bf8,2026-05-16,Malcolm Wellmaker,Juan Diaz,False,0.596572,True,True
+http://www.ufcstats.com/fight-details/57bd683efc797fc1,2026-05-16,Christian Edwards,Modestas Bukauskas,False,0.360502,True,True
+http://www.ufcstats.com/fight-details/ec32745308e2b055,2026-05-16,Nikolay Veretennikov,Khaos Williams,False,0.488251,True,False
+http://www.ufcstats.com/fight-details/5f7111b982bcf6e3,2026-05-16,Jacqueline Cavalcanti,Ketlen Vieira,False,0.721448,False,False
+http://www.ufcstats.com/fight-details/c9e0aa88afb81dab,2026-05-16,Artur Minev,Tommy Gantt,False,0.647656,True,True
+http://www.ufcstats.com/fight-details/39417b7d07c2fd83,2026-05-16,Nicolle Caliari,Shauna Bannon,True,0.632195,False,False
+http://www.ufcstats.com/fight-details/48cb604345f11766,2026-05-16,Andre Petroski,Cody Brundage,False,0.461561,True,False
+http://www.ufcstats.com/fight-details/b98ead4eff6bf872,2026-05-16,Alice Ardelean,Polyana Viana,True,0.662794,False,False
+http://www.ufcstats.com/fight-details/b482d4452e4d0eee,2026-05-16,Daniel Barez,Luis Gurule,False,0.388722,True,False
+http://www.ufcstats.com/fight-details/6242cda790f2085d,2026-05-16,Tuco Tokkos,Ivan Erslan,False,0.606867,True,False
+http://www.ufcstats.com/fight-details/423f32dd018ac218,2026-05-30,Song Yadong,Deiveson Figueiredo,True,0.717242,True,False
+http://www.ufcstats.com/fight-details/f74e4afdf6ae29d1,2026-05-30,Tallison Teixeira,Sergei Pavlovich,False,0.391759,True,False
+http://www.ufcstats.com/fight-details/00959e29e4a10e26,2026-05-30,Cameron Smotherman,Kai Asakura,False,0.704684,True,False
+http://www.ufcstats.com/fight-details/c1c9dfd0c0952f18,2026-05-30,Carlston Harris,Jake Matthews,False,0.2619,True,False
+http://www.ufcstats.com/fight-details/a23d84f15207e459,2026-05-30,Alonzo Menifield,Zhang Mingyang,True,0.238737,True,False
+http://www.ufcstats.com/fight-details/bc0b3c16246e0d1d,2026-05-30,Ding Meng,Jose Souza,False,0.409475,True,True
+http://www.ufcstats.com/fight-details/3bc0190fb17ba42f,2026-05-30,Aoriqileng,Cody Haddon,False,0.380425,True,False
+http://www.ufcstats.com/fight-details/224dce2c0b03e7eb,2026-05-30,Luis Gurule,Rei Tsuruya,False,0.28221,True,False
+http://www.ufcstats.com/fight-details/3f719885c9916e06,2026-05-30,Angela Hill,Xiong Jingnan,True,0.652133,False,True
+http://www.ufcstats.com/fight-details/34d5ec676fb5bce3,2026-05-30,Zhu Kangjie,Rodrigo Vera,False,0.499438,True,True
+http://www.ufcstats.com/fight-details/370ff29489150560,2026-05-30,Loma Lookboonmee,Jaqueline Amorim,False,0.27334,False,False
+http://www.ufcstats.com/fight-details/f6d09973de0f83e7,2026-05-30,Luis Felipe Dias,YiSak Lee,True,0.439392,True,True
+http://www.ufcstats.com/fight-details/5c69b019e6deee41,2026-06-06,Gabriel Bonfim,Belal Muhammad,True,0.685817,True,False
+http://www.ufcstats.com/fight-details/419fff06f338f5c6,2026-06-06,Brendan Allen,Edmen Shahbazyan,True,0.710897,True,False
+http://www.ufcstats.com/fight-details/58ffa2dac4f2e7d0,2026-06-06,Tom Nolan,Fares Ziam,True,0.247687,True,False
+http://www.ufcstats.com/fight-details/c47796e11a801e12,2026-06-06,Santiago Luna,Bryce Mitchell,False,0.555803,True,False
+http://www.ufcstats.com/fight-details/bfe4950b3de83e9c,2026-06-06,Junior Tafa,Iwo Baraniewski,False,0.372971,True,False
+http://www.ufcstats.com/fight-details/20d74ed23d3e9b3a,2026-06-06,Edgar Chairez,Bruno Silva,True,0.526926,True,False
+http://www.ufcstats.com/fight-details/90940d93d6e0998f,2026-06-06,John Yannis,Marcus McGhee,False,0.359302,True,False
+http://www.ufcstats.com/fight-details/98e77712f99956ff,2026-06-06,Priscila Cachoeira,Chelsea Chandler,False,0.404058,False,False
+http://www.ufcstats.com/fight-details/44cfbb8c3c356c65,2026-06-06,Joanderson Brito,Jordan Leavitt,True,0.495834,True,False
+http://www.ufcstats.com/fight-details/a6b211d8dab5edec,2026-06-06,Jeisla Chaves,Yuneisy Duben,True,0.620291,False,True
+http://www.ufcstats.com/fight-details/b0474597b2c60482,2026-06-06,Ketlen Souza,Ariane Carnelossi,True,0.77672,False,False
+http://www.ufcstats.com/fight-details/5d2eedd05081ed23,2026-06-06,Matt Schnell,Alessandro Costa,False,0.2077,True,False
+http://www.ufcstats.com/fight-details/5727d5be8c373346,2026-06-14,Alex Pereira,Ciryl Gane,False,0.381094,True,False
+http://www.ufcstats.com/fight-details/7208e40818401e88,2026-06-14,Ilia Topuria,Justin Gaethje,False,0.779805,True,False
+http://www.ufcstats.com/fight-details/60de0423ae6ed097,2026-06-14,Aiemann Zahabi,Sean O'Malley,False,0.281201,True,False
+http://www.ufcstats.com/fight-details/30cdb851f6c63444,2026-06-14,Josh Hokit,Derrick Lewis,True,0.692644,True,False
+http://www.ufcstats.com/fight-details/9a9b30b3165b62e4,2026-06-14,Mauricio Ruffy,Michael Chandler,True,0.782867,True,False
+http://www.ufcstats.com/fight-details/00e8d4b961a65d21,2026-06-14,Bo Nickal,Kyle Daukaus,True,0.720534,True,False
+http://www.ufcstats.com/fight-details/127ba4a1ccb3d4a6,2026-06-14,Diego Lopes,Steve Garcia,True,0.4546,True,False
+http://www.ufcstats.com/fight-details/33afdd7ad43a2756,2026-06-20,Manel Kape,Kyoji Horiguchi,True,0.59331,True,False
+http://www.ufcstats.com/fight-details/afc021700481ac4e,2026-06-20,Ion Cutelaba,Navajo Stirling,False,0.305226,True,False
+http://www.ufcstats.com/fight-details/aaec28fa3c0c576d,2026-06-20,Hyder Amil,Christian Rodriguez,False,0.308256,True,False
+http://www.ufcstats.com/fight-details/571a3eabff5c7ba7,2026-06-20,Vinicius Oliveira,Andre Fili,True,0.712101,True,False
+http://www.ufcstats.com/fight-details/17d31249c9ab18af,2026-06-20,Kevin Borjas,Andre Lima,True,0.140976,True,False
+http://www.ufcstats.com/fight-details/e4849375d1949c74,2026-06-20,Melsik Baghdasaryan,Murtazali Magomedov,False,0.416185,True,True
+http://www.ufcstats.com/fight-details/3b4803afa824fea3,2026-06-20,Mitch Raposo,Allan Nascimento,True,0.514152,True,False
+http://www.ufcstats.com/fight-details/8b809ba1880aded0,2026-06-20,Michael Aswell Jr.,Gaston Bolanos,False,0.665754,True,False
+http://www.ufcstats.com/fight-details/6658fe4531c86674,2026-06-20,Levan Chokheli,Leon Shahbazyan,True,0.517141,True,True
+http://www.ufcstats.com/fight-details/b23a1a5d35eb438a,2026-06-20,Luana Santos,Karol Rosa,True,0.691207,False,False
+http://www.ufcstats.com/fight-details/9efa4de316b8bf43,2026-06-20,Shane Collins,Otari Tanzilovi,True,0.545387,True,True
+http://www.ufcstats.com/fight-details/c0980a613f24accd,2026-06-20,Melissa Mullins,Bia Mesquita,False,0.343618,False,False
+http://www.ufcstats.com/fight-details/d83294b031502177,2026-06-27,Ikram Aliskerov,Brunno Ferreira,True,0.650994,True,False
+http://www.ufcstats.com/fight-details/c13dc0cccef263f7,2026-06-27,Manuel Torres,Rafael Fiziev,False,0.773549,True,False
+http://www.ufcstats.com/fight-details/012c307c9d446c4d,2026-06-27,Michel Pereira,Shara Magomedov,False,0.218946,True,False
+http://www.ufcstats.com/fight-details/809814f03ff3140c,2026-06-27,Matheus Camilo,Nazim Sadykhov,True,0.531246,True,False
+http://www.ufcstats.com/fight-details/81cde317c156723b,2026-06-27,Charles Johnson,Asu Almabayev,False,0.270011,True,False
+http://www.ufcstats.com/fight-details/35985895d4ef321e,2026-06-27,Michal Oleksiejczuk,Abus Magomedov,False,0.613072,True,False
+http://www.ufcstats.com/fight-details/0e60ab32f3d03929,2026-06-27,Theodor Berggren,Daniil Donchenko,False,0.296809,True,True
+http://www.ufcstats.com/fight-details/48b1ee7ab45add4c,2026-06-27,Abdul Rakhman Yakhyaev,Julius Walker,True,0.686347,True,False
+http://www.ufcstats.com/fight-details/5e7f4ba1210f433d,2026-06-27,Andrey Pulyaev,Nursulton Ruziboev,False,0.466042,True,False
+http://www.ufcstats.com/fight-details/1a7119f3996b5635,2026-06-27,Kaan Ofli,Javier Reyes,True,0.289541,True,False
+http://www.ufcstats.com/fight-details/ae0a91c8f92f4758,2026-06-27,Jean Matsumoto,Bekzat Almakhan,True,0.647482,True,False
+http://www.ufcstats.com/fight-details/f1cb2e7ef096ec7c,2026-06-27,Tahir Abdullayev,Jefferson Nascimento,True,0.464541,True,True
+http://www.ufcstats.com/fight-details/6a35ff33b8597904,2026-06-27,Farman Hasanov,Eric Nolan,True,0.571874,True,True
+http://www.ufcstats.com/fight-details/a26ea74f2e908842,2026-07-11,Terrance McKinney,King Green,False,0.443315,True,False
+http://www.ufcstats.com/fight-details/989760fa75321d69,2026-07-11,Conor McGregor,Max Holloway,False,0.277075,True,False
+http://www.ufcstats.com/fight-details/130b325610c54a64,2026-07-11,Paddy Pimblett,Benoit Saint Denis,True,0.16805,True,False
+http://www.ufcstats.com/fight-details/c572daedf2012a49,2026-07-11,Cory Sandhagen,Mario Bautista,False,0.523432,True,False
+http://www.ufcstats.com/fight-details/a3ab1979192b647c,2026-07-11,Lone'er Kavanagh,Brandon Royval,False,0.70219,True,False
+http://www.ufcstats.com/fight-details/118c25bda9392140,2026-07-11,Gable Steveson,Elisha Ellison,True,0.620828,True,True
+http://www.ufcstats.com/fight-details/7765e5e779dd7dc9,2026-07-11,Nikita Krylov,Robert Whittaker,False,0.335635,True,False
+http://www.ufcstats.com/fight-details/930317fde9dbc55e,2026-07-11,Kai Kamaka III,Luke Riley,False,0.278759,True,False
+http://www.ufcstats.com/fight-details/e84c3f1f9a33fa90,2026-07-11,Wang Cong,Tracy Cortez,True,0.491847,False,False
+http://www.ufcstats.com/fight-details/b223b10ef19f912c,2026-07-11,Cesar Almeida,Damian Pinas,False,0.266748,True,False
+http://www.ufcstats.com/fight-details/9e00ee7644774e18,2026-07-11,Farid Basharat,John Garza,True,0.754245,True,True
+http://www.ufcstats.com/fight-details/1162a74e3604c488,2026-07-11,Zach Reese,Ryan Gandra,False,0.500171,True,False
+http://www.ufcstats.com/fight-details/e9f389ba3a1e33c4,2026-07-11,Adrian Yanez,Cody Garbrandt,True,0.593522,True,False
+http://www.ufcstats.com/fight-details/1b6a3b0d27654d3e,2026-07-11,Alessandro Costa,Cody Durden,True,0.669893,True,False
+http://www.ufcstats.com/fight-details/4eff5a845db17572,2026-07-18,Jared Cannonier,Christian Leroy Duncan,False,0.213834,True,False
+http://www.ufcstats.com/fight-details/701c97405da76603,2026-07-18,Kamaru Usman,Dricus Du Plessis,False,0.509441,True,False
+http://www.ufcstats.com/fight-details/f2abca7379982d4f,2026-07-18,Chase Hooper,Mitch Ramirez,True,0.866122,True,False
+http://www.ufcstats.com/fight-details/52ddf20a10890b41,2026-07-18,Tabatha Ricci,Fatima Kline,False,0.36821,False,False
+http://www.ufcstats.com/fight-details/c64c6ba6eb1e1d06,2026-07-18,Tommy McMillen,Alberto Montes,True,0.688431,True,False
+http://www.ufcstats.com/fight-details/f2eb569176e46edf,2026-07-18,Jean-Paul Lebosnoyani,Seokhyeon Ko,True,0.432917,True,False
+http://www.ufcstats.com/fight-details/46d800ce45fdd3e6,2026-07-18,Levi Rodrigues Jr.,Felipe Franco,False,0.408222,True,True
+http://www.ufcstats.com/fight-details/9e525f939fba3e73,2026-07-18,Damien Anderson,Ezra Elliott,False,0.441613,True,True
+http://www.ufcstats.com/fight-details/410e6b9e01660b35,2026-07-18,Stewart Nicoll,Alden Coria,False,0.269861,True,False
+http://www.ufcstats.com/fight-details/e05155c1b5c2dc74,2026-07-18,Alvin Hines,RJ Harris,False,0.409187,True,True
+http://www.ufcstats.com/fight-details/307ea95ad7ebe466,2026-07-18,Anna Melisano,Dione Barbosa,False,0.358664,False,True
+http://www.ufcstats.com/fight-details/3bd159c1bed14700,2026-07-18,Jose Delgado,Austin Bashi,True,0.319219,True,False
+http://www.ufcstats.com/fight-details/5ffb251c6ea48b65,2026-07-25,Tyrell Fortune,Rizvan Kuniev,False,0.408599,True,False
+http://www.ufcstats.com/fight-details/9009ec7b91f2be14,2026-07-25,Bogdan Guskov,Magomed Ankalaev,False,0.268997,True,False
+http://www.ufcstats.com/fight-details/c36cd04f8f560f0a,2026-07-25,Ramazan Temirov,Steve Erceg,True,0.368602,True,False
+http://www.ufcstats.com/fight-details/4ace64aa144389c5,2026-07-25,Damian Rzepecki,Magomed Zaynukov,False,0.590077,True,True
+http://www.ufcstats.com/fight-details/61280e5644189c61,2026-07-25,Saygid Izagakhmaev,Abubakar Vagaev,False,0.633657,True,True
+http://www.ufcstats.com/fight-details/532340708f0500bd,2026-07-25,Abdul Hussein,Cody Gibson,True,0.718352,True,True
+http://www.ufcstats.com/fight-details/05bc7a042156b6f6,2026-07-25,Muhammad Saidov,Dustin Jacoby,True,0.280802,True,True
+http://www.ufcstats.com/fight-details/f6e6b004f07363e9,2026-07-25,Sam Patterson,Santiago Ponzinibbio,True,0.681528,True,False
+http://www.ufcstats.com/fight-details/a122306d0ce5fbfb,2026-07-25,Ismael Bonfim,Axel Sola,False,0.39038,True,False
+http://www.ufcstats.com/fight-details/3ac870d6e7d323b7,2026-07-25,Magomed Tuchalov,Brendson Ribeiro,True,0.625764,True,True
+http://www.ufcstats.com/fight-details/3859314324918eeb,2026-07-25,Mike Davis,Nurullo Aliev,False,0.464329,True,False
+http://www.ufcstats.com/fight-details/d7070ab1b2144f8d,2026-07-25,Valter Walker,Thomas Petersen,True,0.644101,True,False
+http://www.ufcstats.com/fight-details/f425b7a527dd53aa,2026-08-01,Robert Valentin,Dusko Todorovic,True,0.531641,True,False
+http://www.ufcstats.com/fight-details/eb8753ed0476b3d1,2026-08-01,Marcin Tybura,Aleksandar Rakic,False,0.27358,True,False
+http://www.ufcstats.com/fight-details/7ecb154439aca0f9,2026-08-01,Gilbert Urbina,Vlasto Cepo,True,0.386637,True,True
+http://www.ufcstats.com/fight-details/68ae50dbf98dc15f,2026-08-01,Daniel Rodriguez,Uros Medic,False,0.336137,True,False
+http://www.ufcstats.com/fight-details/0c3c835e681972d3,2026-08-01,Jan Blachowicz,Navajo Stirling,False,0.304457,True,False
+http://www.ufcstats.com/fight-details/fec91da886d80200,2026-08-01,Milos Janicic,Noah Gugnon,False,0.444312,True,True
+http://www.ufcstats.com/fight-details/878a7e6fec3e4573,2026-08-01,Stephanie Luciano,Marina Spasic,True,0.721692,False,True
+http://www.ufcstats.com/fight-details/f1bce0c9a3fa4bcb,2026-08-01,Michael Oliveira,Oban Elliott,True,0.508028,True,True
+http://www.ufcstats.com/fight-details/4350abb4f1933f88,2026-08-01,Borislav Nikolic,Mark Vologdin,True,0.350022,True,True
+http://www.ufcstats.com/fight-details/13aa6688d0538095,2026-08-01,Dennis Buzukja,Bogdan Grad,False,0.337021,True,False
+http://www.ufcstats.com/fight-details/5425c577ed4f50b3,2026-08-01,Mateusz Rebecki,Kyle Prepolec,True,0.826361,True,False
+http://www.ufcstats.com/fight-details/f78f34ef2ee7b02c,2026-08-01,Nina Milosevic,Hailey Cowan,True,0.6687,False,True
+http://www.ufcstats.com/fight-details/94cef172179c9778,2026-08-01,Alexander Poppeck,Jovan Leka,False,0.34475,True,True
+http://www.ufcstats.com/fight-details/fbd99ae7e1ff993a,2026-08-01,Ludovit Klein,Tofiq Musayev,False,0.718592,True,False
+http://www.ufcstats.com/fight-details/a10deecfb8558335,2026-08-08,Mateusz Gamrot,Quillan Salkilld,False,0.390712,True,False
+http://www.ufcstats.com/fight-details/d5245f5b96b8afdf,2026-08-08,Diego Ferreira,Billy Quarantillo,True,0.60241,True,False
+http://www.ufcstats.com/fight-details/06bfde3e3577906f,2026-08-08,Darren Elkins,Yadier del Valle,False,0.29321,True,False
+http://www.ufcstats.com/fight-details/13f31f7a784013a3,2026-08-08,Amanda Lemos,Alexia Thainara,False,0.245569,False,False
+http://www.ufcstats.com/fight-details/f44ab9e9e4a89735,2026-08-08,Billy Ray Goff,Ty Miller,False,0.324419,True,False
+http://www.ufcstats.com/fight-details/13380a8d6cdbb381,2026-08-08,Bruno Lopes,Diyar Nurgozhay,False,0.499894,True,False
+http://www.ufcstats.com/fight-details/64829a32c78ab656,2026-08-08,Jose Montanha,Louie Sutherland,True,0.548056,True,True
+http://www.ufcstats.com/fight-details/81ae2a465e0dfa4f,2026-08-08,Manoel Sousa,Richie Miranda,True,0.645782,True,True
+http://www.ufcstats.com/fight-details/1168a8e59aacfd72,2026-08-08,Gianni Vazquez,Miles Johns,False,0.23405,True,False
+http://www.ufcstats.com/fight-details/d463229133909215,2026-08-08,Juliana Miller,Ravena Oliveira,True,0.596773,False,False
+http://www.ufcstats.com/fight-details/ded584e13276cbcb,2026-08-08,Carol Foro,Gigi Canuto,True,0.424076,False,True
+http://www.ufcstats.com/fight-details/3050549d19395f6f,2026-08-08,Steven Asplund,Guilherme Pat,True,0.569013,True,False
+http://www.ufcstats.com/fight-details/53902dcb3e213b18,2026-08-15,Mansur Abdul-Malik,Dustin Stoltzfus,False,0.65152,True,False
+http://www.ufcstats.com/fight-details/365fd759c03e93cf,2026-08-15,Ian Machado Garry,Islam Makhachev,False,0.31435,True,False
+http://www.ufcstats.com/fight-details/4700d42c9869674a,2026-08-15,Mackenzie Dern,Gillian Robertson,True,0.365338,False,False
+http://www.ufcstats.com/fight-details/d4bd456d70965734,2026-08-15,Jalin Turner,Kaue Fernandes,True,0.419168,True,False
+http://www.ufcstats.com/fight-details/8e482cead0c7eb15,2026-08-15,Edson Barboza,Esteban Ribovics,False,0.264157,True,False
+http://www.ufcstats.com/fight-details/d5ebdf462c9b59b3,2026-08-15,Jeremiah Wells,Myktybek Orolbai,True,0.191445,True,False
+http://www.ufcstats.com/fight-details/e7c11d1b22d50ba0,2026-08-15,Charles Johnson,Eduardo Chapolin,True,0.543305,True,True
+http://www.ufcstats.com/fight-details/9c5da658c76da7c0,2026-08-15,Eric McConico,Donte Johnson,False,0.275528,True,False
+http://www.ufcstats.com/fight-details/e79e4d13546d2360,2026-08-15,Tresean Gore,Vicente Luque,True,0.341294,True,False
+http://www.ufcstats.com/fight-details/360b13f97e7ca703,2026-08-15,Rafael Tobias,Lucas Fernando,False,0.454695,True,True
+http://www.ufcstats.com/fight-details/e7077d030d5fc15f,2026-08-15,Neil Magny,Ramiz Brahimaj,True,0.446681,True,False
+http://www.ufcstats.com/fight-details/6e495deac1f57169,2026-08-15,Chidi Njokuani,Joel Alvarez,True,0.207578,True,False
+http://www.ufcstats.com/fight-details/a4b3becc0cc394d7,2026-08-22,Carli Judice,Jeisla Chaves,True,0.653247,False,False
+http://www.ufcstats.com/fight-details/fb77b08a90b92d5b,2026-08-22,Gregory Rodrigues,Anthony Hernandez,True,0.162349,True,False
+http://www.ufcstats.com/fight-details/a57ccf31c5f6f82b,2026-08-22,Serghei Spivac,Vitor Petrino,False,0.386085,True,False
+http://www.ufcstats.com/fight-details/0eba299c9b6760fa,2026-08-22,Reinier de Ridder,Roman Dolidze,True,0.766918,True,False
+http://www.ufcstats.com/fight-details/bf70d01518c80fba,2026-08-22,Mason Jones,MarQuel Mederos,False,0.464347,True,False
+http://www.ufcstats.com/fight-details/a6873fd459587d17,2026-08-22,Anthony Wint,Terrance Chatman,True,0.476816,True,True
+http://www.ufcstats.com/fight-details/11e4a448ce1ae5e3,2026-08-22,Jackson McVey,Wes Schultz,True,0.405567,True,False
+http://www.ufcstats.com/fight-details/5d2c1c4dd444772f,2026-08-22,Shamil Gaziev,Kennedy Nzechukwu,True,0.353401,True,False
+http://www.ufcstats.com/fight-details/bbd05484f8c8d739,2026-08-22,Nasrat Haqparast,Chris Padilla,False,0.316124,True,False
+http://www.ufcstats.com/fight-details/7e86f774f19e5e59,2026-08-22,Marcio Barbosa,Ryan Kuse,True,0.704092,True,True
+http://www.ufcstats.com/fight-details/116dc88b63113f61,2026-08-22,Stan Dorsainvil,Gauge Young,True,0.412319,True,True
+http://www.ufcstats.com/fight-details/97fb716bc7b8751a,2026-08-22,Shanelle Dyer,Elise Reed,True,0.803305,False,False
+http://www.ufcstats.com/fight-details/2bbacf9ed3c64184,2026-08-22,Jamall Emmers,Lerryan Douglas,True,0.416821,True,False
+http://www.ufcstats.com/fight-details/228fefc6923c40a5,2026-08-29,Song Yadong,Umar Nurmagomedov,True,0.379764,True,False
+http://www.ufcstats.com/fight-details/73cb6c4e060c4ee9,2026-08-29,Yan Xiaonan,Denise Gomes,False,0.324228,False,False
+http://www.ufcstats.com/fight-details/4af8cb715ac0d459,2026-08-29,Aoriqileng,Kai Asakura,False,0.3687,True,False
+http://www.ufcstats.com/fight-details/48a5d9c4592d2f2a,2026-08-29,Alex Perez,Sumudaerji,False,0.317003,True,False
+http://www.ufcstats.com/fight-details/f894989058f2bb05,2026-08-29,Liu Ce,Levi Rodrigues Jr.,True,0.609892,True,True
+http://www.ufcstats.com/fight-details/1fe768d599c159dc,2026-08-29,Nilson Rojas,Bilal Hasan,False,0.444675,True,True
+http://www.ufcstats.com/fight-details/ec5281a72f09d8ac,2026-08-29,Kevin Borjas,Rei Tsuruya,False,0.273077,True,False
+http://www.ufcstats.com/fight-details/8a980234dab7ae43,2026-08-29,Sean Woodson,Jack Jenkins,True,0.62042,True,False
+http://www.ufcstats.com/fight-details/636867bbc9f96739,2026-08-29,Francesco Nuzzi,Xiao Long,True,0.374211,True,True
+http://www.ufcstats.com/fight-details/ab5922e10699e869,2026-08-29,Lawrence Lui,Hector Santiago,False,0.626166,True,True
+http://www.ufcstats.com/fight-details/6206c62fc8f0b71b,2026-08-29,Xiong Jingnan,Julia Polastri,False,0.184876,False,False
+http://www.ufcstats.com/fight-details/6cd4457edf4089f9,2026-08-29,Cam Nelson,Ding Meng,True,0.536323,True,True
+http://www.ufcstats.com/fight-details/80f7f5405d5ffca0,2026-08-29,Namsrai Batbayar,Andre Lima,False,0.408314,True,True
+http://www.ufcstats.com/fight-details/bba8c0ab999b9e6f,2026-09-05,Salahdine Parnasse,Dan Hooker,True,0.306131,True,True
+http://www.ufcstats.com/fight-details/55f698e5c4ed2c47,2026-09-05,Axel Sola,Fares Ziam,True,0.235053,True,False
+http://www.ufcstats.com/fight-details/c23197c7e4f2fd9d,2026-09-05,Nursulton Ruziboev,Michael Page,False,0.476848,True,False
+http://www.ufcstats.com/fight-details/b90b099c1f47bb93,2026-09-05,Losene Keita,Muhammad Naimov,True,0.647478,True,False
+http://www.ufcstats.com/fight-details/cbf9063d23513661,2026-09-05,Kurtis Campbell,Trevor Peek,True,0.47537,True,False
+http://www.ufcstats.com/fight-details/ad17c34e0cc7d702,2026-09-05,Morgan Charriere,Felipe Lima,False,0.379953,True,False
+http://www.ufcstats.com/fight-details/8300a095a4908ab1,2026-09-05,Daniil Donchenko,Punahele Soriano,True,0.599199,True,False
+http://www.ufcstats.com/fight-details/94d411112ebe8fad,2026-09-05,Modestas Bukauskas,Oumar Sy,True,0.333594,True,False
+http://www.ufcstats.com/fight-details/ac3af13ffe39b1d8,2026-09-05,Nathaniel Wood,Pavel Andrusca,False,0.708137,True,True
+http://www.ufcstats.com/fight-details/1f973e21581b082a,2026-09-05,Fabia Sintes,Michael Aljarouj,True,0.454409,True,True
+http://www.ufcstats.com/fight-details/809ebb0cfdd01ce2,2026-09-05,Nora Cornolle,Klaudia Sygula,True,0.400887,False,False
+http://www.ufcstats.com/fight-details/e5fd7ef7ccf955b8,2026-09-05,Matthieu Duclos,Luis Felipe Dias,True,0.317126,True,True
+http://www.ufcstats.com/fight-details/9226a13d001b49ec,2026-09-05,Sofia Montenegro,Delphine Benouaich,False,0.553201,False,True
+http://www.ufcstats.com/fight-details/b1c6ea7d7d413bd5,2026-09-05,Ryan Spann,Mario Pinto,False,0.224208,True,False
+http://www.ufcstats.com/fight-details/1aa008d8597a73b8,2026-09-12,Joseph Morales,Brandon Moreno,False,0.324776,True,False
+http://www.ufcstats.com/fight-details/1fca7dfa9e1e15cb,2026-09-12,Tommy McMillen,Marwan Rahiki,True,0.472295,True,False
+http://www.ufcstats.com/fight-details/d9712b45c094730e,2026-09-12,Alexa Grasso,Manon Fiorot,True,0.320705,False,False
+http://www.ufcstats.com/fight-details/606639bf387f60e2,2026-09-12,Waldo Cortes Acosta,Curtis Blaydes,False,0.702366,True,False
+http://www.ufcstats.com/fight-details/51caa91f68873cf5,2026-09-12,Dan Ige,David Martinez,False,0.232818,True,False
+http://www.ufcstats.com/fight-details/034c04e480d87b8f,2026-09-12,Jose Delgado,Jean Silva,False,0.282996,True,False
+http://www.ufcstats.com/fight-details/046c22f769fd8300,2026-09-12,Ignacio Bahamondes,Muslim Salikhov,True,0.729775,True,False
+http://www.ufcstats.com/fight-details/9a0e77ecd1b7f04e,2026-09-12,Djorden Santos,Yousri Belgaroui,False,0.2071,True,False
+http://www.ufcstats.com/fight-details/0aa849ca85e4355a,2026-09-12,Tommy Gantt,Drakkar Klose,True,0.716624,True,False
+http://www.ufcstats.com/fight-details/d0d48877bf3724d1,2026-09-12,Rafa Garcia,Rongzhu,False,0.744219,True,False
+http://www.ufcstats.com/fight-details/5a91827fe8c1dc26,2026-09-12,Jessie Rosas,Sean King III,False,0.461667,True,True
+http://www.ufcstats.com/fight-details/64da2e60f1b472fa,2026-09-12,JJ Aldrich,Regina Tarin,False,0.475328,False,False
+http://www.ufcstats.com/fight-details/f154037892b9fb94,2026-09-12,Edgar Chairez,Tim Elliott,False,0.590334,True,False
+http://www.ufcstats.com/fight-details/568ec6af4008355a,2026-09-19,Joshua Van,Alexandre Pantoja,True,0.773939,True,False
+http://www.ufcstats.com/fight-details/fe612d20eec7ef35,2026-09-19,Arman Tsarukyan,Mauricio Ruffy,True,0.709518,True,False
+http://www.ufcstats.com/fight-details/f7810c98786c3dd8,2026-09-19,Patricio Pitbull,Dooho Choi,True,0.198833,True,False
+http://www.ufcstats.com/fight-details/023ce4fa7b7b76f9,2026-09-19,Sean Sharaf,Gable Steveson,True,0.174678,True,False
+http://www.ufcstats.com/fight-details/196c64693a2ce308,2026-09-19,Iwo Baraniewski,Alonzo Menifield,False,0.725413,True,False
+http://www.ufcstats.com/fight-details/3f2d637ffb324a51,2026-09-19,Tai Tuivasa,Robelis Despaigne,False,0.406699,True,False
+http://www.ufcstats.com/fight-details/d89cc2cb92cd8407,2026-09-19,Michael Aswell Jr.,JooSang Yoo,True,0.464768,True,False
+http://www.ufcstats.com/fight-details/51789f77811b1817,2026-09-19,Ryan Gandra,Ozzy Diaz,True,0.6774,True,False
+http://www.ufcstats.com/fight-details/9be47241c960d082,2026-09-19,Edmen Shahbazyan,Brunno Ferreira,True,0.699217,True,False
+http://www.ufcstats.com/fight-details/73304588cef4f88b,2026-09-19,Casey O'Neill,Eduarda Moura,True,0.633767,False,False
+http://www.ufcstats.com/fight-details/2e35163040eb3189,2026-09-19,Giga Chikadze,Joanderson Brito,False,0.329809,True,False
+http://www.ufcstats.com/fight-details/d0361fe28d05a0b5,2026-09-19,Marlon Vera,Charles Jourdain,True,0.254264,True,False
+http://www.ufcstats.com/fight-details/0e55d8a3d7a73912,2026-09-26,Raoni Barcelos,Raul Rosas Jr.,False,0.420913,True,False
+http://www.ufcstats.com/fight-details/5e5d01e437bced71,2026-09-26,Norma Dumont,Ailin Perez,False,0.319779,False,False
+http://www.ufcstats.com/fight-details/7c954175878dd610,2026-09-26,Luis Hernandez,Sedriques Dumas,True,0.707785,True,True
+http://www.ufcstats.com/fight-details/3a70ed81e5611d24,2026-09-26,Ilimbek Akylbek,Mahammadali Osmanli,True,0.479506,True,True
+http://www.ufcstats.com/fight-details/7bff1b7a45666e98,2026-09-26,Tina Black,Melissa Amaya,True,0.5206,False,True
+http://www.ufcstats.com/fight-details/15d95453729f4c2c,2026-09-26,Elves Brener,Josiah Harrell,True,0.562388,True,False
+http://www.ufcstats.com/fight-details/5a5395d939bb3ff3,2026-09-26,Rodolfo Vieira,Robert Bryczek,True,0.638375,True,False
+http://www.ufcstats.com/fight-details/30b73c201daa089c,2026-09-26,Rodolfo Bellato,Christian Edwards,False,0.470847,True,False
+http://www.ufcstats.com/fight-details/9037b26e92e25357,2026-09-26,Montel Jackson,Ricky Simon,True,0.769746,True,False
+http://www.ufcstats.com/fight-details/577011f3bbcf7f91,2026-09-26,Alatengheili,John Castaneda,True,0.397712,True,False
+http://www.ufcstats.com/fight-details/f34e58d365bb37b1,2026-09-26,Vanessa Demopoulos,Yazmin Jauregui,False,0.166561,False,False
+http://www.ufcstats.com/fight-details/29423f522e76f12e,2026-09-26,Brady Hiestand,Rinya Nakamura,True,0.565459,True,False
+http://www.ufcstats.com/fight-details/3f804eec9183e597,2026-10-03,Wang Cong,Natalia Silva,False,0.289127,False,False
+http://www.ufcstats.com/fight-details/514366f770553cc9,2026-10-03,Payton Talbott,Deiveson Figueiredo,True,0.808685,True,False
+http://www.ufcstats.com/fight-details/c93d7f60674df307,2026-10-03,Esteban Ribovics,King Green,True,0.431579,True,False
+http://www.ufcstats.com/fight-details/ec45db01699c4b05,2026-10-03,Roman Kopylov,Ateba Gautier,True,0.227017,True,False
+http://www.ufcstats.com/fight-details/54bbe6d1eb248128,2026-10-03,Alden Coria,Imanol Rodriguez,False,0.554419,True,False
+http://www.ufcstats.com/fight-details/31b85cd63fb291ed,2026-10-03,Andrey Pulyaev,Damian Pinas,False,0.298652,True,False
+http://www.ufcstats.com/fight-details/a7c8722ad85eee5f,2026-10-03,Roberto Soldic,Khaos Williams,True,0.286437,True,True
+http://www.ufcstats.com/fight-details/bd673bf80b95d350,2026-10-03,Lucas Armand,Anthony Wint,False,0.315972,True,True
+http://www.ufcstats.com/fight-details/e92092a37dc1cfc8,2026-10-03,Johnny Walker,Mick Parkin,True,0.426779,True,False
+http://www.ufcstats.com/fight-details/bc35fb29afba68b9,2026-10-03,Bruce Whitehead,Jacobe Smith,False,0.218176,True,True
+http://www.ufcstats.com/fight-details/d0d2339f56681707,2026-10-03,Rafael Dos Anjos,Alexander Hernandez,False,0.321743,True,False
+http://www.ufcstats.com/fight-details/bf93e735845cb960,2026-10-03,Ismail Naurdiev,Marvin Vettori,True,0.67514,True,False
+http://www.ufcstats.com/fight-details/e87db876810cbc3c,2026-10-03,Eric Nolan,Court McGee,True,0.436731,True,False
+http://www.ufcstats.com/fight-details/041f9b7dd3542fa6,2026-10-03,Anthony Romero,Marcus McGhee,False,0.207997,True,True
+http://www.ufcstats.com/fight-details/295339c08c80a3cf,2026-10-10,Jai Herbert,Matheus Camilo,True,0.320937,True,False
+http://www.ufcstats.com/fight-details/4f0f783503d5b5c4,2026-10-10,Loopy Godinez,Ketlen Souza,True,0.417617,False,False
+http://www.ufcstats.com/fight-details/e8710a6236db464e,2026-10-10,Kai Kamaka III,Andre Fili,False,0.481639,True,False
+http://www.ufcstats.com/fight-details/c56bbc28d155f846,2026-10-10,Otari Tanzilovi,Malcolm Wellmaker,True,0.597604,True,False
+http://www.ufcstats.com/fight-details/eda03e3ddf74d1cd,2026-10-10,Gerald Meerschaert,Julius Walker,False,0.394145,True,False
+http://www.ufcstats.com/fight-details/ab17995c72396061,2026-10-10,Felipe Franco,Brendson Ribeiro,False,0.780242,True,False
+http://www.ufcstats.com/fight-details/e5496bb07c76d010,2026-10-10,Niko Price,Leon Shahbazyan,True,0.25968,True,False
+http://www.ufcstats.com/fight-details/e997bc8caf59cf03,2026-10-10,Allen Frye Jr.,RJ Harris,True,0.319168,True,False
+http://www.ufcstats.com/fight-details/335b3ce2b5c0a3cd,2026-10-10,Daria Zhelezniakova,Alice Pereira,False,0.237517,False,False
+http://www.ufcstats.com/fight-details/254ace2091125fc6,2026-10-10,Ismael Bonfim,Francisco Prado,False,0.435469,True,False
+http://www.ufcstats.com/fight-details/7db1a3dac7e343e7,2026-10-10,Brendan Allen,Christian Leroy Duncan,True,0.459686,True,False
