@@ -3,11 +3,13 @@ import pandas as pd
 import pytest
 
 from ufc_predictor.modeling.evaluate import (
+    breakdown,
     calibration_table,
     compare,
     compare_log_loss,
     fit_baseline,
     group_importance,
+    has_debutant,
     is_womens_fight,
     per_fight_log_loss,
     predict_baseline,
@@ -44,6 +46,32 @@ def test_scorecard_reports_mens_fights_separately():
     card = scorecard({"model": [0.9, 0.1, 0.1, 0.9]}, y, mens)
     assert card.loc["model", "men_accuracy"] == 1.0   # both men's fights right
     assert card.loc["model", "all_accuracy"] == 0.5   # both women's fights wrong
+
+
+def test_has_debutant_is_true_when_either_corner_debuts():
+    fights = pd.DataFrame({"fighter_a_prior_is_debut": [True, False, False, True],
+                           "fighter_b_prior_is_debut": [False, True, False, True]})
+    assert has_debutant(fights).tolist() == [True, True, False, True]
+
+
+def test_breakdown_scores_each_group_on_its_own_fights():
+    y = [True, False, True, False, True]
+    debutant = [False, False, False, True, True]
+    p = [0.9, 0.1, 0.8, 0.9, 0.1]                     # right without debutants, wrong with them
+    card = breakdown({"model": p, "coin flip": [0.5] * 5}, y, debutant)
+    assert card.loc[("all", "model"), "fights"] == 5
+    assert card.loc[("no debutant", "model"), "accuracy"] == 1.0
+    assert card.loc[("with a debutant", "model"), "accuracy"] == 0.0
+    assert card.loc[("with a debutant", "coin flip"), "log_loss"] == pytest.approx(0.6931, abs=1e-4)
+
+
+def test_breakdown_keep_restricts_every_group():
+    y = [True, False, True, False]
+    debutant = [False, True, False, True]
+    card = breakdown({"model": [0.9, 0.1, 0.1, 0.9]}, y, debutant, keep=[True, True, False, False])
+    assert card.loc[("all", "model"), "fights"] == 2
+    assert card.loc[("no debutant", "model"), "fights"] == 1
+    assert card.loc[("with a debutant", "model"), "fights"] == 1
 
 
 def test_compare_counts_fixes_and_breaks():

@@ -21,6 +21,14 @@ cross-validation and on validation.
 `compare` asks whether the *picks* got better; `compare_log_loss` asks
 whether the *probabilities* did, fight by fight. Log loss is the headline,
 so `compare_log_loss` is usually the test that matters.
+
+Every evaluation also reports fights with and without a debutant
+(`has_debutant`, `breakdown`). About one fight in five involves a fighter with
+no UFC history, for whom 30 of the 40 inputs are blank, and they are where the
+model is weakest and the betting market strongest: on men's validation fights
+with odds the gap to the market was 0.044 without a debutant and 0.107 with
+one (2026-10-17). A single overall number hides that, so the final test look
+reports all three rows.
 """
 
 import numpy as np
@@ -59,6 +67,29 @@ def scorecard(predictions: dict, y, mens) -> pd.DataFrame:
             "all_accuracy": every["accuracy"], "all_log_loss": every["log_loss"], "all_auc": every["auc"],
         })
     return pd.DataFrame(rows).set_index("model").round(4)
+
+
+def has_debutant(fights: pd.DataFrame) -> pd.Series:
+    """True where at least one fighter has no UFC history before this fight."""
+    return fights["fighter_a_prior_is_debut"].astype(bool) | fights["fighter_b_prior_is_debut"].astype(bool)
+
+
+def breakdown(predictions: dict, y, debutant, keep=None) -> pd.DataFrame:
+    """Scores for all fights, fights without a debutant, and fights with one.
+
+    One row per (group, set of predictions). `debutant` is `has_debutant` for
+    the same fights; `keep` restricts every row first (e.g. men's fights, or
+    fights with odds), so all predictions are scored on exactly the same fights.
+    """
+    y, debutant = np.asarray(y, dtype=bool), np.asarray(debutant, dtype=bool)
+    keep = np.ones(len(y), dtype=bool) if keep is None else np.asarray(keep, dtype=bool)
+    groups = {"all": keep, "no debutant": keep & ~debutant, "with a debutant": keep & debutant}
+    rows = []
+    for group, rows_in in groups.items():
+        for name, p in predictions.items():
+            s = score(y[rows_in], np.asarray(p, dtype=float)[rows_in])
+            rows.append({"group": group, "predictions": name, **s})
+    return pd.DataFrame(rows).set_index(["group", "predictions"]).round(4)
 
 
 def compare(y, p_new, p_old) -> dict:
