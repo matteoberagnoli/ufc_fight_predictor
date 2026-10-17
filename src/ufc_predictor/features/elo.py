@@ -78,14 +78,8 @@ def win_score(method: str, weights: dict | None) -> float:
     return float(weights.get(method, 1.0)) if method in ("unanimous", "narrow") else 1.0
 
 
-def elo_ratings(fights: pd.DataFrame, k: float, weights: dict | None = None) -> pd.DataFrame:
-    """Both fighters' ratings going into every fight, aligned to `fights`' index.
-
-    Needs `event_date`, `fights_url`, `fighter_a_id`, `fighter_b_id` and
-    `outcome` on every row - all fights, not just the decided ones, since a
-    draw is history too - and `method` when `weights` is given (see
-    win_score). The input's row order does not matter.
-    """
+def _run(fights: pd.DataFrame, k: float, weights: dict | None):
+    """The rating loop, once: (fights in processing order, ratings before each fight, ratings after the last)."""
     if not fights.index.is_unique:
         raise ValueError("elo_ratings needs a unique index to put each rating back on its row")
     if fights[["fighter_a_id", "fighter_b_id"]].isna().any().any():
@@ -113,9 +107,30 @@ def elo_ratings(fights: pd.DataFrame, k: float, weights: dict | None = None) -> 
         change = k * (score_a - expected_score(r_a, r_b))
         rating[a] = r_a + change
         rating[b] = r_b - change                # whatever A gains, B loses
+    return ordered, before_a, before_b, rating
 
+
+def elo_ratings(fights: pd.DataFrame, k: float, weights: dict | None = None) -> pd.DataFrame:
+    """Both fighters' ratings going into every fight, aligned to `fights`' index.
+
+    Needs `event_date`, `fights_url`, `fighter_a_id`, `fighter_b_id` and
+    `outcome` on every row - all fights, not just the decided ones, since a
+    draw is history too - and `method` when `weights` is given (see
+    win_score). The input's row order does not matter.
+    """
+    ordered, before_a, before_b, _ = _run(fights, k, weights)
     out = pd.DataFrame({ELO_COLUMNS[0]: before_a, ELO_COLUMNS[1]: before_b}, index=ordered.index)
     return out.reindex(fights.index)
+
+
+def current_ratings(fights: pd.DataFrame, k: float, weights: dict | None = None) -> pd.Series:
+    """Every fighter's rating after their last fight in `fights`, by fighter id.
+
+    The same loop as elo_ratings, read at the end instead of before each fight:
+    what the rating would be going into a fight held tomorrow.
+    """
+    _, _, _, rating = _run(fights, k, weights)
+    return pd.Series(rating, name="elo").rename_axis("fighter_id")
 
 
 def attach_elo_features(table: pd.DataFrame, k: float, weights: dict | None = None) -> pd.DataFrame:

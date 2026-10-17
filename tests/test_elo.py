@@ -263,3 +263,17 @@ def test_weights_round_trip_and_default_to_classic(tmp_path):
     assert load_elo_weights(processed_dir=tmp_path) == {"unanimous": 0.7, "narrow": 0.55}
     save_elo_params(158.5, [(158.5, 0.655)], seeds=range(5), processed_dir=tmp_path)
     assert load_elo_weights(processed_dir=tmp_path) is None
+
+
+def test_current_rating_is_the_rating_going_into_the_next_fight():
+    from ufc_predictor.features.elo import current_ratings
+    league = _made_up_league()
+    league["method"] = np.resize(["finish", "unanimous", "narrow"], len(league))
+    now = current_ratings(league, K, WEIGHTS)
+    later = pd.DataFrame({"event_date": pd.Timestamp("2030-01-01"), "fights_url": [f"z/{i}" for i in range(12)],
+                          "fighter_a_id": range(12), "fighter_b_id": [(i + 1) % 12 for i in range(12)],
+                          "outcome": "no_contest", "method": "other"})
+    extended = pd.concat([league, later], ignore_index=True)
+    before = elo_ratings(extended, K, WEIGHTS).iloc[len(league):]
+    for i, row in enumerate(before.itertuples()):
+        assert row.fighter_a_prior_elo == pytest.approx(now[i])
