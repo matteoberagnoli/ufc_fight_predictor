@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ufc_predictor.modeling.present import fighter_records, p4p
+from ufc_predictor.modeling.present import fighter_records, inactivity_penalty, p4p
 
 
 def _fights():
@@ -36,10 +36,26 @@ def test_p4p_ranks_active_fighters_by_rating_men_and_women_apart():
     men, women = ranks["men"], ranks["women"]
     assert men["name"].tolist()[0] == "F1"
     assert "F7" not in men["name"].tolist()          # last fought in 2019: not active
-    assert men["elo"].is_monotonic_decreasing
+    assert men["rating"].is_monotonic_decreasing
     assert women["name"].tolist() == ["F9", "F8"]
     assert men["rank"].tolist() == list(range(1, len(men) + 1))
 
 
 def test_p4p_needs_enough_fights():
     assert p4p(_fights(), 64, None, min_fights=4)["women"].empty
+
+
+def test_inactivity_costs_nothing_before_8_months_then_grows_faster():
+    pen = inactivity_penalty([0, 8, 12, 18, 24]).tolist()
+    assert pen == [0, 0, 8, 50, 128]
+
+
+def test_a_long_layoff_lowers_the_rating_and_18_months_unranks():
+    f = _fights()
+    as_of = pd.Timestamp("2026-10-01")          # fighter 1 last fought 2025-05-01: 17 months
+    men = p4p(f, 64, None, as_of=as_of)["men"].set_index("name")
+    months = (as_of - pd.Timestamp("2025-05-01")).days / 30.44
+    assert men.loc["F1", "penalty"] == round(0.5 * (months - 8) ** 2)
+    assert men.loc["F1", "rating"] == men.loc["F1", "elo"] - men.loc["F1", "penalty"]
+    later = p4p(f, 64, None, as_of=pd.Timestamp("2026-12-15"))["men"]
+    assert "F1" not in later["name"].tolist() and later.empty   # every man idle 18+ months
