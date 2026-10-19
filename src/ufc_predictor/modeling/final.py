@@ -17,6 +17,11 @@ result (a no-contest), dated on fight night. Every feature is built only from ea
 fights, so the row gets each fighter's history exactly as it stands, and a no-contest
 moves no rating and no average. The same feature code then serves past and future
 fights alike: there is no second implementation to drift.
+
+A fake fight is still a row in the fighter's history, though: a later fake fight of the
+same fighter would count it as their last fight (layoff 0 days) and as one of the 8 fights
+in their window. So bouts that share a fighter are built in separate passes, each pass
+holding every fighter at most once (review 2026-10-18, finding F3).
 """
 import shutil
 import tempfile
@@ -98,17 +103,43 @@ def _fighter_id(fighters: pd.DataFrame, who) -> int:
     return int(hits["fighter_id"].iloc[0])
 
 
-def upcoming_rows(bouts: list[dict], fighters: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def _batches(ids: list[tuple[int, int]]) -> list[list[int]]:
+    """Group bouts so that no fighter appears twice in a group.
+
+    `ids` holds each bout's two fighter ids; the result holds positions in `ids`.
+    Each bout goes into the first group that has neither of its fighters yet, so a
+    normal card (everyone fights once) stays one group.
+    """
+    batches, taken = [], []
+    for i, pair in enumerate(ids):
+        for batch, fighters_in in zip(batches, taken):
+            if not fighters_in & set(pair):
+                batch.append(i)
+                fighters_in.update(pair)
+                break
+        else:
+            batches.append([i])
+            taken.append(set(pair))
+    return batches
+
+
+def upcoming_rows(bouts: list[dict], fighters: pd.DataFrame,
+                  positions: list[int] | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Raw fight-stats and event rows for fights not yet fought.
 
     Each bout: {"fighter_a": name or id, "fighter_b": ..., "date": "YYYY-MM-DD",
     "weight_class": e.g. "Lightweight Bout" or "UFC Women's Flyweight Title Bout"}.
     No statistics and result "nc": history for nobody, features for itself.
+    `positions` numbers the bouts in the url (default 0, 1, 2...), which keeps the
+    caller's order when bouts are built in separate passes.
     """
+    positions = range(len(bouts)) if positions is None else positions
     stats, events = [], []
-    for i, bout in enumerate(bouts):
+    for i, bout in zip(positions, bouts):
         date = pd.Timestamp(bout["date"])
         row = dict.fromkeys(FIGHT_STATS_COLUMNS, np.nan)
+        if _fighter_id(fighters, bout["fighter_a"]) == _fighter_id(fighters, bout["fighter_b"]):
+            raise ValueError(f"{bout['fighter_a']!r}: the same fighter is on both sides")
         for side, key in (("f1", "fighter_a"), ("f2", "fighter_b")):
             fid = _fighter_id(fighters, bout[key])
             bio = fighters.loc[fighters["fighter_id"] == fid].iloc[0]
@@ -128,16 +159,23 @@ def upcoming_featured(bouts: list[dict], alphas: dict, elo_k: float, elo_weights
     """The featured rows of fights not yet fought, in the order of `bouts`, and each bout's first-listed id."""
     raw_dir = Path(raw_dir) if raw_dir is not None else RAW_DIR
     fighters = load_fighters(raw_dir)
-    new_stats, new_events = upcoming_rows(bouts, fighters)
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp = Path(tmp)
-        pd.concat([load_fight_stats(raw_dir), new_stats], ignore_index=True).to_csv(tmp / "ufc_event_fight_stats.csv", index=False)
-        # read as plain text: load_events parses dates, and a mix of parsed and new string dates won't re-parse
-        pd.concat([pd.read_csv(raw_dir / "ufc_events.csv"), new_events], ignore_index=True).to_csv(tmp / "ufc_events.csv", index=False)
-        shutil.copy(raw_dir / "ufc_fighters.csv", tmp / "ufc_fighters.csv")
-        fights = build_fight_dataset(raw_dir=tmp)
-    featured = build_featured_table(fights, fighters, alphas, elo_k=elo_k, elo_weights=elo_weights)
-    rows = featured[featured["fights_url"].str.startswith(UPCOMING)].sort_values("fights_url")
+    new_stats, _ = upcoming_rows(bouts, fighters)       # checks every bout before the slow part
+    old_stats, old_events = load_fight_stats(raw_dir), pd.read_csv(raw_dir / "ufc_events.csv")
+    parts = []
+    # one pass per group of bouts that share no fighter: a fake fight must not enter
+    # another fake fight's history (see the module docstring)
+    for batch in _batches(list(zip(new_stats["f1_id"], new_stats["f2_id"]))):
+        stats, events = upcoming_rows([bouts[i] for i in batch], fighters, positions=batch)
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            pd.concat([old_stats, stats], ignore_index=True).to_csv(tmp / "ufc_event_fight_stats.csv", index=False)
+            # read as plain text: load_events parses dates, and a mix of parsed and new string dates won't re-parse
+            pd.concat([old_events, events], ignore_index=True).to_csv(tmp / "ufc_events.csv", index=False)
+            shutil.copy(raw_dir / "ufc_fighters.csv", tmp / "ufc_fighters.csv")
+            fights = build_fight_dataset(raw_dir=tmp)
+        featured = build_featured_table(fights, fighters, alphas, elo_k=elo_k, elo_weights=elo_weights)
+        parts.append(featured[featured["fights_url"].str.startswith(UPCOMING)])
+    rows = pd.concat(parts).sort_values("fights_url")
     return rows, new_stats["f1_id"]
 
 

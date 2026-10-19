@@ -8,7 +8,7 @@ from ufc_predictor.data.io import load_fight_stats, load_fighters
 from ufc_predictor.features import manifest
 from ufc_predictor.features.pipeline import build_featured_table
 from ufc_predictor.features.rolling import no_shrinkage
-from ufc_predictor.modeling.final import UPCOMING, training_rows, upcoming_featured, upcoming_rows
+from ufc_predictor.modeling.final import UPCOMING, _batches, training_rows, upcoming_featured, upcoming_rows
 from ufc_predictor.modeling.model import mirror
 
 FIGHTERS = pd.DataFrame({
@@ -33,6 +33,23 @@ def test_unknown_or_ambiguous_names_are_refused():
         upcoming_rows([{"fighter_a": "Nobody", "fighter_b": 1, "date": "2026-11-01", "weight_class": "x"}], FIGHTERS)
     with pytest.raises(ValueError, match="pass the id"):
         upcoming_rows([{"fighter_a": "Bea Bold", "fighter_b": 1, "date": "2026-11-01", "weight_class": "x"}], FIGHTERS)
+
+
+def test_a_fighter_cannot_be_on_both_sides():
+    with pytest.raises(ValueError, match="both sides"):
+        upcoming_rows([{"fighter_a": "Ann Able", "fighter_b": 1, "date": "2026-11-01", "weight_class": "x"}], FIGHTERS)
+
+
+def test_bouts_sharing_a_fighter_are_built_in_separate_passes():
+    # a card where everyone fights once is one pass; a round robin of 1, 2, 3 needs three
+    assert _batches([(1, 2), (3, 4), (5, 6)]) == [[0, 1, 2]]
+    assert _batches([(1, 2), (1, 3), (2, 3), (4, 5)]) == [[0, 3], [1], [2]]
+    batches = _batches([(1, 2), (2, 3), (3, 4), (4, 1), (5, 6), (1, 5)])
+    assert sorted(i for b in batches for i in b) == list(range(6))
+    pairs = [(1, 2), (2, 3), (3, 4), (4, 1), (5, 6), (1, 5)]
+    for b in batches:
+        ids = [f for i in b for f in pairs[i]]
+        assert len(ids) == len(set(ids))
 
 
 def test_training_rows_stop_before_until_and_skip_undecided():
@@ -67,3 +84,28 @@ def test_an_upcoming_fight_gets_exactly_the_features_the_real_fight_had(tmp_path
     expected = real_featured.loc[[real.name], list(cols)]
     pd.testing.assert_frame_equal(got.reset_index(drop=True).astype(float),
                                   expected.reset_index(drop=True).astype(float), check_exact=False, atol=1e-9)
+
+
+def test_other_bouts_in_the_same_call_do_not_change_a_bouts_inputs():
+    """The same fighter in an earlier bout (same night or weeks before) must not count as a fight they
+    already had: the bout's 40 inputs equal those it gets when predicted alone, and stay in order."""
+    try:
+        stats = load_fight_stats()
+    except (FileNotFoundError, OSError):
+        pytest.skip("raw data not present")
+    recent = stats.dropna(subset=["f1_id", "f2_id"]).iloc[-1]
+    a, b = int(recent["f1_id"]), int(recent["f2_id"])
+    third = int(stats.loc[~stats["f1_id"].isin([a, b]), "f1_id"].dropna().iloc[-1])
+    elo = (158.5, {"unanimous": 0.7, "narrow": 0.55})
+    bout = {"fighter_a": a, "fighter_b": b, "date": "2026-12-05", "weight_class": "Lightweight Bout"}
+    alone, _ = upcoming_featured([bout], no_shrinkage(), *elo)
+    for earlier_date in ("2026-12-05", "2026-11-01"):
+        other = {"fighter_a": third, "fighter_b": a, "date": earlier_date, "weight_class": "Lightweight Bout"}
+        rows, first_ids = upcoming_featured([other, bout], no_shrinkage(), *elo)
+        assert first_ids.tolist() == [third, a]
+        got = rows.iloc[[1]][list(manifest.FEATURES)]
+        if rows["fighter_a_id"].iloc[1] != alone["fighter_a_id"].iloc[0]:
+            got = mirror(got)
+        pd.testing.assert_frame_equal(got.reset_index(drop=True).astype(float),
+                                      alone[list(manifest.FEATURES)].reset_index(drop=True).astype(float),
+                                      check_exact=False, atol=1e-9)
