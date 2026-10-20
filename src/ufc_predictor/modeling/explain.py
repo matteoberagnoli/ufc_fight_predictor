@@ -2,7 +2,7 @@
 
 SHAP splits one prediction into one piece per feature:
 
-    score = baseline + piece from Elo + piece from age + ...   (108 pieces)
+    score = baseline + piece from Elo + piece from age + ...   (40 pieces)
 
 Each piece is that feature's SHAP value for that fight. Positive pushes
 towards fighter A, negative towards fighter B. The units are log-odds, the
@@ -33,6 +33,14 @@ validation fights sigmoid(S) was at most 0.8 percentage points from
 predict_proba_mean (0.06 on average) and picked the same winner in every
 fight. `symmetric_score` returns S so that can be re-checked. Calibration's stretch would multiply every piece by
 the same a = 1.05, so it is left out.
+
+Interactions (`shap_interaction_values`) split each piece once more: into the
+feature's push on its own (its *main effect*) and the extra push it gets only
+because of another feature's value - "Elo pushes harder because the age gap
+points the same way". Per fight that is a features x features table: the
+diagonal holds the main effects, entries [i, j] and [j, i] each hold half of
+the pair's interaction, and each row adds up exactly to that feature's SHAP
+value. The same two adjustments apply, on both axes of the table.
 """
 
 import numpy as np
@@ -79,6 +87,25 @@ def shap_values(models: list, X: pd.DataFrame) -> shap.Explanation:
     )
 
 
+def shap_interaction_values(models: list, X: pd.DataFrame) -> np.ndarray:
+    """SHAP interaction values of the symmetric score, averaged over the models.
+
+    Shape (fights, features, features). The diagonal is each feature's main
+    effect; [i, j] + [j, i] is the interaction of the pair; row i adds up to
+    feature i's value in shap_values. Same recipe as shap_values, with the
+    swapped fight's table put back under the right columns on both axes.
+    """
+    X = to_matrix(X)
+    swapped_X = mirror(X)
+    partner = _partner_index(X.columns)
+    total = np.zeros((len(X), X.shape[1], X.shape[1]))
+    for m in models:                      # a running sum: 8 stored tables of 4,000 fights would be large
+        explainer = shap.TreeExplainer(m)
+        swapped = explainer.shap_interaction_values(swapped_X)[:, partner][:, :, partner]
+        total += (explainer.shap_interaction_values(X) - swapped) / 2
+    return total / len(models)
+
+
 def symmetric_score(models: list, X: pd.DataFrame) -> np.ndarray:
     """What the SHAP values add up to: (score as-is - score swapped) / 2, averaged over the models."""
     X = to_matrix(X)
@@ -97,13 +124,42 @@ def group_shap(explanation: shap.Explanation, groups: dict) -> shap.Explanation:
     value, so `data` is left empty: use the bar plot, not the beeswarm.
     """
     names = list(explanation.feature_names)
-    grouped = [c for columns in groups.values() for c in columns]
-    if sorted(grouped) != sorted(names):
-        missing = set(names) - set(grouped)
-        extra = [c for c in set(grouped) if grouped.count(c) > 1 or c not in names]
-        raise ValueError(f"groups must cover every feature exactly once; missing {sorted(missing)}, extra {sorted(extra)}")
+    _check_groups(names, groups)
     position = {c: i for i, c in enumerate(names)}
     values = np.column_stack([
         explanation.values[:, [position[c] for c in columns]].sum(axis=1) for columns in groups.values()
     ])
     return shap.Explanation(values=values, base_values=explanation.base_values, feature_names=list(groups))
+
+
+def group_interactions(values: np.ndarray, feature_names, groups: dict) -> pd.DataFrame:
+    """How strongly each pair of feature groups interacts: the average size of the push.
+
+    `values` comes from shap_interaction_values. For two groups, the entries
+    linking their features are added up per fight (both halves, [i, j] and
+    [j, i]), then averaged ignoring direction. The diagonal is the interaction
+    *within* a group, between its own features; main effects are left out.
+    """
+    names = list(feature_names)
+    _check_groups(names, groups)
+    position = {c: i for i, c in enumerate(names)}
+    off = values.copy()
+    off[:, np.arange(len(names)), np.arange(len(names))] = 0      # main effects are not interactions
+    index = {g: [position[c] for c in columns] for g, columns in groups.items()}
+    table = pd.DataFrame(0.0, index=list(groups), columns=list(groups))
+    for g, rows in index.items():
+        for h, cols in index.items():
+            block = off[:, rows][:, :, cols].sum(axis=(1, 2))
+            # within a group the block already holds both halves; between groups add the mirror block
+            pair = block if g == h else block + off[:, cols][:, :, rows].sum(axis=(1, 2))
+            table.loc[g, h] = np.abs(pair).mean()
+    return table
+
+
+def _check_groups(names: list, groups: dict) -> None:
+    """Every feature in exactly one group, or a ValueError naming what is wrong."""
+    grouped = [c for columns in groups.values() for c in columns]
+    if sorted(grouped) != sorted(names):
+        missing = set(names) - set(grouped)
+        extra = [c for c in set(grouped) if grouped.count(c) > 1 or c not in names]
+        raise ValueError(f"groups must cover every feature exactly once; missing {sorted(missing)}, extra {sorted(extra)}")
