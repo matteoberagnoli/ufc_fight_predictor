@@ -228,3 +228,6 @@ ROADMAP.md
 debug_randomize.py
 ufc_fight_predictor.code-workspace
 launch.json
+
+# Images for the web pages (official UFC event art is UFC's copyright: never publish)
+data/pictures/

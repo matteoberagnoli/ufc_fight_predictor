@@ -6,12 +6,25 @@ build-backend = "setuptools.build_meta"
 name = "ufc_predictor"
 version = "0.1.0"
 description = "Pipeline and model for predicting UFC fight outcomes"
+readme = "README.md"
+authors = [{ name = "Matteo Beragnoli" }]
+# developed and tested on Python 3.14; exact tested versions of every package are in requirements.txt
 requires-python = ">=3.11"
 dependencies = [
     "pandas",
     "numpy",
-    "pyarrow",
+    "pyarrow",          # parquet files in data/processed
+    "scikit-learn",
+    "scipy",
+    "joblib",
+    "shap",
+    "optuna",           # hyperparameter search (modeling/tune.py)
+    "kagglehub",        # downloading the raw data (data/source.py, data/odds.py)
 ]
+
+[project.optional-dependencies]
+notebooks = ["matplotlib", "jupyter"]   # SHAP plots in notebook 07
+dev = ["pytest"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
