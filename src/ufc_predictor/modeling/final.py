@@ -2,7 +2,7 @@
 
 Two uses, one code path:
 
-  * the one-time test look (10_test_evaluation.ipynb): `fit_final(..., until=TEST_START)`
+  * the one-time test look (09_test_evaluation.ipynb): `fit_final(..., until=TEST_START)`
     learns everything from 2014-2024 - shrinkage alphas, calibration, the 8 models -
     and is scored once on 2025 onwards;
   * predicting upcoming fights: `fit_final` on everything to the last event, then

@@ -34,7 +34,7 @@ would bake in an assumed direction of advantage, so `attach_stance_features`
 uses signed differences instead (see there): they say who is the southpaw
 and leave the direction of any edge for the model to discover.
 
-Tested in 08_feature_questions.ipynb and **not adopted**: with its
+Tested in 07_feature_questions.ipynb and **not adopted**: with its
 own tuned settings, the model with the stance columns was slightly worse in
 cross-validation (better in 1 of 8 seeds) and slightly better on validation,
 both by noise-sized amounts. That matches the raw data - southpaws beat

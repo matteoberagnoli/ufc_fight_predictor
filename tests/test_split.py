@@ -112,7 +112,7 @@ def test_real_data_split_sizes():
     try:
         fights = load_processed("fights")
     except (FileNotFoundError, OSError):
-        pytest.skip("processed data not built yet - run notebook 02")
+        pytest.skip("processed data not built yet - run notebook 01")
     train, validation, test = chronological_split(fights)
     # The split: train 2014-2022, validation 2023-2024. The test period runs
     # to the end of the data, so it grows with each refresh: 925 fights to

@@ -15,7 +15,7 @@ Men's fights are reported first because they are what this project is for.
 The model still trains on all fights: tested on men's validation fights, the
 pooled model did better than one trained on men's fights only - first with
 the untuned model, then again with each version tuned separately
-(08_feature_questions.ipynb): pooled was better in 8 of 8 seeds in
+(07_feature_questions.ipynb): pooled was better in 8 of 8 seeds in
 cross-validation and on validation.
 
 `compare` asks whether the *picks* got better; `compare_log_loss` asks

@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-notebooks = ["matplotlib", "jupyter"]   # SHAP plots in notebook 07
+notebooks = ["matplotlib", "jupyter"]   # SHAP plots in notebook 06
 dev = ["pytest"]
 
 [tool.setuptools.packages.find]

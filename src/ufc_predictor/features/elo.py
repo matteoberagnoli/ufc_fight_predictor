@@ -166,7 +166,7 @@ def elo_forecast_log_loss(fights: pd.DataFrame, k: float,
     return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
-# The Elo settings searched by 05_elo.ipynb (modeling.tune.choose_elo_settings).
+# The Elo settings searched by 04_elo.ipynb (modeling.tune.choose_elo_settings).
 # K from slow to fast; the two win weights from 1 (as convincing as a finish) down
 # to 0.5 (no better than a draw), a narrow win never counting more than a unanimous one.
 ELO_SEARCH_KS = (39.81, 63.1, 100.0, 125.9, 158.5, 199.5, 251.2, 316.2, 398.1)
@@ -186,7 +186,7 @@ def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
 
     `note` records anything the curve alone would get wrong - e.g. a saved K
     that is not the curve's minimum, because a check with the final model's
-    own settings overruled the search (05_elo.ipynb, section 4).
+    own settings overruled the search (04_elo.ipynb, section 4).
     `weights` are the win weights (see win_score); None is the classic Elo.
     The curve is a list of (K, score) pairs or of dicts (K, weights, score).
     """
