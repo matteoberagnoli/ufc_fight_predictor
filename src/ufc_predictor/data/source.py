@@ -2,7 +2,7 @@
 
 Source: the Kaggle dataset `scarekrow/ufc-data` - every UFC fight on
 ufcstats.com from UFC 2 (1994) to the latest card, kept current by its
-maintainer's scrape after every event. Chosen on Day 9 after comparing about
+maintainer's scrape after every event. Chosen after comparing about
 a hundred Kaggle UFC datasets: it reproduces all 7,840 fights of the
 previous source (dates, strikes, knockdowns and fight times identical;
 control time within a few seconds), adds 82 early fights that source was

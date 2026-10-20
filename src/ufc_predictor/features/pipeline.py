@@ -3,7 +3,7 @@
 Every table the project trains on is built by this one function - the main
 table in 03_first_features.ipynb and every comparison arm in
 modeling/variants.py. Before it existed, the chain was written out twice, and
-on Day 7 one copy silently missed the weight-class step: a "shrinkage
+during development one copy silently missed the weight-class step: a "shrinkage
 comparison" was really comparing 107 features against 105. With one shared
 chain, two tables can only differ in what is passed in.
 """

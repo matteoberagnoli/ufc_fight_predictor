@@ -20,7 +20,7 @@ ERA_START = "2014-01-01"
 #   validation  VALIDATION_START -> TEST_START  make every design decision here
 #   test        TEST_START -> end of data       look once, at the very end
 #
-# Until Day 9 this was 2014-19 / 2020-21 / 2022+. When the data grew to 2026,
+# Originally this was 2014-19 / 2020-21 / 2022+. When the data grew to 2026,
 # the test period swelled to 2,448 fights (39%) - far more than one honest
 # check needs (~900 fights already pin log loss to about +/-0.008) - while the
 # model learned nothing from the most recent years. So everything slid

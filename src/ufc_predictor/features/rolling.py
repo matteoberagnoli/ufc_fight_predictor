@@ -1,11 +1,12 @@
 """Pre-fight rolling features, computed only from each fighter's history
 strictly before the fight being predicted.
 
-This is what closes leakage traps #2 and #3 from ROADMAP.md: the per-fight
-stat columns in fights.parquet (strikes, takedowns, control time...) are
-outcomes of the fight they're attached to, so they can never be used as
-features for that same fight. They're only safe as *raw material*, rolled up
-over a fighter's earlier fights.
+This is what closes two leakage traps in the raw data. The per-fight stat
+columns in fights.parquet (strikes, takedowns, control time...) are outcomes
+of the fight they're attached to, so they can never be used as features for
+that same fight; and career totals scraped today (wins, strikes per minute...)
+would carry later fights into earlier ones. The per-fight stats are only safe
+as *raw material*, rolled up over a fighter's earlier fights.
 
 The approach:
   1. Reshape fights.parquet from one-row-per-fight into one-row-per-fighter-
@@ -36,11 +37,11 @@ import pandas as pd
 from ufc_predictor.features import shrinkage
 from ufc_predictor.features.shrinkage import RatioFeature
 
-# The recent-form window, in fights. 3 until Day 11, when a window test (each
+# The recent-form window, in fights. It was 3 until a window test (each
 # version tuned on its own, cross-validated over 8 seeds) found 3 fights the
 # worst choice: 8 fights scored 0.0040 better in log loss, in every seed, and
 # beat career-only and recency-weighted alternatives (reviews/end_tests_2026-10-08.md).
-# Most of these stats are noisy over a few fights (Day 10 repeatability check),
+# Most of these stats are noisy over a few fights (input review repeatability check),
 # so more fights mostly means a steadier measurement. The model uses this window
 # as the ONE input per stat; the career window is still built, but not selected.
 ROLLING_WINDOW = 8
@@ -49,11 +50,11 @@ ROLLING_WINDOW = 8
 def accuracy_column(landed: str, absorbed: bool, window: str) -> str:
     """Name of a landed / attempted ratio column, in either direction.
 
-    A fighter's own ratio is his accuracy ("head_strikes_accuracy_..."). The same
-    ratio for what is thrown *at* him is not his accuracy at all, so it is named
-    for what it is: the hit rate against him ("head_strikes_hit_rate_against_...");
-    for takedowns, the success rate against him. Renamed on Day 12 from the old
-    "..._absorbed_accuracy_..." (the user's point: accuracy is the wrong word).
+    A fighter's own ratio is their accuracy ("head_strikes_accuracy_..."). The
+    same ratio for what is thrown *at* them is not their accuracy at all, so it is
+    named for what it is: the hit rate against them ("head_strikes_hit_rate_against_...");
+    for takedowns, the success rate against them. Earlier versions called it
+    "..._absorbed_accuracy_...", but accuracy is the wrong word for it.
     """
     if not absorbed:
         return f"{landed}_accuracy_{window}"

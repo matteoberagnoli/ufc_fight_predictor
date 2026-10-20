@@ -7,9 +7,9 @@ specific fight*, not a scraped-today snapshot, so they're already safe and
 just need their diffs computed.
 
 Reach and stance aren't in the fight table at all and have to be joined in
-from ufc_fighters.csv. Unlike the career-aggregate columns flagged in
-ROADMAP.md (wins, SLpM, ...), reach and stance don't change over a fighter's
-career, so joining the fighters.csv value is safe regardless of when the
+from ufc_fighters.csv. Unlike career totals (wins, strikes per minute, ...),
+which a scrape records as of today and so would leak later results into
+earlier fights, reach and stance don't change over a fighter's career, so joining the fighters.csv value is safe regardless of when the
 fight took place - there's no "as of" date attached to a person's arm span.
 
 Weight is deliberately excluded: a fighter's competing weight changes across
@@ -34,7 +34,7 @@ would bake in an assumed direction of advantage, so `attach_stance_features`
 uses signed differences instead (see there): they say who is the southpaw
 and leave the direction of any edge for the model to discover.
 
-Tested on Day 9 (08_feature_questions.ipynb) and **not adopted**: with its
+Tested in 08_feature_questions.ipynb and **not adopted**: with its
 own tuned settings, the model with the stance columns was slightly worse in
 cross-validation (better in 1 of 8 seeds) and slightly better on validation,
 both by noise-sized amounts. That matches the raw data - southpaws beat
@@ -66,7 +66,7 @@ def attach_static_features(featured: pd.DataFrame, fighters: pd.DataFrame) -> pd
         out = out.merge(side_static, on=f"{side}_id", how="left", validate="many_to_one")
         out[f"{side}_ape_index_cm"] = out[f"{side}_reach_cm"] - out[f"{side}_height_cm"]
 
-    # named "age gap" (Day 12): it is a difference, and the model never sees either age itself
+    # named "age gap": it is a difference, and the model never sees either age itself
     out["diff_static_age_gap"] = out["fighter_a_age_during"] - out["fighter_b_age_during"]
     out["diff_static_height_cm"] = out["fighter_a_height_cm"] - out["fighter_b_height_cm"]
     out["diff_static_reach_cm"] = out["fighter_a_reach_cm"] - out["fighter_b_reach_cm"]

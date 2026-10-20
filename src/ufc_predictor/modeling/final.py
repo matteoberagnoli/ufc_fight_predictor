@@ -21,7 +21,7 @@ fights alike: there is no second implementation to drift.
 A fake fight is still a row in the fighter's history, though: a later fake fight of the
 same fighter would count it as their last fight (layoff 0 days) and as one of the 8 fights
 in their window. So bouts that share a fighter are built in separate passes, each pass
-holding every fighter at most once (review 2026-10-18, finding F3).
+holding every fighter at most once.
 """
 import shutil
 import tempfile

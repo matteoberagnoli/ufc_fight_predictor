@@ -11,7 +11,7 @@ fighters' ufcstats URLs are used (36% of the file), so odds join our fights
 by id - no fuzzy name matching. Those rows are of two kinds:
 
   * archive rows (source "zewnetrzne", Polish for "external"): one line per
-    fight from 2010-03 to 2024-12, imported in one batch. Checked on Day 9:
+    fight from 2010-03 to 2024-12, imported in one batch. Cross-checked:
     96% are identical to the odds in Kaggle's mdabbert/ultimate-ufc-dataset,
     which scrapes bestfightodds.com. Its documentation doesn't say when the
     line is taken, but on the fights both datasets cover, it matches the

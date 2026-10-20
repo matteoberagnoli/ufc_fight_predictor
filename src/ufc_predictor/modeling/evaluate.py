@@ -14,7 +14,7 @@ Three numbers, always on fights the model never trained on:
 Men's fights are reported first because they are what this project is for.
 The model still trains on all fights: tested on men's validation fights, the
 pooled model did better than one trained on men's fights only - first with
-the untuned model (Day 7), then again with each version tuned separately
+the untuned model, then again with each version tuned separately
 (08_feature_questions.ipynb): pooled was better in 8 of 8 seeds in
 cross-validation and on validation.
 
@@ -27,7 +27,7 @@ Every evaluation also reports fights with and without a debutant
 no UFC history, for whom 30 of the 40 inputs are blank, and they are where the
 model is weakest and the betting market strongest: on men's validation fights
 with odds the gap to the market was 0.044 without a debutant and 0.107 with
-one (2026-10-17). A single overall number hides that, so the final test look
+one. A single overall number hides that, so the final test look
 reports all three rows.
 """
 

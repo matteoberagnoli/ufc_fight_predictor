@@ -184,9 +184,9 @@ def save_elo_params(k: float, curve: list, seeds, until: str = VALIDATION_START,
     neighbouring K values score within ~0.001 of each other is what tells you
     the exact K barely matters.
 
-    `note` records anything the curve alone would get wrong - e.g. on Day 12
-    the saved K is not the curve's minimum, because a check with the final
-    model's own settings overruled the search (05_elo.ipynb, section 4).
+    `note` records anything the curve alone would get wrong - e.g. a saved K
+    that is not the curve's minimum, because a check with the final model's
+    own settings overruled the search (05_elo.ipynb, section 4).
     `weights` are the win weights (see win_score); None is the classic Elo.
     The curve is a list of (K, score) pairs or of dicts (K, weights, score).
     """

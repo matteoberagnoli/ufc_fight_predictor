@@ -1,9 +1,9 @@
 """De-bias the fighter-1/fighter-2 column ordering in the raw fight stats.
 
-The raw data (see ROADMAP.md, "fighter-ordering leakage") lists the winner as
-f1 for every fight before 2010, and even afterwards f1 is the more experienced
-fighter more often than chance. Any model trained on fixed f1/f2 columns can
-partly learn "which slot" instead of "which fighter is better".
+The raw data lists the winner as f1 for every fight before 2010, and even
+afterwards f1 is the more experienced fighter more often than chance. Any
+model trained on fixed f1/f2 columns can partly learn "which slot" instead of
+"which fighter is better".
 
 The fix here relabels each fight's fighters as fighter_a / fighter_b using a
 coin flip, so slot no longer correlates with outcome. The coin flip is a hash

@@ -9,7 +9,7 @@ predicted, and they sit one word away from their safe counterparts:
 
 So `X = df.drop(columns=[...])` is not a safe way to build a design matrix.
 `X` is built from an explicit allow-list, FEATURES: the 40 inputs chosen in the
-Day 10-11 input review, each with a stated mechanism, tested as a model before
+input review, each with a stated mechanism, tested as a model before
 it was adopted (reviews/final_inputs_2026-10-08.csv; reasons for every one of
 the 108 earlier candidates in reviews/input_review_2026-10-07.csv). Two guards
 fail loudly rather than silently:
@@ -146,7 +146,7 @@ def _group_of(column: str) -> str | None:
     return None
 
 
-# The model's inputs: the 40 chosen in the input review (Day 10-11). Each has a
+# The model's inputs: the 40 chosen in the input review. Each has a
 # stated mechanism; together they beat the previous 108 in cross-validation
 # (log loss 0.65767 vs 0.66258, better in 8 of 8 seeds). Every rolling stat is
 # ONE input over the last ROLLING_WINDOW fights. Order follows the review's

@@ -336,7 +336,7 @@ def choose_elo_settings(featured: pd.DataFrame, params: dict, ks=ELO_SEARCH_KS,
 
     Like choose_elo_k, but each win is weighted by how it came (features.elo.
     win_score), and judged with `params` - the settings of the model the
-    rating will serve. Day 12 showed why: a K judged by a differently shaped
+    rating will serve. An earlier search showed why: a K judged by a differently shaped
     model (the one tuned without Elo) lost to the previous K in 8 of 8 seeds
     once the final model's settings were used. Returns one row per setting,
     best first.

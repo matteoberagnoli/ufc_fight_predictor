@@ -9,7 +9,7 @@ measures results against the opponents a fighter actually faced, with each win
 weighted by how it came; it knows nothing about weight, so "pound for pound" is
 literal here: one scale for every division.
 
-Inactivity costs ranking points (decided 2026-10-17). From 8 months without a
+Inactivity costs ranking points. From 8 months without a
 fight the rating used for the ranking falls by 0.5 x (months - 8)^2 points:
 8 at 12 months, 50 at 18, 128 at 24. The size matches what the data shows:
 fighters returning after 12-18 months won 2.9 points less often than their Elo

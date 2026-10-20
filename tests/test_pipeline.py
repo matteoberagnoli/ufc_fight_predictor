@@ -43,7 +43,7 @@ def test_elo_adds_its_three_columns_and_changes_nothing_else():
 
 
 def test_every_comparison_arm_gets_the_same_elo():
-    """The Day 7 lesson: an arm that silently skips a step fakes a comparison."""
+    """An arm that silently skips a step fakes a comparison (see features/pipeline.py)."""
     arms = build_variants(_fights(), no_shrinkage(), FIGHTERS, elo_k=64, elo_weights={"unanimous": 0.7, "narrow": 0.55})
     reference = arms["shrunk"][ELO]
     for name, table in arms.items():
