@@ -1,6 +1,15 @@
 # ufc_fight_predictor
 Personal project - ML model to predict ufc fights outcome
 
+## Read more
+
+Four pages explain the project without reading the code:
+
+- [Teo's UFC ML Predictor](https://claude.ai/artifact/EDZr7qCv1WQA2xRxNoTyRt): the overview, with the test results and the pound-for-pound ranking.
+- [UFC Pipeline Walkthrough](https://claude.ai/artifact/3uXZoZbc7T3zVsma3K91QU): how the Kaggle download becomes the 40 model inputs, step by step.
+- [The Modelling Half](https://claude.ai/artifact/J1VyvnhyvJb9qY4yWG3fVU): the model, how its score becomes a probability, how it is judged, tuned and explained.
+- [Volkanovski vs Evloev](https://claude.ai/artifact/58U9xDqvk6oPbDmzkkdSjh): the model's preview of one fight (UFC 333).
+
 ## How this was built
 
 I built this project with [Claude Code](https://claude.com/claude-code), Anthropic's AI
