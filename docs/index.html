@@ -73,35 +73,27 @@ tr.us td{color:var(--gold);font-weight:700}
 .viz{margin:0;background:var(--panel);border:1px solid var(--line);padding:16px 18px 18px;min-width:0}
 .vizh{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:24px;line-height:1.05;margin:0 0 14px}
 .viz figcaption{margin-top:14px;font-size:14.5px;color:var(--muted);line-height:1.5;max-width:70ch}
-.jrn{display:grid;gap:4px}
-.jrow{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center;padding-block:8px;border-bottom:1px solid var(--line)}
-.jrow.axis{border-bottom:0;padding-block:0}
-.jl b{display:block;font-size:15px}.jl span{display:block;font-size:13px;color:var(--muted)}
-.track{position:relative;height:60px;margin-inline:14px}
-.jrow.axis .track{height:20px}
-.even{position:absolute;left:25%;top:0;bottom:0;border-left:1px solid var(--muted);opacity:.55}
-.seg{position:absolute;top:30px;height:2px;background:var(--muted);opacity:.5;transform:translateY(-1px)}
-.seg.arrow{background:var(--blue);opacity:.8}
-.dot{position:absolute;top:30px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 2px var(--panel);cursor:default}
-.dot.off{background:var(--muted);opacity:.75}
-.dot.sm{width:10px;height:10px;margin:-5px 0 0 -5px;opacity:.6}
-.dot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.vlab{position:absolute;top:2px;transform:translateX(-50%);font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
-.vlab.low{top:42px;font-weight:400;font-size:11.5px;color:var(--muted)}
-.tick{position:absolute;top:0;transform:translateX(-50%);font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-@media (max-width:640px){.jrow{grid-template-columns:1fr;gap:4px}.jrow.axis .jl{display:none}}
-.pkey{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
-.sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin:0 6px}
-.sw.e,.pbar.e{background:var(--blue)}.sw.v,.pbar.v{background:var(--red)}
-.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,240px) minmax(0,1fr);gap:12px;align-items:center;padding-block:6px;border-bottom:1px solid var(--line)}
-.pl{display:flex;justify-content:flex-end}.pr{display:flex}
-.pbar{display:block;height:16px}
-.pbar.e{border-radius:4px 0 0 4px}.pbar.v{border-radius:0 4px 4px 0}
-.pbar:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.pm{text-align:center;min-width:0}.pm b{display:block;font-size:14.5px}
-.pm span{display:block;font-size:12.5px;color:var(--muted)}
-.pm em{display:block;font-style:normal;font-family:var(--mono);font-size:12px}
-@media (max-width:560px){.prow{grid-template-columns:minmax(0,1fr) minmax(130px,1.7fr) minmax(0,1fr);gap:8px}}
+.vizgrid.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.lkey{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.ln{display:inline-block;width:18px;height:2px;vertical-align:4px;margin-right:6px;border-radius:1px}
+.ln.fin{background:var(--blue)}.ln.raw{background:var(--muted)}
+.scurve{display:block;width:100%;max-width:520px;height:auto;touch-action:pan-y}
+.scurve .g{stroke:var(--line);stroke-width:1}
+.scurve .ax{fill:var(--muted);font-family:var(--mono);font-size:11.5px}
+.scurve .c{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scurve .c.fin{stroke:var(--blue)}.scurve .c.raw{stroke:var(--muted);opacity:.8}
+.scurve .dl{fill:var(--ink);font-size:12px;font-weight:600}.scurve .dl.mut{fill:var(--muted);font-weight:400}
+.scurve .xh{stroke:var(--muted);stroke-width:1;opacity:0}
+.scurve .xd{opacity:0;stroke:var(--panel);stroke-width:2}.scurve .xd.fin{fill:var(--blue)}.scurve .xd.raw{fill:var(--muted)}
+.scurve.on .xh,.scurve.on .xd{opacity:1}
+.scurve .hit{fill:transparent;cursor:crosshair}
+.fam{display:grid}
+.frow2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:12px;align-items:center;padding-block:7px;border-bottom:1px solid var(--line)}
+.fn b{display:block;font-size:14.5px}.fn span{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.fb{display:flex;align-items:center;gap:8px;min-width:0}
+.fbar2{display:block;height:16px;background:var(--gold);border-radius:0 4px 4px 0;min-width:3px}
+.fbar2:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.fb b{font-family:var(--mono);font-size:12.5px;font-weight:600}
 #tip{position:fixed;z-index:10;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.35;padding:6px 9px;border-radius:3px;max-width:240px;opacity:0;transition:opacity .1s}
 #tip.on{opacity:1}
 footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
@@ -177,42 +169,48 @@ footer p{max-width:none} footer p+p{margin-top:8px}
 
 <section>
   <h2>How it gets to a prediction</h2>
-  <p>The model never sees names or reputations, only numbers built from each fighter's UFC history. The worked example is UFC 333, Volkanovski vs Evloev, which the model scored at 58&ndash;42 for Evloev. Volkanovski won by TKO in round 2.</p>
+  <p>The model never sees names or reputations, only numbers built from each fighter's UFC history. Every fight goes through the same six steps.</p>
   <ol class="steps">
-    <li><b>Build the inputs</b><span>Every UFC fight since 1994 is turned into 40 numbers known before fight night, mostly gaps between the two fighters: age, reach, an Elo rating of who each has beaten (a finish counts more than a split decision), and striking, wrestling and defence averaged over the last 8 fights. Short records are pulled towards the league average.</span><em>Evloev 6 years younger, Elo 119 points lower</em></li>
-    <li><b>Ask the trees</b><span>950 small decision trees, each asking at most four yes-or-no questions such as &ldquo;is the age gap over 1.5 years?&rdquo;, add their nudges into one score. A curve turns the score into a chance.</span><em>Evloev 49.8%</em></li>
-    <li><b>Swap the corners</b><span>The fight is asked again with the fighters swapped and the two answers are averaged, so the result can't depend on who is listed first.</span><em>Evloev 56.4%</em></li>
-    <li><b>Average eight versions</b><span>Eight copies of the model, each trained with a different random seed, are averaged to remove the luck of one draw.</span><em>Evloev 56.4%</em></li>
-    <li><b>Calibrate</b><span>One stretch factor, fitted on past fights, makes the percentages come true as often as they say (the table above).</span><em>Evloev 57.9%</em></li>
-    <li><b>Explain</b><span>SHAP splits the prediction into one push per input, so every pick comes with its reasons.</span><em>Age +12 pts Evloev, Elo +9 pts Volkanovski</em></li>
+    <li><b>Build the inputs</b><span>Every UFC fight since 1994 is turned into 40 numbers known before fight night, mostly gaps between the two fighters: age, reach, an Elo rating of who each has beaten (a finish counts more than a split decision), and striking, wrestling and defence averaged over the last 8 fights. Short records are pulled towards the league average.</span><em>40 inputs per fight, 6,276 fights</em></li>
+    <li><b>Ask the trees</b><span>950 small decision trees, each asking at most four yes-or-no questions such as &ldquo;is the age gap over 1.5 years?&rdquo;, add their nudges into one score. A curve turns the score into a chance.</span><em>950 trees, at most 4 questions each</em></li>
+    <li><b>Swap the corners</b><span>The fight is asked again with the fighters swapped and the two answers are averaged, so the result can't depend on who is listed first.</span><em>asked one way only, an early version changed its pick in 35% of fights</em></li>
+    <li><b>Average eight versions</b><span>Eight copies of the model, each trained with a different random seed, are averaged to remove the luck of one draw.</span><em>8 versions &times; 2 corners = 16 answers per fight</em></li>
+    <li><b>Calibrate</b><span>One stretch factor, fitted on past fights, makes the percentages come true as often as they say (the table above).</span><em>stretch 1.235: a raw 70% becomes 74%</em></li>
+    <li><b>Explain</b><span>SHAP splits the prediction into one push per input, so every pick comes with its reasons.</span><em>the pushes add up exactly to the prediction</em></li>
   </ol>
-  <div class="vizgrid">
-<figure class="viz" role="img" aria-label="Evloev's chance after each step: one version as given 49.8%; corners swapped 63.0%, averaged 56.4%; eight versions from 55.1% to 57.8%, average 56.4%; calibrated 57.9%.">
-<h3 class="vizh">Evloev's chance, step by step</h3>
-<div class="jrn">
-  <div class="jrow"><div class="jl"><b>2 · Ask the trees</b><span>one version, fight as given</span></div><div class="track"><span class="even"></span><span class="dot on" style="left:24.00%" tabindex="0" data-tip="Ask the trees: one version with Evloev in corner A says 49.8%"></span><span class="vlab " style="left:24.00%">49.8%</span></div></div>
-  <div class="jrow"><div class="jl"><b>3 · Swap the corners</b><span>asked both ways, then averaged</span></div><div class="track"><span class="even"></span><span class="seg" style="left:24.00%;width:66.00%"></span><span class="dot off" style="left:24.00%" tabindex="0" data-tip="As given: 49.8%"></span><span class="dot off" style="left:90.00%" tabindex="0" data-tip="Corners swapped: 63.0% for Evloev"></span><span class="dot on" style="left:57.00%" tabindex="0" data-tip="Average of both corners: 56.4%"></span><span class="vlab low" style="left:24.00%">given</span><span class="vlab low" style="left:90.00%">swapped</span><span class="vlab " style="left:57.00%">56.4%</span></div></div>
-  <div class="jrow"><div class="jl"><b>4 · Average eight versions</b><span>each trained with a different seed</span></div><div class="track"><span class="even"></span><span class="seg" style="left:50.50%;width:13.50%"></span><span class="dot off sm" style="left:57.00%" tabindex="0" data-tip="Version 0: 56.4%"></span><span class="dot off sm" style="left:57.50%" tabindex="0" data-tip="Version 1: 56.5%"></span><span class="dot off sm" style="left:62.50%" tabindex="0" data-tip="Version 2: 57.5%"></span><span class="dot off sm" style="left:52.00%" tabindex="0" data-tip="Version 3: 55.4%"></span><span class="dot off sm" style="left:56.00%" tabindex="0" data-tip="Version 4: 56.2%"></span><span class="dot off sm" style="left:64.00%" tabindex="0" data-tip="Version 5: 57.8%"></span><span class="dot off sm" style="left:58.00%" tabindex="0" data-tip="Version 6: 56.6%"></span><span class="dot off sm" style="left:50.50%" tabindex="0" data-tip="Version 7: 55.1%"></span><span class="dot on" style="left:57.00%" tabindex="0" data-tip="Average of the eight versions: 56.4% (range 55.1–57.8%)"></span><span class="vlab " style="left:57.00%">56.4%</span><span class="vlab low" style="left:57.25%">range 55.1–57.8</span></div></div>
-  <div class="jrow"><div class="jl"><b>5 · Calibrate</b><span>one stretch, fitted on past fights</span></div><div class="track"><span class="even"></span><span class="seg arrow" style="left:57.00%;width:7.50%"></span><span class="dot off" style="left:57.00%" tabindex="0" data-tip="Before the stretch: 56.4%"></span><span class="dot on" style="left:64.50%" tabindex="0" data-tip="After the stretch: 57.9% Evloev, 42.1% Volkanovski"></span><span class="vlab " style="left:64.50%">57.9%</span></div></div>
-  <div class="jrow axis"><div class="jl"></div><div class="track"><span class="tick" style="left:0.00%">45%</span><span class="tick" style="left:25.00%">50%</span><span class="tick" style="left:50.00%">55%</span><span class="tick" style="left:75.00%">60%</span><span class="tick" style="left:100.00%">65%</span></div></div>
-</div>
-<figcaption>Each row is one step. The vertical line is 50&ndash;50. Swapping the corners moves this fight the most: asked one way the trees say 49.8%, the other way 63.0%. The eight versions barely disagree, and the stretch makes the final call a little bolder. Hover or tap a dot for its value.</figcaption>
+  <div class="vizgrid two">
+<figure class="viz">
+<h3 class="vizh">From score to chance</h3>
+<div class="lkey"><span><i class="ln fin"></i>final chance</span><span><i class="ln raw"></i>before the stretch</span></div>
+<svg viewBox="0 0 360 236" class="scurve" role="img" aria-label="An S-shaped curve turns the trees' score into fighter A's chance. A score of 0 is 50%. The calibration stretch makes the curve a little steeper: a score of +1 gives 73% before the stretch and 77% after.">
+<line x1="44" x2="348" y1="196.0" y2="196.0" class="g"/><text x="38" y="200.0" class="ax" text-anchor="end">0%</text><line x1="44" x2="348" y1="150.5" y2="150.5" class="g"/><text x="38" y="154.5" class="ax" text-anchor="end">25%</text><line x1="44" x2="348" y1="105.0" y2="105.0" class="g"/><text x="38" y="109.0" class="ax" text-anchor="end">50%</text><line x1="44" x2="348" y1="59.5" y2="59.5" class="g"/><text x="38" y="63.5" class="ax" text-anchor="end">75%</text><line x1="44" x2="348" y1="14.0" y2="14.0" class="g"/><text x="38" y="18.0" class="ax" text-anchor="end">100%</text>
+<line x1="196.0" x2="196.0" y1="14" y2="196" class="g"/>
+<path d="M44.0,174.3 L45.5,173.9 L47.0,173.5 L48.6,173.1 L50.1,172.7 L51.6,172.3 L53.1,171.9 L54.6,171.5 L56.2,171.1 L57.7,170.6 L59.2,170.2 L60.7,169.7 L62.2,169.3 L63.8,168.8 L65.3,168.4 L66.8,167.9 L68.3,167.4 L69.8,166.9 L71.4,166.4 L72.9,165.9 L74.4,165.4 L75.9,164.9 L77.4,164.4 L79.0,163.9 L80.5,163.3 L82.0,162.8 L83.5,162.3 L85.0,161.7 L86.6,161.1 L88.1,160.6 L89.6,160.0 L91.1,159.4 L92.6,158.8 L94.2,158.2 L95.7,157.6 L97.2,157.0 L98.7,156.4 L100.2,155.8 L101.8,155.2 L103.3,154.5 L104.8,153.9 L106.3,153.2 L107.8,152.6 L109.4,151.9 L110.9,151.2 L112.4,150.5 L113.9,149.9 L115.4,149.2 L117.0,148.5 L118.5,147.8 L120.0,147.1 L121.5,146.3 L123.0,145.6 L124.6,144.9 L126.1,144.1 L127.6,143.4 L129.1,142.6 L130.6,141.9 L132.2,141.1 L133.7,140.4 L135.2,139.6 L136.7,138.8 L138.2,138.0 L139.8,137.2 L141.3,136.4 L142.8,135.6 L144.3,134.8 L145.8,134.0 L147.4,133.2 L148.9,132.3 L150.4,131.5 L151.9,130.7 L153.4,129.8 L155.0,129.0 L156.5,128.1 L158.0,127.3 L159.5,126.4 L161.0,125.6 L162.6,124.7 L164.1,123.8 L165.6,123.0 L167.1,122.1 L168.6,121.2 L170.2,120.3 L171.7,119.4 L173.2,118.5 L174.7,117.7 L176.2,116.8 L177.8,115.9 L179.3,115.0 L180.8,114.1 L182.3,113.2 L183.8,112.3 L185.4,111.4 L186.9,110.5 L188.4,109.5 L189.9,108.6 L191.4,107.7 L193.0,106.8 L194.5,105.9 L196.0,105.0 L197.5,104.1 L199.0,103.2 L200.6,102.3 L202.1,101.4 L203.6,100.5 L205.1,99.5 L206.6,98.6 L208.2,97.7 L209.7,96.8 L211.2,95.9 L212.7,95.0 L214.2,94.1 L215.8,93.2 L217.3,92.3 L218.8,91.5 L220.3,90.6 L221.8,89.7 L223.4,88.8 L224.9,87.9 L226.4,87.0 L227.9,86.2 L229.4,85.3 L231.0,84.4 L232.5,83.6 L234.0,82.7 L235.5,81.9 L237.0,81.0 L238.6,80.2 L240.1,79.3 L241.6,78.5 L243.1,77.7 L244.6,76.8 L246.2,76.0 L247.7,75.2 L249.2,74.4 L250.7,73.6 L252.2,72.8 L253.8,72.0 L255.3,71.2 L256.8,70.4 L258.3,69.6 L259.8,68.9 L261.4,68.1 L262.9,67.4 L264.4,66.6 L265.9,65.9 L267.4,65.1 L269.0,64.4 L270.5,63.7 L272.0,62.9 L273.5,62.2 L275.0,61.5 L276.6,60.8 L278.1,60.1 L279.6,59.5 L281.1,58.8 L282.6,58.1 L284.2,57.4 L285.7,56.8 L287.2,56.1 L288.7,55.5 L290.2,54.8 L291.8,54.2 L293.3,53.6 L294.8,53.0 L296.3,52.4 L297.8,51.8 L299.4,51.2 L300.9,50.6 L302.4,50.0 L303.9,49.4 L305.4,48.9 L307.0,48.3 L308.5,47.7 L310.0,47.2 L311.5,46.7 L313.0,46.1 L314.6,45.6 L316.1,45.1 L317.6,44.6 L319.1,44.1 L320.6,43.6 L322.2,43.1 L323.7,42.6 L325.2,42.1 L326.7,41.6 L328.2,41.2 L329.8,40.7 L331.3,40.3 L332.8,39.8 L334.3,39.4 L335.8,38.9 L337.4,38.5 L338.9,38.1 L340.4,37.7 L341.9,37.3 L343.4,36.9 L345.0,36.5 L346.5,36.1 L348.0,35.7" class="c raw"/>
+<path d="M44.0,181.8 L45.5,181.5 L47.0,181.1 L48.6,180.8 L50.1,180.5 L51.6,180.1 L53.1,179.7 L54.6,179.4 L56.2,179.0 L57.7,178.6 L59.2,178.2 L60.7,177.8 L62.2,177.4 L63.8,177.0 L65.3,176.6 L66.8,176.1 L68.3,175.7 L69.8,175.2 L71.4,174.8 L72.9,174.3 L74.4,173.8 L75.9,173.4 L77.4,172.9 L79.0,172.4 L80.5,171.8 L82.0,171.3 L83.5,170.8 L85.0,170.3 L86.6,169.7 L88.1,169.1 L89.6,168.6 L91.1,168.0 L92.6,167.4 L94.2,166.8 L95.7,166.2 L97.2,165.6 L98.7,164.9 L100.2,164.3 L101.8,163.6 L103.3,163.0 L104.8,162.3 L106.3,161.6 L107.8,160.9 L109.4,160.2 L110.9,159.5 L112.4,158.8 L113.9,158.0 L115.4,157.3 L117.0,156.5 L118.5,155.8 L120.0,155.0 L121.5,154.2 L123.0,153.4 L124.6,152.6 L126.1,151.8 L127.6,150.9 L129.1,150.1 L130.6,149.2 L132.2,148.4 L133.7,147.5 L135.2,146.6 L136.7,145.7 L138.2,144.8 L139.8,143.9 L141.3,143.0 L142.8,142.1 L144.3,141.1 L145.8,140.2 L147.4,139.2 L148.9,138.2 L150.4,137.3 L151.9,136.3 L153.4,135.3 L155.0,134.3 L156.5,133.3 L158.0,132.2 L159.5,131.2 L161.0,130.2 L162.6,129.1 L164.1,128.1 L165.6,127.0 L167.1,126.0 L168.6,124.9 L170.2,123.8 L171.7,122.8 L173.2,121.7 L174.7,120.6 L176.2,119.5 L177.8,118.4 L179.3,117.3 L180.8,116.2 L182.3,115.1 L183.8,114.0 L185.4,112.8 L186.9,111.7 L188.4,110.6 L189.9,109.5 L191.4,108.4 L193.0,107.2 L194.5,106.1 L196.0,105.0 L197.5,103.9 L199.0,102.8 L200.6,101.6 L202.1,100.5 L203.6,99.4 L205.1,98.3 L206.6,97.2 L208.2,96.0 L209.7,94.9 L211.2,93.8 L212.7,92.7 L214.2,91.6 L215.8,90.5 L217.3,89.4 L218.8,88.3 L220.3,87.2 L221.8,86.2 L223.4,85.1 L224.9,84.0 L226.4,83.0 L227.9,81.9 L229.4,80.9 L231.0,79.8 L232.5,78.8 L234.0,77.8 L235.5,76.7 L237.0,75.7 L238.6,74.7 L240.1,73.7 L241.6,72.7 L243.1,71.8 L244.6,70.8 L246.2,69.8 L247.7,68.9 L249.2,67.9 L250.7,67.0 L252.2,66.1 L253.8,65.2 L255.3,64.3 L256.8,63.4 L258.3,62.5 L259.8,61.6 L261.4,60.8 L262.9,59.9 L264.4,59.1 L265.9,58.2 L267.4,57.4 L269.0,56.6 L270.5,55.8 L272.0,55.0 L273.5,54.2 L275.0,53.5 L276.6,52.7 L278.1,52.0 L279.6,51.2 L281.1,50.5 L282.6,49.8 L284.2,49.1 L285.7,48.4 L287.2,47.7 L288.7,47.0 L290.2,46.4 L291.8,45.7 L293.3,45.1 L294.8,44.4 L296.3,43.8 L297.8,43.2 L299.4,42.6 L300.9,42.0 L302.4,41.4 L303.9,40.9 L305.4,40.3 L307.0,39.7 L308.5,39.2 L310.0,38.7 L311.5,38.2 L313.0,37.6 L314.6,37.1 L316.1,36.6 L317.6,36.2 L319.1,35.7 L320.6,35.2 L322.2,34.8 L323.7,34.3 L325.2,33.9 L326.7,33.4 L328.2,33.0 L329.8,32.6 L331.3,32.2 L332.8,31.8 L334.3,31.4 L335.8,31.0 L337.4,30.6 L338.9,30.3 L340.4,29.9 L341.9,29.5 L343.4,29.2 L345.0,28.9 L346.5,28.5 L348.0,28.2" class="c fin"/>
+<text x="264.4" y="51.1" class="dl" text-anchor="end">final</text>
+<text x="230.2" y="106.9" class="dl mut">before stretch</text>
+<text x="44.0" y="212" class="ax" text-anchor="middle">-2</text><text x="120.0" y="212" class="ax" text-anchor="middle">-1</text><text x="196.0" y="212" class="ax" text-anchor="middle">0</text><text x="272.0" y="212" class="ax" text-anchor="middle">+1</text><text x="348.0" y="212" class="ax" text-anchor="middle">+2</text>
+<text x="44" y="232" class="ax">&larr; towards fighter B</text>
+<text x="348" y="232" class="ax" text-anchor="end">towards fighter A &rarr;</text>
+<line class="xh" x1="0" x2="0" y1="14" y2="196"/>
+<circle class="xd raw" r="4"/><circle class="xd fin" r="4.5"/>
+<rect class="hit" x="44" y="14" width="304" height="182"/>
+</svg>
+<figcaption>The trees add up to a score: 0 means even, and the further from 0, the more one fighter is favoured. A curve turns the score into a chance (step 2). The calibration stretch (step 5) makes it a little bolder, because on past fights the raw percentages were slightly too timid. Hover or tap the chart to read values.</figcaption>
 </figure>
-<figure class="viz" role="img" aria-label="SHAP pushes for UFC 333. Towards Evloev: age 11.7 points, winning record 2.7, body-strike accuracy 2.6, takedown accuracy 2.0, takedown attempts 2.0, the other 32 inputs 0.8. Towards Volkanovski: Elo 8.8, head-strike accuracy 2.9, accuracy at range 2.3.">
-<h3 class="vizh">Why 58&ndash;42: the pushes behind it</h3>
-<div class="pkey"><span><i class="sw e"></i>towards Evloev &middot; 22 pts</span><span>14 pts &middot; towards Volkanovski<i class="sw v"></i></span></div>
-<div class="push">
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:100.0%" tabindex="0" data-tip="Age: +11.7 points towards Evloev"></span></div><div class="pm"><b>Age</b><span>Volkanovski 38, Evloev 32</span><em>+11.7 Evloev</em></div><div class="pr"></div></div>
-  <div class="prow"><div class="pl"></div><div class="pm"><b>Elo rating</b><span>1947 against 1827</span><em>+8.8 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:75.2%" tabindex="0" data-tip="Elo rating: +8.8 points towards Volkanovski"></span></div></div>
-  <div class="prow"><div class="pl"></div><div class="pm"><b>Head-strike accuracy</b><span>49% against 43%</span><em>+2.9 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:24.8%" tabindex="0" data-tip="Head-strike accuracy: +2.9 points towards Volkanovski"></span></div></div>
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:23.1%" tabindex="0" data-tip="Winning record: +2.7 points towards Evloev"></span></div><div class="pm"><b>Winning record</b><span>15-3 against 10-0</span><em>+2.7 Evloev</em></div><div class="pr"></div></div>
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:22.2%" tabindex="0" data-tip="Body-strike accuracy: +2.6 points towards Evloev"></span></div><div class="pm"><b>Body-strike accuracy</b><span>68% against 74%</span><em>+2.6 Evloev</em></div><div class="pr"></div></div>
-  <div class="prow"><div class="pl"></div><div class="pm"><b>Accuracy at range</b><span>53% against 45%</span><em>+2.3 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:19.7%" tabindex="0" data-tip="Accuracy at range: +2.3 points towards Volkanovski"></span></div></div>
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:17.1%" tabindex="0" data-tip="Takedown accuracy: +2.0 points towards Evloev"></span></div><div class="pm"><b>Takedown accuracy</b><span>35% against 44%</span><em>+2.0 Evloev</em></div><div class="pr"></div></div>
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:17.1%" tabindex="0" data-tip="Takedown attempts: +2.0 points towards Evloev"></span></div><div class="pm"><b>Takedown attempts</b><span>4.4 against 7.4 per 15 min</span><em>+2.0 Evloev</em></div><div class="pr"></div></div>
-  <div class="prow"><div class="pl"><span class="pbar e" style="width:6.8%" tabindex="0" data-tip="The other 32 inputs: +0.8 points towards Evloev"></span></div><div class="pm"><b>The other 32 inputs</b><span>together</span><em>+0.8 Evloev</em></div><div class="pr"></div></div>
+<figure class="viz" role="img" aria-label="Share of the model's total push by input family, on 2023 to 2024 fights: Elo 28%, age and body 24%, defence 19%, striking 12%, grappling 10%, debut flags 3%, record and layoff 2%, knockdowns 1%.">
+<h3 class="vizh">What the model listens to</h3>
+<div class="fam">
+  <div class="frow2"><div class="fn"><b>Elo rating</b><span>who each fighter has beaten · 1 input</span></div><div class="fb"><span class="fbar2" style="width:100.0%" tabindex="0" data-tip="Elo rating: 28% of the total push (1 input)"></span><b>28%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Age and body</b><span>age gap, reach, height, division · 5 inputs</span></div><div class="fb"><span class="fbar2" style="width:86.9%" tabindex="0" data-tip="Age and body: 24% of the total push (5 inputs)"></span><b>24%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Defence</b><span>what opponents land, time spent controlled · 11 inputs</span></div><div class="fb"><span class="fbar2" style="width:69.0%" tabindex="0" data-tip="Defence: 19% of the total push (11 inputs)"></span><b>19%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Striking</b><span>volume and accuracy, by target and range · 13 inputs</span></div><div class="fb"><span class="fbar2" style="width:44.5%" tabindex="0" data-tip="Striking: 12% of the total push (13 inputs)"></span><b>12%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Grappling</b><span>takedowns, control, submission attempts · 4 inputs</span></div><div class="fb"><span class="fbar2" style="width:35.1%" tabindex="0" data-tip="Grappling: 10% of the total push (4 inputs)"></span><b>10%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Debut flags</b><span>first UFC fight · 2 inputs</span></div><div class="fb"><span class="fbar2" style="width:9.8%" tabindex="0" data-tip="Debut flags: 3% of the total push (2 inputs)"></span><b>3%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Record and layoff</b><span>win rate, streak, time out · 3 inputs</span></div><div class="fb"><span class="fbar2" style="width:7.8%" tabindex="0" data-tip="Record and layoff: 2% of the total push (3 inputs)"></span><b>2%</b></div></div>
+  <div class="frow2"><div class="fn"><b>Knockdowns scored</b><span>1 input</span></div><div class="fb"><span class="fbar2" style="width:3.3%" tabindex="0" data-tip="Knockdowns scored: 1% of the total push (1 input)"></span><b>1%</b></div></div>
 </div>
-<figcaption>Every fight starts at 50&ndash;50. SHAP splits the prediction into one push per input, and the pushes add up: about 22 points towards Evloev minus 14 towards Volkanovski takes Evloev from 50% to 58%. Age was the biggest single push, the champion's Elo the biggest one back.</figcaption>
+<figcaption>Each family's share of the total SHAP push, averaged over the 1,017 fights of 2023&ndash;24, ignoring which fighter it favoured. Who you have beaten and how old you are carry half the weight; defence, what opponents manage against you, comes next. The training years give the same order.</figcaption>
 </figure>
   </div>
   <p class="note">The test above used a model trained on 2014&ndash;2024. The previews use the same frozen recipe retrained on all 6,276 fights from 2014 to October 2026.</p>
@@ -255,6 +253,19 @@ function hide(){t.classList.remove('on');}
 document.querySelectorAll('[data-tip]').forEach(function(el){
 el.addEventListener('pointerenter',function(e){show(e,el)});el.addEventListener('pointermove',function(e){show(e,el)});
 el.addEventListener('pointerleave',hide);el.addEventListener('focus',function(){show(null,el)});el.addEventListener('blur',hide);});
+})();
+</script>
+<script>
+(function(){var sv=document.querySelector('.scurve');if(!sv)return;var t=document.getElementById('tip');
+var X0=44,X1=348,Y0=14,Y1=196,xh=sv.querySelector('.xh'),dr=sv.querySelector('.xd.raw'),df=sv.querySelector('.xd.fin'),hit=sv.querySelector('.hit');
+function sg(f){return 1/(1+Math.exp(-f))}
+function mv(e){var r=sv.getBoundingClientRect(),k=360/r.width,x=(e.clientX-r.left)*k;x=Math.max(X0,Math.min(X1,x));
+var f=(x-X0)/(X1-X0)*4-2,pr=sg(f),pf=sg(1.235*f);xh.setAttribute('x1',x);xh.setAttribute('x2',x);
+dr.setAttribute('cx',x);dr.setAttribute('cy',Y1-pr*(Y1-Y0));df.setAttribute('cx',x);df.setAttribute('cy',Y1-pf*(Y1-Y0));sv.classList.add('on');
+t.textContent='Score '+(f>=0?'+':'')+f.toFixed(2)+': '+Math.round(pf*100)+'% final ('+Math.round(pr*100)+'% before the stretch)';t.classList.add('on');
+var w=t.offsetWidth;t.style.left=Math.max(8,Math.min(innerWidth-w-8,e.clientX-w/2))+'px';t.style.top=Math.max(8,e.clientY-t.offsetHeight-14)+'px';}
+function out(){sv.classList.remove('on');t.classList.remove('on');}
+hit.addEventListener('pointermove',mv);hit.addEventListener('pointerdown',mv);hit.addEventListener('pointerleave',out);
 })();
 </script>
 </body>
