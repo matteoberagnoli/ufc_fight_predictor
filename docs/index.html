@@ -69,6 +69,41 @@ tr.us td{color:var(--gold);font-weight:700}
 .blind b{display:block;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:19px;color:var(--ink)}
 .panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);padding:16px 18px;margin-top:16px}
 .panel p{max-width:none;font-size:15.5px}
+.vizgrid{display:grid;gap:22px;margin-top:22px}
+.viz{margin:0;background:var(--panel);border:1px solid var(--line);padding:16px 18px 18px;min-width:0}
+.vizh{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:24px;line-height:1.05;margin:0 0 14px}
+.viz figcaption{margin-top:14px;font-size:14.5px;color:var(--muted);line-height:1.5;max-width:70ch}
+.jrn{display:grid;gap:4px}
+.jrow{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center;padding-block:8px;border-bottom:1px solid var(--line)}
+.jrow.axis{border-bottom:0;padding-block:0}
+.jl b{display:block;font-size:15px}.jl span{display:block;font-size:13px;color:var(--muted)}
+.track{position:relative;height:60px;margin-inline:14px}
+.jrow.axis .track{height:20px}
+.even{position:absolute;left:25%;top:0;bottom:0;border-left:1px solid var(--muted);opacity:.55}
+.seg{position:absolute;top:30px;height:2px;background:var(--muted);opacity:.5;transform:translateY(-1px)}
+.seg.arrow{background:var(--blue);opacity:.8}
+.dot{position:absolute;top:30px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 2px var(--panel);cursor:default}
+.dot.off{background:var(--muted);opacity:.75}
+.dot.sm{width:10px;height:10px;margin:-5px 0 0 -5px;opacity:.6}
+.dot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.vlab{position:absolute;top:2px;transform:translateX(-50%);font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
+.vlab.low{top:42px;font-weight:400;font-size:11.5px;color:var(--muted)}
+.tick{position:absolute;top:0;transform:translateX(-50%);font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+@media (max-width:640px){.jrow{grid-template-columns:1fr;gap:4px}.jrow.axis .jl{display:none}}
+.pkey{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin:0 6px}
+.sw.e,.pbar.e{background:var(--blue)}.sw.v,.pbar.v{background:var(--red)}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,240px) minmax(0,1fr);gap:12px;align-items:center;padding-block:6px;border-bottom:1px solid var(--line)}
+.pl{display:flex;justify-content:flex-end}.pr{display:flex}
+.pbar{display:block;height:16px}
+.pbar.e{border-radius:4px 0 0 4px}.pbar.v{border-radius:0 4px 4px 0}
+.pbar:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.pm{text-align:center;min-width:0}.pm b{display:block;font-size:14.5px}
+.pm span{display:block;font-size:12.5px;color:var(--muted)}
+.pm em{display:block;font-style:normal;font-family:var(--mono);font-size:12px}
+@media (max-width:560px){.prow{grid-template-columns:minmax(0,1fr) minmax(130px,1.7fr) minmax(0,1fr);gap:8px}}
+#tip{position:fixed;z-index:10;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.35;padding:6px 9px;border-radius:3px;max-width:240px;opacity:0;transition:opacity .1s}
+#tip.on{opacity:1}
 footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 footer p{max-width:none} footer p+p{margin-top:8px}
 </style>
@@ -151,6 +186,35 @@ footer p{max-width:none} footer p+p{margin-top:8px}
     <li><b>Calibrate</b><span>One stretch factor, fitted on past fights, makes the percentages come true as often as they say (the table above).</span><em>Evloev 57.9%</em></li>
     <li><b>Explain</b><span>SHAP splits the prediction into one push per input, so every pick comes with its reasons.</span><em>Age +12 pts Evloev, Elo +9 pts Volkanovski</em></li>
   </ol>
+  <div class="vizgrid">
+<figure class="viz" role="img" aria-label="Evloev's chance after each step: one version as given 49.8%; corners swapped 63.0%, averaged 56.4%; eight versions from 55.1% to 57.8%, average 56.4%; calibrated 57.9%.">
+<h3 class="vizh">Evloev's chance, step by step</h3>
+<div class="jrn">
+  <div class="jrow"><div class="jl"><b>2 · Ask the trees</b><span>one version, fight as given</span></div><div class="track"><span class="even"></span><span class="dot on" style="left:24.00%" tabindex="0" data-tip="Ask the trees: one version with Evloev in corner A says 49.8%"></span><span class="vlab " style="left:24.00%">49.8%</span></div></div>
+  <div class="jrow"><div class="jl"><b>3 · Swap the corners</b><span>asked both ways, then averaged</span></div><div class="track"><span class="even"></span><span class="seg" style="left:24.00%;width:66.00%"></span><span class="dot off" style="left:24.00%" tabindex="0" data-tip="As given: 49.8%"></span><span class="dot off" style="left:90.00%" tabindex="0" data-tip="Corners swapped: 63.0% for Evloev"></span><span class="dot on" style="left:57.00%" tabindex="0" data-tip="Average of both corners: 56.4%"></span><span class="vlab low" style="left:24.00%">given</span><span class="vlab low" style="left:90.00%">swapped</span><span class="vlab " style="left:57.00%">56.4%</span></div></div>
+  <div class="jrow"><div class="jl"><b>4 · Average eight versions</b><span>each trained with a different seed</span></div><div class="track"><span class="even"></span><span class="seg" style="left:50.50%;width:13.50%"></span><span class="dot off sm" style="left:57.00%" tabindex="0" data-tip="Version 0: 56.4%"></span><span class="dot off sm" style="left:57.50%" tabindex="0" data-tip="Version 1: 56.5%"></span><span class="dot off sm" style="left:62.50%" tabindex="0" data-tip="Version 2: 57.5%"></span><span class="dot off sm" style="left:52.00%" tabindex="0" data-tip="Version 3: 55.4%"></span><span class="dot off sm" style="left:56.00%" tabindex="0" data-tip="Version 4: 56.2%"></span><span class="dot off sm" style="left:64.00%" tabindex="0" data-tip="Version 5: 57.8%"></span><span class="dot off sm" style="left:58.00%" tabindex="0" data-tip="Version 6: 56.6%"></span><span class="dot off sm" style="left:50.50%" tabindex="0" data-tip="Version 7: 55.1%"></span><span class="dot on" style="left:57.00%" tabindex="0" data-tip="Average of the eight versions: 56.4% (range 55.1–57.8%)"></span><span class="vlab " style="left:57.00%">56.4%</span><span class="vlab low" style="left:57.25%">range 55.1–57.8</span></div></div>
+  <div class="jrow"><div class="jl"><b>5 · Calibrate</b><span>one stretch, fitted on past fights</span></div><div class="track"><span class="even"></span><span class="seg arrow" style="left:57.00%;width:7.50%"></span><span class="dot off" style="left:57.00%" tabindex="0" data-tip="Before the stretch: 56.4%"></span><span class="dot on" style="left:64.50%" tabindex="0" data-tip="After the stretch: 57.9% Evloev, 42.1% Volkanovski"></span><span class="vlab " style="left:64.50%">57.9%</span></div></div>
+  <div class="jrow axis"><div class="jl"></div><div class="track"><span class="tick" style="left:0.00%">45%</span><span class="tick" style="left:25.00%">50%</span><span class="tick" style="left:50.00%">55%</span><span class="tick" style="left:75.00%">60%</span><span class="tick" style="left:100.00%">65%</span></div></div>
+</div>
+<figcaption>Each row is one step. The vertical line is 50&ndash;50. Swapping the corners moves this fight the most: asked one way the trees say 49.8%, the other way 63.0%. The eight versions barely disagree, and the stretch makes the final call a little bolder. Hover or tap a dot for its value.</figcaption>
+</figure>
+<figure class="viz" role="img" aria-label="SHAP pushes for UFC 333. Towards Evloev: age 11.7 points, winning record 2.7, body-strike accuracy 2.6, takedown accuracy 2.0, takedown attempts 2.0, the other 32 inputs 0.8. Towards Volkanovski: Elo 8.8, head-strike accuracy 2.9, accuracy at range 2.3.">
+<h3 class="vizh">Why 58&ndash;42: the pushes behind it</h3>
+<div class="pkey"><span><i class="sw e"></i>towards Evloev &middot; 22 pts</span><span>14 pts &middot; towards Volkanovski<i class="sw v"></i></span></div>
+<div class="push">
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:100.0%" tabindex="0" data-tip="Age: +11.7 points towards Evloev"></span></div><div class="pm"><b>Age</b><span>Volkanovski 38, Evloev 32</span><em>+11.7 Evloev</em></div><div class="pr"></div></div>
+  <div class="prow"><div class="pl"></div><div class="pm"><b>Elo rating</b><span>1947 against 1827</span><em>+8.8 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:75.2%" tabindex="0" data-tip="Elo rating: +8.8 points towards Volkanovski"></span></div></div>
+  <div class="prow"><div class="pl"></div><div class="pm"><b>Head-strike accuracy</b><span>49% against 43%</span><em>+2.9 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:24.8%" tabindex="0" data-tip="Head-strike accuracy: +2.9 points towards Volkanovski"></span></div></div>
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:23.1%" tabindex="0" data-tip="Winning record: +2.7 points towards Evloev"></span></div><div class="pm"><b>Winning record</b><span>15-3 against 10-0</span><em>+2.7 Evloev</em></div><div class="pr"></div></div>
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:22.2%" tabindex="0" data-tip="Body-strike accuracy: +2.6 points towards Evloev"></span></div><div class="pm"><b>Body-strike accuracy</b><span>68% against 74%</span><em>+2.6 Evloev</em></div><div class="pr"></div></div>
+  <div class="prow"><div class="pl"></div><div class="pm"><b>Accuracy at range</b><span>53% against 45%</span><em>+2.3 Volkanovski</em></div><div class="pr"><span class="pbar v" style="width:19.7%" tabindex="0" data-tip="Accuracy at range: +2.3 points towards Volkanovski"></span></div></div>
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:17.1%" tabindex="0" data-tip="Takedown accuracy: +2.0 points towards Evloev"></span></div><div class="pm"><b>Takedown accuracy</b><span>35% against 44%</span><em>+2.0 Evloev</em></div><div class="pr"></div></div>
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:17.1%" tabindex="0" data-tip="Takedown attempts: +2.0 points towards Evloev"></span></div><div class="pm"><b>Takedown attempts</b><span>4.4 against 7.4 per 15 min</span><em>+2.0 Evloev</em></div><div class="pr"></div></div>
+  <div class="prow"><div class="pl"><span class="pbar e" style="width:6.8%" tabindex="0" data-tip="The other 32 inputs: +0.8 points towards Evloev"></span></div><div class="pm"><b>The other 32 inputs</b><span>together</span><em>+0.8 Evloev</em></div><div class="pr"></div></div>
+</div>
+<figcaption>Every fight starts at 50&ndash;50. SHAP splits the prediction into one push per input, and the pushes add up: about 22 points towards Evloev minus 14 towards Volkanovski takes Evloev from 50% to 58%. Age was the biggest single push, the champion's Elo the biggest one back.</figcaption>
+</figure>
+  </div>
   <p class="note">The test above used a model trained on 2014&ndash;2024. The previews use the same frozen recipe retrained on all 6,276 fights from 2014 to October 2026.</p>
 </section>
 
@@ -181,5 +245,17 @@ footer p{max-width:none} footer p+p{margin-top:8px}
   <p>Event artwork &copy; its owners, supplied by the author and shown for illustration. This site is an independent model preview, not affiliated with or endorsed by the UFC.</p>
 </footer>
 </div>
+<div id="tip" role="tooltip"></div>
+<script>
+(function(){var t=document.getElementById('tip');
+function show(e,el){t.textContent=el.getAttribute('data-tip');t.classList.add('on');
+var r=el.getBoundingClientRect(),x=e&&e.clientX!=null?e.clientX:r.left+r.width/2,y=e&&e.clientY!=null?e.clientY:r.top;
+var w=t.offsetWidth;t.style.left=Math.max(8,Math.min(innerWidth-w-8,x-w/2))+'px';t.style.top=Math.max(8,y-t.offsetHeight-12)+'px';}
+function hide(){t.classList.remove('on');}
+document.querySelectorAll('[data-tip]').forEach(function(el){
+el.addEventListener('pointerenter',function(e){show(e,el)});el.addEventListener('pointermove',function(e){show(e,el)});
+el.addEventListener('pointerleave',hide);el.addEventListener('focus',function(){show(null,el)});el.addEventListener('blur',hide);});
+})();
+</script>
 </body>
 </html>
