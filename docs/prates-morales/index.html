@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Teo's UFC ML Predictor picks Morales, 67% to 33%, for the UFC 336 interim welterweight title fight, and shows why.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Teo's UFC ML Predictor">
+<meta property="og:title" content="Prates vs Morales">
+<meta property="og:description" content="Teo's UFC ML Predictor picks Morales, 67% to 33%, for the UFC 336 interim welterweight title fight, and shows why.">
+<meta property="og:url" content="https://matteoberagnoli.github.io/ufc_fight_predictor/prates-morales/">
+<meta property="og:image" content="https://matteoberagnoli.github.io/ufc_fight_predictor/prates-morales/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>Prates vs Morales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@600;800;900&family=Chivo:ital,wght@0,400;0,600;0,700;1,400&family=Chivo+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a fight-poster header (red corner left, blue corner right), then one reading column scored like a scorecard. Single dark look by choice: fight night. */
+:root {
+  color-scheme: dark;
+  --bg: #0D0D10;
+  --panel: #17171C;
+  --line: #2C2C33;
+  --ink: #F4F2ED;
+  --muted: #A3A0A9;
+  --red: #E2343D;      /* red corner: Prates, billed first */
+  --blue: #3D7FE3;     /* blue corner: Morales */
+  --gold: #D6B04C;     /* the interim belt */
+  --display: "Saira Extra Condensed", "Arial Narrow", Impact, sans-serif;
+  --body: "Chivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Chivo Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 18px; padding-block: 0 72px; }
+p { margin: 0; max-width: 66ch; }
+p + p { margin-top: .8em; }
+a { color: var(--gold); }
+a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+small { color: var(--muted); }
+
+/* ---------- poster ---------- */
+.poster { position: relative; margin-inline: -18px; padding: 26px 18px 30px; overflow: hidden; border-bottom: 4px solid var(--gold);
+  background: radial-gradient(60% 90% at 0% 40%, rgba(226,52,61,.28), transparent 70%), radial-gradient(60% 90% at 100% 40%, rgba(61,127,227,.28), transparent 70%), var(--bg); }
+.meta { position: relative; text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.meta b { color: var(--gold); font-weight: 600; }
+.art { position: relative; margin: 20px auto 0; border-radius: 3px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 18px 48px rgba(0,0,0,.5); }
+.art img { display: block; width: 100%; height: auto; }
+.card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 10px; margin-top: clamp(22px, 4vw, 32px); }
+.corner { min-width: 0; text-align: center; }
+.name { font-family: var(--display); font-weight: 900; text-transform: uppercase; line-height: .86; letter-spacing: .01em; font-size: clamp(30px, 8.6vw, 84px); position: relative; text-wrap: balance; overflow-wrap: anywhere; }
+.first { display: block; font-size: .42em; font-weight: 600; letter-spacing: .08em; color: var(--muted); margin-bottom: .1em; }
+.tag { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 9px; border-radius: 2px; }
+.red .tag { background: var(--red); color: var(--ink); }
+.blue .tag { background: var(--blue); color: var(--ink); }
+.vs { align-self: center; font-family: var(--display); font-weight: 900; font-size: clamp(26px, 5vw, 48px); color: var(--gold); padding-bottom: 26px; }
+.belt { position: relative; text-align: center; margin-top: 16px; font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: clamp(18px, 3.4vw, 26px); }
+.belt span { color: var(--gold); }
+.indep { position: relative; text-align: center; margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+
+/* ---------- the call ---------- */
+.call { padding-block: 54px 0; }
+.callkick { text-align: center; }
+.callhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: 12px; font-family: var(--display); font-weight: 900; text-transform: uppercase; }
+.cside { min-width: 0; }
+.cside.e { text-align: right; }
+.cside.v { color: var(--red); } .cside.e { color: var(--blue); }
+.big { display: block; font-size: clamp(88px, 23vw, 184px); line-height: .82; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.cname { display: block; margin-top: 8px; font-size: clamp(26px, 5.4vw, 46px); line-height: .92; font-weight: 800; }
+.cname small { display: block; font-size: .46em; font-weight: 600; letter-spacing: .08em; color: var(--muted); margin-bottom: .15em; }
+.pickbadge { display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; color: var(--bg); background: var(--gold); padding: 4px 9px; border-radius: 2px; }
+.split { position: relative; display: flex; height: 30px; margin-top: 16px; border-radius: 2px; overflow: hidden; }
+.split .v { background: var(--red); } .split .e { background: var(--blue); }
+.split::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 2px dashed var(--ink); opacity: .7; }
+.evenmark { max-width: none; display: flex; justify-content: center; margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.pick { margin-top: 18px; font-size: 20px; max-width: 62ch; }
+.pick b { color: var(--blue); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 20px; }
+.facts div { background: var(--bg); padding: 12px 14px; min-width: 0; }
+.facts dt { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 4px 0 0; font-size: 15px; }
+.facts dd b { font-family: var(--display); font-size: 28px; font-weight: 800; display: block; line-height: 1.05; }
+@media (max-width: 640px) { .facts { grid-template-columns: 1fr; } }
+
+/* ---------- sections ---------- */
+section { padding-block: 46px 0; }
+h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(30px, 6vw, 44px); line-height: 1; letter-spacing: .01em; margin: 0 0 12px; text-wrap: balance; }
+h2 .round { display: block; font-family: var(--mono); font-weight: 400; font-size: 12px; letter-spacing: .16em; color: var(--gold); margin-bottom: 6px; }
+.lede { color: var(--muted); font-size: 16px; margin-bottom: 18px; }
+.legend { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+.legend .v { color: var(--red); } .legend .e { color: var(--blue); }
+
+/* tug of war */
+.tug { display: flex; height: 54px; gap: 2px; border-radius: 2px; overflow: hidden; }
+.tside { display: flex; gap: 2px; min-width: 0; }
+.tseg { position: relative; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding-inline: 8px; overflow: hidden; }
+.tseg.e { background: rgba(61,127,227,.85); } .tseg.v { background: rgba(226,52,61,.85); }
+.tseg i { font-style: normal; font-size: 11.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tseg b { font-family: var(--display); font-size: 22px; line-height: 1; }
+.tugnote { margin-top: 10px; font-size: 15px; color: var(--muted); }
+
+/* factor chart */
+.factors { margin-top: 22px; display: grid; gap: 4px; }
+.frow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(170px, 300px) minmax(0, 1fr); align-items: center; gap: 12px; padding-block: 7px; border-bottom: 1px solid var(--line); }
+.fl { display: flex; justify-content: flex-end; } .fr { display: flex; }
+.fbar { display: block; height: 14px; border-radius: 1px; }
+.fbar.v { background: var(--red); } .fbar.e { background: var(--blue); }
+.fmid { text-align: center; min-width: 0; }
+.fmid b { display: block; font-size: 15px; }
+.fmid span { display: block; font-size: 13.5px; color: var(--muted); }
+.fmid em { display: block; font-style: normal; font-family: var(--mono); font-size: 12.5px; }
+em.v { color: var(--red); } em.e { color: var(--blue); }
+@media (max-width: 600px) { .frow { grid-template-columns: minmax(0, 1fr) minmax(140px, 1.6fr) minmax(0, 1fr); gap: 8px; } }
+
+/* tale of the tape */
+.tape { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); border-top: 1px solid var(--line); }
+.tape > div { padding: 10px 6px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.tape .tv { text-align: right; font-family: var(--display); font-weight: 800; font-size: 24px; }
+.tape .te { text-align: left; font-family: var(--display); font-weight: 800; font-size: 24px; }
+.tape .tk { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); align-self: center; min-width: 9em; }
+.tape small { font-family: var(--body); font-weight: 400; font-size: 13px; }
+
+/* ratings */
+.rkey { display: flex; gap: 18px; font-family: var(--mono); font-size: 12px; margin-bottom: 8px; }
+.rkey i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; border-radius: 1px; }
+.rrow { display: grid; grid-template-columns: 11em minmax(0, 1fr); gap: 14px; align-items: center; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.rname { font-weight: 600; font-size: 15px; }
+.rbars { display: grid; gap: 5px; min-width: 0; }
+.rb { position: relative; height: 18px; background: var(--panel); border-radius: 1px; }
+.rfill { position: absolute; inset: 0 auto 0 0; border-radius: 1px; }
+.rfill.v { background: var(--red); } .rfill.e { background: var(--blue); }
+.rb b { position: absolute; right: 6px; top: 0; font-family: var(--mono); font-size: 12px; line-height: 18px; }
+.rb::before { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; border-left: 1px dashed var(--muted); opacity: .6; z-index: 1; }
+@media (max-width: 520px) { .rrow { grid-template-columns: 1fr; gap: 6px; } }
+
+/* stat duel */
+.duel { border-top: 1px solid var(--line); }
+.drow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 1.5fr) minmax(0, 1fr); gap: 10px; align-items: center; padding-block: 9px; border-bottom: 1px solid var(--line); }
+.dv { text-align: right; } .de { text-align: left; }
+.dv b, .de b { font-family: var(--display); font-weight: 800; font-size: 24px; color: var(--muted); display: block; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.dv.win b { color: var(--red); } .de.win b { color: var(--blue); }
+.dv small, .de small { font-family: var(--mono); font-size: 11px; }
+.dl { text-align: center; font-size: 14.5px; }
+.dl small { display: block; font-family: var(--mono); font-size: 11px; }
+
+/* notes */
+.panel { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--gold); padding: 16px 18px; margin-top: 16px; }
+.panel p { max-width: none; font-size: 15.5px; }
+.blind { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 10px; }
+.blind li { background: var(--panel); border: 1px solid var(--line); padding: 12px 14px; font-size: 15.5px; }
+.blind b { display: block; font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .03em; font-size: 19px; }
+footer { margin-top: 54px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+footer p { max-width: none; }
+/* ---------- the record (top banner) ---------- */
+.record { margin-inline: -18px; padding: 26px 18px 24px; background: var(--panel); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 18px 34px; align-items: center; }
+.kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); max-width: none; }
+.modelname { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(40px, 8vw, 68px); line-height: .88; letter-spacing: .01em; margin: 8px 0 0; text-wrap: balance; }
+.modelname span { color: var(--gold); }
+.recscope { margin-top: 12px; font-size: 14.5px; line-height: 1.5; color: var(--muted); max-width: 52ch; }
+.recscope b { color: var(--ink); font-weight: 600; }
+.recnums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.recnums div { background: var(--bg); padding: 14px 16px; min-width: 0; }
+.recnums b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(32px, 5vw, 42px); line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
+.recnums span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; }
+.recnums small { display: block; margin-top: 2px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+@media (max-width: 720px) { .record { grid-template-columns: 1fr; } }
+
+/* ---------- how the chance is made ---------- */
+.steps { list-style: none; counter-reset: step; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.steps li { background: var(--bg); padding: 14px; min-width: 0; counter-increment: step; }
+.steps li::before { content: counter(step); display: block; font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1; color: var(--gold); }
+.steps b { display: block; font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 20px; letter-spacing: .02em; margin-top: 4px; }
+.steps p { font-size: 14.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.steps strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 780px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .steps { grid-template-columns: 1fr; } }
+figure.fig { margin: 26px 0 0; }
+.chart { display: block; width: 100%; max-width: 640px; height: auto; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .zone { fill: rgba(214,176,76,.13); }
+.chart .zl { fill: var(--gold); font-family: var(--mono); font-size: 12.5px; letter-spacing: .08em; }
+.chart .hbar { fill: var(--muted); opacity: .26; }
+.chart .curve { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+.chart .guide { stroke: var(--blue); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.chart .dot { fill: var(--blue); stroke: var(--bg); stroke-width: 2; }
+.chart .ml { fill: var(--ink); font-family: var(--body); font-weight: 700; font-size: 15px; }
+.chart .ax { fill: var(--muted); font-family: var(--mono); font-size: 12.5px; }
+@media (max-width: 560px) { .chart .ax { font-size: 17px; } .chart .ml { font-size: 20px; } .chart .zl { font-size: 16px; } }
+figcaption { margin-top: 8px; font-size: 14px; color: var(--muted); max-width: 66ch; line-height: 1.5; }
+h3 { font-family: var(--display); text-transform: uppercase; font-size: 24px; line-height: 1.1; margin: 34px 0 8px; }
+
+/* ---------- how it could play out ---------- */
+.story p { font-size: 17.5px; line-height: 1.65; }
+.story p + p { margin-top: 1em; }
+.story .dek { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.story strong { color: var(--ink); }
+.verdict { margin-top: 22px; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--blue); }
+.verdict p { max-width: none; font-size: 17px; }
+.verdict b { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; font-size: 20px; color: var(--blue); margin-right: 6px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+.poster p { margin-inline: auto; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="poster">
+  <p class="meta"><b>UFC 336</b> &middot; Scotiabank Arena, Toronto &middot; Saturday 30 January 2027</p>
+  <figure class="art" style="max-width:445px"><img src="event_art.jpg" width="445" height="523" alt="UFC 336 poster: Carlos Prates and Michael Morales either side of the interim welterweight belt, in front of the Toronto skyline"></figure>
+  <div class="card">
+    <div class="corner red">
+      <div class="name"><span class="first">Carlos</span>Prates</div>
+      <span class="tag">Brazil &middot; UFC 7-1</span>
+    </div>
+    <div class="vs">VS</div>
+    <div class="corner blue">
+      <div class="name"><span class="first">Michael</span>Morales</div>
+      <span class="tag">Ecuador &middot; UFC 7-0</span>
+    </div>
+  </div>
+  <p class="belt"><span>Interim welterweight title</span> &middot; 5 &times; 5 minutes</p>
+  <p class="indep">A preview from <b>Teo's UFC ML Predictor</b>, an independent statistical model. Not affiliated with or endorsed by the UFC.</p>
+</header>
+
+<section class="record" aria-labelledby="rec-h">
+  <div>
+    <p class="kicker">The model behind this preview</p>
+    <h2 class="modelname" id="rec-h">Teo's UFC <span>ML</span> Predictor</h2>
+    <p class="recscope">Record on fights it had never seen: <b>643 men's fights from 2025&ndash;26 with no debutant</b>, the same kind of fight as this one, scored once after the model was frozen.</p>
+  </div>
+  <div class="recnums">
+    <div><b>64.9%</b><span>Winners picked</span><small>coin flip 50%</small></div>
+    <div><b>0.640</b><span>Log loss</span><small>lower is better<br>coin flip 0.693</small></div>
+  </div>
+</section>
+
+<section class="call" aria-labelledby="call-h">
+  <p class="kicker callkick" id="call-h">The prediction</p>
+  <div class="callhead">
+    <div class="cside v"><span class="big">33%</span><span class="cname"><small>Carlos</small>Prates</span></div>
+    <div class="cside e"><span class="pickbadge">Model's pick</span><span class="big">67%</span><span class="cname"><small>Michael</small>Morales</span></div>
+  </div>
+  <div class="split" role="img" aria-label="Model: Prates 33%, Morales 67%"><span class="v" style="width:33.2%"></span><span class="e" style="width:66.8%"></span></div>
+  <p class="evenmark">50&ndash;50</p>
+  <p class="pick">Teo's UFC ML Predictor picks <b>Michael Morales</b>, giving him about two chances in three. Age and defence pull towards Morales; Prates' wins over stronger opposition pull back.</p>
+  <dl class="facts">
+    <div><dt>How firm is it</dt><dd><b>59&ndash;69%</b>Morales' chance in 36 of 40 retrainings on a random redraw of past fights</dd></div>
+    <div><dt>Track record</dt><dd><b>68%</b>right in 193 similar fights (2025&ndash;26, men, no debutant) where it was this sure</dd></div>
+    <div><dt>Built from</dt><dd><b>40 inputs</b>known before the fight; trained on 6,276 UFC fights</dd></div>
+  </dl>
+</section>
+
+<section>
+  <h2><span class="round">Round 1</span>Why the model leans Morales</h2>
+  <p class="lede">The model starts every fight at 50&ndash;50. Each factor then pushes the prediction towards one fighter, by a number of percentage points. These pushes come from SHAP, a method that splits a prediction into one piece per input.</p>
+  <div class="legend"><span class="v">&larr; towards Prates &middot; 6 pts</span><span class="e">22 pts &middot; towards Morales &rarr;</span></div>
+  <div class="tug" role="img" aria-label="Prates' side: Quality of opposition 6. Morales' side: Age and body 11, Defence 7, Record and layoff 2, Striking 2, Wrestling 1.">
+    <div class="tside" style="flex:5.51"><span class="tseg v" style="flex:5.51" title="Quality of opposition: 5.5 points"><i>Quality of opposition</i><b>6</b></span></div>
+    <div class="tside" style="flex:22.27"><span class="tseg e" style="flex:11.14" title="Age and body: 11.1 points"><i>Age and body</i><b>11</b></span><span class="tseg e" style="flex:6.75" title="Defence: 6.7 points"><i>Defence</i><b>7</b></span><span class="tseg e" style="flex:2.00" title="Record and layoff: 2.0 points"><i>Record and layoff</i><b>2</b></span><span class="tseg e" style="flex:1.68" title="Striking: 1.7 points"><i>Striking</i><b>2</b></span><span class="tseg e" style="flex:0.70" title="Wrestling: 0.7 points"><i>Wrestling</i><b>1</b></span></div>
+  </div>
+  <p class="tugnote">Morales' side outweighs Prates' by about 17 points, which takes him from 50% up to 67%. Points are approximate: the model adds its pushes up on an internal score, and here they are scaled to add up to the final chance.</p>
+
+  <div class="factors">
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Age</b><span>Prates is 33, Morales 27</span><em class="e">+11.4 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:100.0%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"><span class="fbar v" style="width:48.3%"></span></div>
+      <div class="fmid"><b>Quality of wins (Elo rating)</b><span>Prates 2043, Morales 1981</span><em class="v">+5.5 pts Prates</em></div>
+      <div class="fr"></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Head strikes that land on him</b><span>40% against 37%</span><em class="e">+3.1 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:27.0%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Leg strikes that land on him</b><span>80% against 75%</span><em class="e">+2.0 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:17.8%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Winning record</b><span>7-1 against an unbeaten 7-0</span><em class="e">+1.9 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:16.3%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Head-strike accuracy</b><span>42% against 43%</span><em class="e">+1.4 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:12.0%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"><span class="fbar v" style="width:11.3%"></span></div>
+      <div class="fmid"><b>Accuracy at range</b><span>50% against 45%</span><em class="v">+1.3 pts Prates</em></div>
+      <div class="fr"></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Significant strikes thrown</b><span>122 against 161 per 15 minutes</span><em class="e">+1.3 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:11.3%"></span></div>
+    </div>
+<div class="frow">
+      <div class="fl"></div>
+      <div class="fmid"><b>Everything else</b><span>the other 32 inputs together</span><em class="e">+2.5 pts Morales</em></div>
+      <div class="fr"><span class="fbar e" style="width:22.1%"></span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p><b>Age is the single biggest factor.</b> The six-year gap is worth about 11 points to the younger man, twice Prates' whole Elo edge. <b>Elo is Prates' best argument:</b> it measures who you beat, not just whether you won. His last two wins were knockouts of former champions Leon Edwards and Jack Della Maddalena, and the rating counts a finish as a full win, so his Elo sits 62 points above Morales'. <b>Defence is Morales' second reason:</b> head strikes land on him 37% of the time and leg strikes 75%, against 40% and 80% for Prates.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="round">Round 2</span>How the chance is calculated</h2>
+  <p class="lede">The model never sees names or reputations. It turns 40 numbers about the two fighters into a chance, in four steps.</p>
+  <ol class="steps">
+    <li><b>Measure</b><p>40 numbers known before fight night, mostly gaps between the two men: <strong>6 years</strong> of age, <strong>62 Elo points</strong>, <strong>39 more significant strikes</strong> thrown per 15 minutes by Morales.</p></li>
+    <li><b>Ask the trees</b><p>950 small decision trees each ask a few yes-or-no questions about those gaps, such as how wide the age gap is, and nudge a score up or down.</p></li>
+    <li><b>Add and average</b><p>The nudges add up to one score. Eight versions of the model, with each fighter tried in both corners, are averaged: <strong>+0.70 towards Morales</strong>. Zero would be dead even.</p></li>
+    <li><b>Turn it into a chance</b><p>An S-shaped curve turns the score into a percentage, tuned on past fights so its percentages come true as often as they say: <strong>+0.70 becomes 67%</strong>.</p></li>
+  </ol>
+
+  <figure class="fig">
+    <svg viewBox="0 0 520 340" class="chart" role="img" aria-label="An S-shaped curve turns the model's score into Morales' chance. This fight scores plus 0.70, which becomes 67%. It sits to the right of the close-call zone between 40% and 60%, where 38% of the test fights fall.">
+  <rect x="243.0" y="32" width="76.0" height="254" class="zone"/>
+  <text x="281.0" y="20" class="zl" text-anchor="middle">CLOSE CALLS &middot; 40&ndash;60%</text>
+  <line x1="56" x2="506" y1="286.0" y2="286.0" class="grid"/><text x="48" y="290.0" class="ax" text-anchor="end">0%</text><line x1="56" x2="506" y1="222.5" y2="222.5" class="grid"/><text x="48" y="226.5" class="ax" text-anchor="end">25%</text><line x1="56" x2="506" y1="159.0" y2="159.0" class="grid"/><text x="48" y="163.0" class="ax" text-anchor="end">50%</text><line x1="56" x2="506" y1="95.5" y2="95.5" class="grid"/><text x="48" y="99.5" class="ax" text-anchor="end">75%</text><line x1="56" x2="506" y1="32.0" y2="32.0" class="grid"/><text x="48" y="36.0" class="ax" text-anchor="end">100%</text>
+  <rect x="75.8" y="284.6" width="16.8" height="1.4" class="hbar"/><rect x="94.5" y="281.1" width="16.8" height="4.9" class="hbar"/><rect x="113.3" y="279.6" width="16.8" height="6.4" class="hbar"/><rect x="132.0" y="273.3" width="16.8" height="12.7" class="hbar"/><rect x="150.8" y="257.1" width="16.8" height="28.9" class="hbar"/><rect x="169.5" y="246.5" width="16.8" height="39.5" class="hbar"/><rect x="188.3" y="224.6" width="16.8" height="61.4" class="hbar"/><rect x="207.0" y="228.8" width="16.8" height="57.2" class="hbar"/><rect x="225.8" y="212.6" width="16.8" height="73.4" class="hbar"/><rect x="244.5" y="202.0" width="16.8" height="84.0" class="hbar"/><rect x="263.3" y="202.0" width="16.8" height="84.0" class="hbar"/><rect x="282.0" y="202.0" width="16.8" height="84.0" class="hbar"/><rect x="300.8" y="202.0" width="16.8" height="84.0" class="hbar"/><rect x="319.5" y="212.6" width="16.7" height="73.4" class="hbar"/><rect x="338.3" y="228.8" width="16.8" height="57.2" class="hbar"/><rect x="357.0" y="224.6" width="16.8" height="61.4" class="hbar"/><rect x="375.8" y="246.5" width="16.7" height="39.5" class="hbar"/><rect x="394.5" y="257.1" width="16.8" height="28.9" class="hbar"/><rect x="413.3" y="273.3" width="16.8" height="12.7" class="hbar"/><rect x="432.0" y="279.6" width="16.8" height="6.4" class="hbar"/><rect x="450.8" y="281.1" width="16.8" height="4.9" class="hbar"/><rect x="469.5" y="284.6" width="16.8" height="1.4" class="hbar"/>
+  <polyline points="56.0,264.9 59.8,264.1 63.5,263.3 67.3,262.4 71.0,261.6 74.8,260.7 78.5,259.7 82.2,258.8 86.0,257.8 89.8,256.8 93.5,255.7 97.2,254.6 101.0,253.5 104.8,252.4 108.5,251.2 112.3,250.0 116.0,248.7 119.8,247.4 123.5,246.1 127.3,244.7 131.0,243.3 134.8,241.9 138.5,240.4 142.2,238.9 146.0,237.3 149.8,235.8 153.5,234.1 157.2,232.5 161.0,230.7 164.8,229.0 168.5,227.2 172.2,225.4 176.0,223.5 179.8,221.6 183.5,219.7 187.2,217.7 191.0,215.7 194.8,213.6 198.5,211.5 202.2,209.4 206.0,207.3 209.8,205.1 213.5,202.8 217.2,200.6 221.0,198.3 224.8,196.0 228.5,193.7 232.2,191.3 236.0,188.9 239.8,186.5 243.5,184.1 247.3,181.6 251.0,179.1 254.7,176.7 258.5,174.2 262.2,171.7 266.0,169.1 269.8,166.6 273.5,164.1 277.2,161.5 281.0,159.0 284.8,156.5 288.5,153.9 292.2,151.4 296.0,148.9 299.8,146.3 303.5,143.8 307.2,141.3 311.0,138.9 314.8,136.4 318.5,133.9 322.3,131.5 326.0,129.1 329.8,126.7 333.5,124.3 337.2,122.0 341.0,119.7 344.8,117.4 348.5,115.2 352.2,112.9 356.0,110.7 359.8,108.6 363.5,106.5 367.2,104.4 371.0,102.3 374.8,100.3 378.5,98.3 382.2,96.4 386.0,94.5 389.8,92.6 393.5,90.8 397.3,89.0 401.0,87.3 404.8,85.5 408.5,83.9 412.2,82.2 416.0,80.7 419.8,79.1 423.5,77.6 427.3,76.1 431.0,74.7 434.8,73.3 438.5,71.9 442.2,70.6 446.0,69.3 449.8,68.0 453.5,66.8 457.2,65.6 461.0,64.5 464.7,63.4 468.5,62.3 472.2,61.2 476.0,60.2 479.8,59.2 483.5,58.3 487.2,57.3 491.0,56.4 494.8,55.6 498.5,54.7 502.2,53.9 506.0,53.1" class="curve"/>
+  <line x1="346.3" x2="346.3" y1="116.4" y2="286.0" class="guide"/>
+  <line x1="56" x2="346.3" y1="116.4" y2="116.4" class="guide"/>
+  <circle cx="346.3" cy="116.4" r="6.5" class="dot"/>
+  <text x="332.3" y="58.4" class="ml" text-anchor="end"><tspan>This fight</tspan><tspan x="332.3" dy="1.25em">+0.70 &rarr; 67% Morales</tspan></text>
+  <text x="93.5" y="305.0" class="ax" text-anchor="middle">-2</text><text x="187.2" y="305.0" class="ax" text-anchor="middle">-1</text><text x="281.0" y="305.0" class="ax" text-anchor="middle">0</text><text x="374.8" y="305.0" class="ax" text-anchor="middle">+1</text><text x="468.5" y="305.0" class="ax" text-anchor="middle">+2</text>
+  <text x="56" y="332" class="ax">&larr; towards Prates</text>
+  <text x="506" y="332" class="ax" text-anchor="end">towards Morales &rarr;</text>
+</svg>
+    <figcaption>The model's score runs along the bottom; the white curve turns it into a chance. Grey bars show where the 643 test fights landed: most sit near the middle, and 38% fall in the close-call zone, where neither fighter gets more than 60%. This fight sits to the right of it: about 4 test fights in ten were at least this one-sided.</figcaption>
+  </figure>
+
+  <h3>How firm is 67%?</h3>
+  <p>The eight versions of the model barely disagree here (Morales 66&ndash;67%), but all eight learn from the same 6,276 fights. A sterner test retrains the model 40 times, each time on a random redraw of those fights, so some count twice and others drop out. The middle 36 answers run from <b>59% to 69%</b>. All 40 still pick Morales, so the pick holds, but the exact number is softer than one figure suggests.</p>
+</section>
+
+<section>
+  <h2><span class="round">Round 3</span>Tale of the tape</h2>
+  <div class="legend"><span class="v">Prates</span><span class="e">Morales</span></div>
+  <div class="tape">
+    <div class="tv">33</div><div class="tk">Age on fight night</div><div class="te">27</div>
+    <div class="tv">185 <small>cm &middot; 6&prime;1&Prime;</small></div><div class="tk">Height</div><div class="te">183 <small>cm &middot; 6&prime;0&Prime;</small></div>
+    <div class="tv">198 <small>cm &middot; 78&Prime;</small></div><div class="tk">Reach</div><div class="te">201 <small>cm &middot; 79&Prime;</small></div>
+    <div class="tv">7-1</div><div class="tk">UFC record</div><div class="te">7-0</div>
+    <div class="tv">2043 <small>#5</small></div><div class="tk">Elo &middot; pound for pound</div><div class="te">1981 <small>#16</small></div>
+    <div class="tv">9 <small>months</small></div><div class="tk">Since last fight</div><div class="te">14 <small>months</small></div>
+  </div>
+  <p class="lede" style="margin-top:12px">Height and reach are nearly level, so the model barely uses them here. By fight night Morales will have been out for 14 months. The model sees the layoff but gives it a fifth of a point; in past fights, men returning after 12 to 18 months out won about 3 points less often than their Elo predicted. Pound-for-pound ranks are as of 10 October.</p>
+</section>
+
+<section>
+  <h2><span class="round">Round 4</span>Two styles</h2>
+  <p class="lede">Four ratings from 0 to 100, built only from the model's own inputs: each fighter's last 8 fights, compared with 617 men active in the 18 months to 10 October. 50 is the typical active fighter (dashed line).</p>
+  <div class="rkey"><span><i style="background:var(--red)"></i>Prates</span><span><i style="background:var(--blue)"></i>Morales</span></div>
+  <div class="rrow"><div class="rname">Striking attack</div>
+      <div class="rbars"><div class="rb"><span class="rfill v" style="width:62%"></span><b>62</b></div>
+      <div class="rb"><span class="rfill e" style="width:66%"></span><b>66</b></div></div></div>
+<div class="rrow"><div class="rname">Striking defence</div>
+      <div class="rbars"><div class="rb"><span class="rfill v" style="width:53%"></span><b>53</b></div>
+      <div class="rb"><span class="rfill e" style="width:75%"></span><b>75</b></div></div></div>
+<div class="rrow"><div class="rname">Grappling attack</div>
+      <div class="rbars"><div class="rb"><span class="rfill v" style="width:23%"></span><b>23</b></div>
+      <div class="rb"><span class="rfill e" style="width:20%"></span><b>20</b></div></div></div>
+<div class="rrow"><div class="rname">Grappling defence</div>
+      <div class="rbars"><div class="rb"><span class="rfill v" style="width:77%"></span><b>77</b></div>
+      <div class="rb"><span class="rfill e" style="width:80%"></span><b>80</b></div></div></div>
+  <p style="margin-top:14px">Two strikers who leave wrestling alone. <b>Both</b> rarely shoot and are hard to take down, so the numbers expect a fight on the feet. <b>Morales</b> throws more and gets hit less. <b>Prates</b> is the sharper and heavier hitter: more accurate at range, with the highest knockdown rate of the 617 active men.</p>
+
+  <h3 style="font-family:var(--display);text-transform:uppercase;font-size:24px;margin:30px 0 8px">The numbers behind it</h3>
+  <p class="lede">Last 8 fights, smoothed towards the league average when the sample is small. "Top x%" is the rank among active men; the brighter number is the better one.</p>
+  <div class="duel">
+<div class="drow"><div class="dv "><b>122.3</b><small>top 55%</small></div>
+      <div class="dl">Significant strikes thrown<small>/15 min &middot; typical 124.0</small></div>
+      <div class="de win"><b>161.4</b><small>top 7%</small></div></div>
+<div class="drow"><div class="dv win"><b>51%</b><small>top 13%</small></div>
+      <div class="dl">Significant-strike accuracy<small>&nbsp; &middot; typical 48%</small></div>
+      <div class="de "><b>49%</b><small>top 35%</small></div></div>
+<div class="drow"><div class="dv "><b>40%</b><small>top 68%</small></div>
+      <div class="dl">Head strikes that land on him<small>&nbsp; &middot; typical 39%</small></div>
+      <div class="de win"><b>37%</b><small>top 18%</small></div></div>
+<div class="drow"><div class="dv "><b>80%</b><small>top 42%</small></div>
+      <div class="dl">Leg strikes that land on him<small>&nbsp; &middot; typical 81%</small></div>
+      <div class="de win"><b>75%</b><small>top 8%</small></div></div>
+<div class="drow"><div class="dv "><b>124.4</b><small>top 52%</small></div>
+      <div class="dl">Significant strikes faced<small>/15 min &middot; typical 123.8</small></div>
+      <div class="de win"><b>118.1</b><small>top 39%</small></div></div>
+<div class="drow"><div class="dv win"><b>0.97</b><small>top 1%</small></div>
+      <div class="dl">Knockdowns scored<small>/15 min &middot; typical 0.30</small></div>
+      <div class="de "><b>0.71</b><small>top 1%</small></div></div>
+<div class="drow"><div class="dv win"><b>0.19</b><small>top 11%</small></div>
+      <div class="dl">Knockdowns suffered<small>/15 min &middot; typical 0.30</small></div>
+      <div class="de "><b>0.21</b><small>top 16%</small></div></div>
+<div class="drow"><div class="dv "><b>1.1</b><small>top 97%</small></div>
+      <div class="dl">Takedown attempts<small>/15 min &middot; typical 3.7</small></div>
+      <div class="de win"><b>2.0</b><small>top 86%</small></div></div>
+<div class="drow"><div class="dv win"><b>36%</b><small>top 29%</small></div>
+      <div class="dl">Takedown accuracy<small>&nbsp; &middot; typical 36%</small></div>
+      <div class="de "><b>35%</b><small>top 63%</small></div></div>
+<div class="drow"><div class="dv "><b>73%</b><small>top 7%</small></div>
+      <div class="dl">Takedown defence<small>&nbsp; &middot; typical 64%</small></div>
+      <div class="de win"><b>75%</b><small>top 2%</small></div></div>
+<div class="drow"><div class="dv "><b>10%</b><small>top 93%</small></div>
+      <div class="dl">Share of fight in control<small>&nbsp; &middot; typical 17%</small></div>
+      <div class="de win"><b>11%</b><small>top 87%</small></div></div>
+<div class="drow"><div class="dv win"><b>17%</b><small>top 39%</small></div>
+      <div class="dl">Share of fight controlled by opponent<small>&nbsp; &middot; typical 18%</small></div>
+      <div class="de win"><b>17%</b><small>top 39%</small></div></div>
+  </div>
+</section>
+
+<section class="story">
+  <h2><span class="round">Round 5</span>The fight, as the numbers see it</h2>
+  <p class="dek">Early read, three months out &middot; built only from the model and the fight data</p>
+  <p><strong>Two finishers who stay on their feet.</strong> Neither man wrestles: Prates tries 1.1 takedowns per 15 minutes and Morales 2.0, against a typical 3.7, and both stop about three in four of the takedowns tried on them. Neither has been knocked down in the UFC, and both have stopped Trevin Giles and Neil Magny.</p>
+  <p><strong>Prates hits harder, and from further out.</strong> He has scored a knockdown in all seven of his UFC wins, 12 in all, and his rate of 0.97 per 15 minutes is the highest of any active man. At range he lands 50% to Morales' 45%. His last two wins were knockouts of former champions: Leon Edwards at UFC 322, the night Morales stopped Sean Brady, and Jack Della Maddalena in May.</p>
+  <p><strong>Morales throws more and gets hit less.</strong> He averages 161 significant strikes per 15 minutes (top 7% of active men) to Prates' 122, and head strikes land on him 37% of the time against 40% for Prates. His last three fights, against Magny, Gilbert Burns and Brady, were first-round stoppages that lasted 11 minutes 45 seconds in total.</p>
+  <p><strong>The distance is the open question.</strong> Morales has never fought past the third round in the UFC; his longest fights are two 15-minute decisions from 2023. Prates has headlined twice, both times booked for five rounds: he lost the one that went 25 minutes, outlanded 126 to 63 by Ian Machado Garry, and stopped Della Maddalena in the third. At 27 against 33, Morales also has the model's biggest single factor on his side.</p>
+  <div class="verdict">
+    <p><b>The read</b>Morales, on youth, volume and defence. Prates' path is a clean shot: he has knocked down every man he has beaten in the UFC, and his wins over stronger opposition are why the model stops at two chances in three.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="round">After the final bell</span>What the model can't see</h2>
+  <ul class="blind">
+    <li><b>Five rounds</b>It does not know this is a 25-minute title fight. Morales has never been past the third round in the UFC, and Prates' only 25-minute fight was his only UFC loss.</li>
+    <li><b>Fights outside the UFC</b>It sees only UFC fights: 8 for Prates, 7 for Morales. Their full professional records (Prates 24-7, Morales 19-0) include many fights it never sees.</li>
+    <li><b>Fight week</b>Weight cuts, training camps and injuries are not in the data, and the fight is three months away.</li>
+  </ul>
+  <div class="panel">
+    <p>This is an experiment in what a model built from public fight statistics can say about one fight. Treat it as one informed opinion: in fights where it was this sure, it has been right about seven times in ten.</p>
+  </div>
+</section>
+
+<footer>
+  <p><a href="../">Teo's UFC ML Predictor</a>, frozen 17 October 2026, data to 10 October 2026 (<a href="https://www.kaggle.com/datasets/scarekrow/ufc-data">scarekrow/ufc-data</a> on Kaggle, version 20, used with the author's permission for non-commercial purposes). Prediction from the final model: gradient-boosted trees, 8 versions, both corners averaged, calibrated. Factor pushes from SHAP, scaled to the final probability. Firmness band from 40 retrainings on resampled training fights. Fight histories from <a href="http://ufcstats.com">UFC Stats</a>.</p>
+  <p style="margin-top:8px">Date, venue and title status from public reports as of 28 October 2026. Event artwork supplied by the page's author and shown for illustration; its rights stay with their owners. This page is an independent model preview, not affiliated with or endorsed by the UFC.</p>
+</footer>
+
+</div>
+</body>
+</html>

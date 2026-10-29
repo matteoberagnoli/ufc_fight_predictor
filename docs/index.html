@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Fight previews from Teo's UFC ML Predictor, an independent statistical model: a pick, the reasons behind it and what the model cannot see.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Teo's UFC ML Predictor">
+<meta property="og:title" content="Teo's UFC ML Predictor">
+<meta property="og:description" content="Fight previews from Teo's UFC ML Predictor, an independent statistical model: a pick, the reasons behind it and what the model cannot see.">
+<meta property="og:url" content="https://matteoberagnoli.github.io/ufc_fight_predictor/">
+<meta property="og:image" content="https://matteoberagnoli.github.io/ufc_fight_predictor/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>Teo's UFC ML Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@600;800;900&family=Chivo:ital,wght@0,400;0,600;0,700;1,400&family=Chivo+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#0D0D10;--panel:#17171C;--line:#2C2C33;--ink:#F4F2ED;--muted:#A3A0A9;--red:#E2343D;--blue:#3D7FE3;--gold:#D6B04C;
+--display:"Saira Extra Condensed","Arial Narrow",Impact,sans-serif;--body:"Chivo",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Chivo Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding-inline:18px;padding-block:0 64px}
+a{color:var(--gold)} a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+p{margin:0;max-width:66ch} p+p{margin-top:.8em}
+.top{padding-block:52px 34px;border-bottom:4px solid var(--gold)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(46px,10vw,88px);line-height:.88;margin:10px 0 18px;text-wrap:balance}
+h1 span{color:var(--gold)}
+.lede{color:var(--muted);font-size:18px}
+h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(28px,5vw,38px);line-height:1;margin:44px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.fcard{display:flex;flex-direction:column;min-width:0;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.fcard:hover{border-color:var(--gold)}
+.fcard img{display:block;width:100%;height:210px;object-fit:cover;object-position:top}
+.fbody{padding:14px 16px 16px}
+.fev{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.fcard h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:30px;line-height:1;margin:6px 0 8px}
+.fcard h3 span{color:var(--muted);font-size:.6em}
+.fpick{font-size:15.5px}.fpick b{color:var(--ink)}
+.fwhen{font-size:13.5px;color:var(--muted);margin-top:4px}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:6px}
+.how div{background:var(--bg);padding:14px}
+.how b{display:block;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;color:var(--gold)}
+.how span{font-size:15px;color:var(--muted)}
+.nums{display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:16px}
+.nums div{background:var(--bg);padding:12px 18px;flex:1 1 150px}
+.nums b{display:block;font-family:var(--display);font-weight:800;font-size:38px;line-height:1;color:var(--gold)}
+.nums span{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer p{max-width:none} footer p+p{margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <p class="kicker">Independent fight previews</p>
+  <h1>Teo's UFC <span>ML</span> Predictor</h1>
+  <p class="lede">A statistical model that reads each fighter's UFC history and gives each fight a chance for each side, plus the reasons behind it. Each preview shows what pushes the pick, how firm it is, and what the model cannot see.</p>
+</header>
+
+<section>
+  <h2>Fight previews</h2>
+  <div class="grid">
+    <a class="fcard" href="volkanovski-evloev/">
+      <img src="volkanovski-evloev/event_art.jpg" alt="" loading="lazy">
+      <div class="fbody">
+        <p class="fev">UFC 333 &middot; Abu Dhabi</p>
+        <h3>Volkanovski <span>vs</span> Evloev</h3>
+        <p class="fpick">Model's pick: <b>Evloev</b> &middot; 58%</p>
+        <p class="fwhen">Sat 24 Oct 2026 &middot; Fought 24 Oct 2026</p>
+      </div>
+    </a>
+    <a class="fcard" href="prates-morales/">
+      <img src="prates-morales/event_art.jpg" alt="" loading="lazy">
+      <div class="fbody">
+        <p class="fev">UFC 336 &middot; Toronto</p>
+        <h3>Prates <span>vs</span> Morales</h3>
+        <p class="fpick">Model's pick: <b>Morales</b> &middot; 67%</p>
+        <p class="fwhen">Sat 30 Jan 2027 &middot; Upcoming</p>
+      </div>
+    </a>
+    <a class="fcard" href="salkilld-saint-denis/">
+      <img src="salkilld-saint-denis/event_art.jpg" alt="" loading="lazy">
+      <div class="fbody">
+        <p class="fev">UFC Fight Night &middot; Sydney</p>
+        <h3>Salkilld <span>vs</span> Saint Denis</h3>
+        <p class="fpick">Model's pick: <b>Salkilld</b> &middot; 68%</p>
+        <p class="fwhen">Sun 7 Feb 2027 &middot; Upcoming</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <div class="how">
+    <div><b>Measure</b><span>40 numbers known before the fight: age, a rating of who each fighter has beaten, strikes, takedowns, defence.</span></div>
+    <div><b>Predict</b><span>Gradient-boosted decision trees, eight versions averaged, turn the gaps between the two fighters into a chance.</span></div>
+    <div><b>Explain</b><span>SHAP splits each prediction into one push per input, so every pick comes with its reasons.</span></div>
+  </div>
+  <div class="nums">
+    <div><b>64.9%</b><span>winners picked<br>643 unseen men's fights, 2025&ndash;26</span></div>
+    <div><b>0.640</b><span>log loss<br>coin flip 0.693</span></div>
+    <div><b>6,276</b><span>UFC fights<br>trained on, 2014&ndash;2026</span></div>
+  </div>
+  <p style="margin-top:16px">The test fights were scored once, after the model was frozen. The model has never been tuned on them. It is a personal project built to learn and to be explained, not a betting tool, and it uses no betting odds.</p>
+  <p>Code, notebooks and the full method: <a href="https://github.com/matteoberagnoli/ufc_fight_predictor">github.com/matteoberagnoli/ufc_fight_predictor</a>.</p>
+</section>
+
+<footer>
+  <p>Fight histories from <a href="http://ufcstats.com">UFC Stats</a>, through the Kaggle dataset <a href="https://www.kaggle.com/datasets/scarekrow/ufc-data">scarekrow/ufc-data</a> (used with its author's permission for non-commercial purposes).</p>
+  <p>Event artwork &copy; its owners, supplied by the author and shown for illustration. This site is an independent model preview, not affiliated with or endorsed by the UFC.</p>
+</footer>
+</div>
+</body>
+</html>
