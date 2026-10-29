@@ -50,6 +50,25 @@ h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size
 .nums div{background:var(--bg);padding:12px 18px;flex:1 1 150px}
 .nums b{display:block;font-family:var(--display);font-weight:800;font-size:38px;line-height:1;color:var(--gold)}
 .nums span{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+.note{margin-top:12px;font-size:15px;color:var(--muted)} .note b{color:var(--ink)}
+.tables{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px 28px;margin-top:20px}
+table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);padding-bottom:8px}
+th{text-align:right;font-weight:600;font-size:13px;color:var(--muted);padding:6px 0 6px 10px;border-bottom:1px solid var(--line)}
+td{text-align:right;padding:7px 0 7px 10px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+tr.us td{color:var(--gold);font-weight:700}
+.steps{list-style:none;counter-reset:step;padding:0;margin:18px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.steps li{counter-increment:step;background:var(--bg);padding:14px 16px;display:flex;flex-direction:column;min-width:0}
+.steps li::before{content:counter(step);font-family:var(--display);font-weight:900;font-size:32px;line-height:1;color:var(--gold)}
+.steps b{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;margin-top:2px}
+.steps span{font-size:15px;color:var(--muted);margin-top:4px;flex:1}
+.steps em{font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--blue);margin-top:10px}
+.blind{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.blind li{background:var(--panel);border:1px solid var(--line);padding:12px 14px;font-size:15.5px;color:var(--muted)}
+.blind b{display:block;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:19px;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);padding:16px 18px;margin-top:16px}
+.panel p{max-width:none;font-size:15.5px}
 footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 footer p{max-width:none} footer p+p{margin-top:8px}
 </style>
@@ -87,22 +106,73 @@ footer p{max-width:none} footer p+p{margin-top:8px}
 </section>
 
 <section>
-  <h2>How it works</h2>
-  <div class="how">
-    <div><b>Measure</b><span>40 numbers known before the fight: age, a rating of who each fighter has beaten, strikes, takedowns, defence.</span></div>
-    <div><b>Predict</b><span>Gradient-boosted decision trees, eight versions averaged, turn the gaps between the two fighters into a chance.</span></div>
-    <div><b>Explain</b><span>SHAP splits each prediction into one push per input, so every pick comes with its reasons.</span></div>
-  </div>
+  <h2>How well it predicts</h2>
+  <p>The model was frozen, then scored once on <b>812 men's UFC fights from 2025&ndash;26</b> that it had never seen. Nothing was tuned on these fights.</p>
   <div class="nums">
-    <div><b>64.9%</b><span>winners picked<br>643 unseen men's fights, 2025&ndash;26</span></div>
-    <div><b>0.640</b><span>log loss<br>coin flip 0.693</span></div>
-    <div><b>6,276</b><span>UFC fights<br>trained on, 2014&ndash;2026</span></div>
+    <div><b>64.0%</b><span>winners picked<br>coin flip 50%</span></div>
+    <div><b>0.644</b><span>log loss<br>coin flip 0.693</span></div>
+    <div><b>64.9%</b><span>winners picked<br>no debutant in the fight</span></div>
   </div>
-  <div class="grid" style="margin-top:20px">
+  <p class="note"><b>Log loss</b> scores the percentages, not just the pick: a confident wrong call costs far more than a cautious one. Lower is better.</p>
+  <div class="tables">
+    <table>
+      <caption>Against simple rules, same 812 fights</caption>
+      <thead><tr><th scope="col">Predictor</th><th scope="col">Picked</th><th scope="col">Log loss</th></tr></thead>
+      <tbody>
+        <tr><td>Coin flip</td><td>50.0%</td><td>0.693</td></tr>
+        <tr><td>Better win rate wins</td><td>57.4%</td><td>0.679</td></tr>
+        <tr><td>Younger fighter wins</td><td>60.7%</td><td>0.661</td></tr>
+        <tr class="us"><td>Teo's UFC ML Predictor</td><td>64.0%</td><td>0.644</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <caption>Do its percentages come true?</caption>
+      <thead><tr><th scope="col">Fights, in five equal groups</th><th scope="col">Model said</th><th scope="col">Fighter won</th></tr></thead>
+      <tbody>
+        <tr><td>Least likely fifth</td><td>26%</td><td>27%</td></tr>
+        <tr><td>Second</td><td>39%</td><td>38%</td></tr>
+        <tr><td>Middle</td><td>50%</td><td>53%</td></tr>
+        <tr><td>Fourth</td><td>60%</td><td>57%</td></tr>
+        <tr><td>Most likely fifth</td><td>73%</td><td>73%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The weak spot is fights with a UFC debutant: 61.0% picked, because the model has no UFC history to read for the newcomer.</p>
+</section>
+
+<section>
+  <h2>How it gets to a prediction</h2>
+  <p>The model never sees names or reputations, only numbers built from each fighter's UFC history. The worked example is UFC 333, Volkanovski vs Evloev, which the model scored at 58&ndash;42 for Evloev. Volkanovski won by TKO in round 2.</p>
+  <ol class="steps">
+    <li><b>Build the inputs</b><span>Every UFC fight since 1994 is turned into 40 numbers known before fight night, mostly gaps between the two fighters: age, reach, an Elo rating of who each has beaten (a finish counts more than a split decision), and striking, wrestling and defence averaged over the last 8 fights. Short records are pulled towards the league average.</span><em>Evloev 6 years younger, Elo 119 points lower</em></li>
+    <li><b>Ask the trees</b><span>950 small decision trees, each asking at most four yes-or-no questions such as &ldquo;is the age gap over 1.5 years?&rdquo;, add their nudges into one score. A curve turns the score into a chance.</span><em>Evloev 49.8%</em></li>
+    <li><b>Swap the corners</b><span>The fight is asked again with the fighters swapped and the two answers are averaged, so the result can't depend on who is listed first.</span><em>Evloev 56.4%</em></li>
+    <li><b>Average eight versions</b><span>Eight copies of the model, each trained with a different random seed, are averaged to remove the luck of one draw.</span><em>Evloev 56.4%</em></li>
+    <li><b>Calibrate</b><span>One stretch factor, fitted on past fights, makes the percentages come true as often as they say (the table above).</span><em>Evloev 57.9%</em></li>
+    <li><b>Explain</b><span>SHAP splits the prediction into one push per input, so every pick comes with its reasons.</span><em>Age +12 pts Evloev, Elo +9 pts Volkanovski</em></li>
+  </ol>
+  <p class="note">The test above used a model trained on 2014&ndash;2024. The previews use the same frozen recipe retrained on all 6,276 fights from 2014 to October 2026.</p>
+</section>
+
+<section>
+  <h2>What the model can't see</h2>
+  <ul class="blind">
+    <li><b>Fights outside the UFC</b>It reads only UFC fights. A fighter's earlier record elsewhere is invisible, and a fighter with no UFC fight can't be predicted at all.</li>
+    <li><b>Five rounds</b>It doesn't know whether a fight is scheduled for 15 or 25 minutes, or whether a title is at stake.</li>
+    <li><b>Where the fight is</b>Home crowd, travel and time zones are not inputs.</li>
+    <li><b>Fight week</b>Weight cuts, training camps, injuries and late replacements are not in the data.</li>
+    <li><b>Matchups head-on</b>Every input is a gap between the two fighters, so the model compares them skill by skill. It never sets one man's attack directly against the other's defence.</li>
+  </ul>
+  <div class="panel"><p>Treat each pick as one informed opinion. On the 812 test fights, when it gave the favourite under 60% the favourite won 56% of the time; at 60&ndash;70%, 66%; above 70%, 73%.</p></div>
+</section>
+
+<section>
+  <h2>Read more</h2>
+  <div class="grid">
     <a class="fcard" href="pipeline/"><div class="fbody"><p class="fev">Explainer</p><h3>UFC Pipeline Walkthrough</h3><p class="fpick">From three raw tables to 40 inputs per fight, with one fight worked through.</p></div></a>
-    <a class="fcard" href="modelling/"><div class="fbody"><p class="fev">Explainer</p><h3>The Modelling Half</h3><p class="fpick">How trees, seeds, corners and calibration turn those 40 numbers into a chance.</p></div></a>
+    <a class="fcard" href="modelling/"><div class="fbody"><p class="fev">Explainer</p><h3>The Modelling Half</h3><p class="fpick">The full detail behind every step above: trees, corners, seeds, calibration, tuning and SHAP.</p></div></a>
   </div>
-  <p style="margin-top:16px">The test fights were scored once, after the model was frozen. The model has never been tuned on them. It is a personal project built to learn and to be explained, not a betting tool, and it uses no betting odds.</p>
+  <p style="margin-top:16px">It is a personal project built to learn and to be explained, not a betting tool, and it uses no betting odds.</p>
   <p>Code, notebooks and the full method: <a href="https://github.com/matteoberagnoli/ufc_fight_predictor">github.com/matteoberagnoli/ufc_fight_predictor</a>.</p>
 </section>
 
