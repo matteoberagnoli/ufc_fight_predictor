@@ -134,37 +134,37 @@ footer p{max-width:none} footer p+p{margin-top:8px}
 
 <section>
   <h2>How well it predicts</h2>
-  <p>The model was frozen, then scored once on <b>812 men's UFC fights from 2025&ndash;26</b> that it had never seen. Nothing was tuned on these fights.</p>
+  <p>The model was frozen, then scored once on men's UFC fights from 2025&ndash;26 that it had never seen. Nothing was tuned on these fights. The numbers below are the <b>643 fights with no UFC debutant</b>, the kind of fight the previews cover.</p>
   <div class="nums">
-    <div><b>64.0%</b><span>winners picked<br>coin flip 50%</span></div>
-    <div><b>0.644</b><span>log loss<br>coin flip 0.693</span></div>
-    <div><b>64.9%</b><span>winners picked<br>no debutant in the fight</span></div>
+    <div><b>64.9%</b><span>winners picked<br>coin flip 50%</span></div>
+    <div><b>0.640</b><span>log loss<br>coin flip 0.693</span></div>
+    <div><b>643</b><span>unseen fights<br>men's, 2025&ndash;26</span></div>
   </div>
   <p class="note"><b>Log loss</b> scores the percentages, not just the pick: a confident wrong call costs far more than a cautious one. Lower is better.</p>
   <div class="tables">
     <table>
-      <caption>Against simple rules, same 812 fights</caption>
+      <caption>Against simple rules, same 643 fights</caption>
       <thead><tr><th scope="col">Predictor</th><th scope="col">Picked</th><th scope="col">Log loss</th></tr></thead>
       <tbody>
         <tr><td>Coin flip</td><td>50.0%</td><td>0.693</td></tr>
-        <tr><td>Better win rate wins</td><td>57.4%</td><td>0.679</td></tr>
-        <tr><td>Younger fighter wins</td><td>60.7%</td><td>0.661</td></tr>
-        <tr class="us"><td>Teo's UFC ML Predictor</td><td>64.0%</td><td>0.644</td></tr>
+        <tr><td>Better win rate wins</td><td>59.3%</td><td>0.676</td></tr>
+        <tr><td>Younger fighter wins</td><td>60.9%</td><td>0.660</td></tr>
+        <tr class="us"><td>Teo's UFC ML Predictor</td><td>64.9%</td><td>0.640</td></tr>
       </tbody>
     </table>
     <table>
       <caption>Do its percentages come true?</caption>
       <thead><tr><th scope="col">Fights, in five equal groups</th><th scope="col">Model said</th><th scope="col">Fighter won</th></tr></thead>
       <tbody>
-        <tr><td>Least likely fifth</td><td>26%</td><td>27%</td></tr>
-        <tr><td>Second</td><td>39%</td><td>38%</td></tr>
-        <tr><td>Middle</td><td>50%</td><td>53%</td></tr>
-        <tr><td>Fourth</td><td>60%</td><td>57%</td></tr>
-        <tr><td>Most likely fifth</td><td>73%</td><td>73%</td></tr>
+        <tr><td>Least likely fifth</td><td>25%</td><td>26%</td></tr>
+        <tr><td>Second</td><td>39%</td><td>37%</td></tr>
+        <tr><td>Middle</td><td>50%</td><td>50%</td></tr>
+        <tr><td>Fourth</td><td>61%</td><td>59%</td></tr>
+        <tr><td>Most likely fifth</td><td>74%</td><td>73%</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">The weak spot is fights with a UFC debutant: 61.0% picked, because the model has no UFC history to read for the newcomer.</p>
+  <p class="note">Fights with a UFC debutant are harder: on the other 169 test fights it picked 61.0% of winners (log loss 0.656), because the model has no UFC history to read for the newcomer.</p>
 </section>
 
 <section>
@@ -225,7 +225,7 @@ footer p{max-width:none} footer p+p{margin-top:8px}
     <li><b>Fight week</b>Weight cuts, training camps, injuries and late replacements are not in the data.</li>
     <li><b>Matchups head-on</b>Every input is a gap between the two fighters, so the model compares them skill by skill. It never sets one man's attack directly against the other's defence.</li>
   </ul>
-  <div class="panel"><p>Treat each pick as one informed opinion. On the 812 test fights, when it gave the favourite under 60% the favourite won 56% of the time; at 60&ndash;70%, 66%; above 70%, 73%.</p></div>
+  <div class="panel"><p>Treat each pick as one informed opinion. On the 643 test fights without a debutant, when it gave the favourite under 60% the favourite won 57% of the time; at 60&ndash;70%, 66%; above 70%, 72%.</p></div>
 </section>
 
 <section>
