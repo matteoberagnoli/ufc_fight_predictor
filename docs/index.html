@@ -136,9 +136,9 @@ footer p{max-width:none} footer p+p{margin-top:8px}
   <h2>How well it predicts</h2>
   <p>The model was frozen, then scored once on men's UFC fights from 2025&ndash;26 that it had never seen. Nothing was tuned on these fights. The numbers below are the <b>643 fights with no UFC debutant</b>, the kind of fight the previews cover.</p>
   <div class="nums">
-    <div><b>64.9%</b><span>winners picked<br>coin flip 50%</span></div>
+    <div><b>64.9%</b><span>winners picked, debutant fights excluded<br>coin flip 50%</span></div>
     <div><b>0.640</b><span>log loss<br>coin flip 0.693</span></div>
-    <div><b>643</b><span>unseen fights<br>men's, 2025&ndash;26</span></div>
+    <div><b>643</b><span>unseen fights, none with a debutant<br>men's, 2025&ndash;26</span></div>
   </div>
   <p class="note"><b>Log loss</b> scores the percentages, not just the pick: a confident wrong call costs far more than a cautious one. Lower is better.</p>
   <div class="tables">
