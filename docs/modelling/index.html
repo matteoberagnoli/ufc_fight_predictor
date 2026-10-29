@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How decision trees, eight seeds, both corners and a calibration curve turn those 40 numbers into a probability.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Teo's UFC ML Predictor">
+<meta property="og:title" content="The Modelling Half">
+<meta property="og:description" content="How decision trees, eight seeds, both corners and a calibration curve turn those 40 numbers into a probability.">
+<meta property="og:url" content="https://matteoberagnoli.github.io/ufc_fight_predictor/modelling/">
+<meta property="og:image" content="https://matteoberagnoli.github.io/ufc_fight_predictor/modelling/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>The Modelling Half</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+/* Layout: one column, scorecard motif; the probability chain is followed step by step with one real fight; formulas sit in worksheet blocks with a term key under each. */
+:root {
+  color-scheme: light;
+  --ground:     #F4F2EE;
+  --surface:    #FFFFFF;
+  --sunk:       #E8E5DE;
+  --ink:        #17161C;
+  --ink-soft:   #3E3C47;
+  --muted:      #6E6B78;
+  --rule:       #DAD6CD;
+  --rule-firm:  #B6B1A5;
+  --accent:     #9A5B14;
+  --accent-bg:  #F5E7D3;
+  --cool:       #2F4A7A;
+  --cool-bg:    #DFE6F1;
+  --alarm:      #9E2B20;
+  --alarm-bg:   #F6E0DC;
+  --shadow: 0 1px 2px rgba(23,22,28,.05), 0 7px 20px rgba(23,22,28,.05);
+
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --math: "Literata", "Cambria Math", Georgia, serif;
+  --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:     #121117;
+    --surface:    #1B1A22;
+    --sunk:       #0C0B10;
+    --ink:        #EDEBF2;
+    --ink-soft:   #C4C1CE;
+    --muted:      #8C8899;
+    --rule:       #2B2934;
+    --rule-firm:  #413E4D;
+    --accent:     #E5A861;
+    --accent-bg:  #2E2114;
+    --cool:       #8FAEDC;
+    --cool-bg:    #16203A;
+    --alarm:      #E68B7E;
+    --alarm-bg:   #331714;
+    --shadow: 0 1px 2px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:     #121117;
+  --surface:    #1B1A22;
+  --sunk:       #0C0B10;
+  --ink:        #EDEBF2;
+  --ink-soft:   #C4C1CE;
+  --muted:      #8C8899;
+  --rule:       #2B2934;
+  --rule-firm:  #413E4D;
+  --accent:     #E5A861;
+  --accent-bg:  #2E2114;
+  --cool:       #8FAEDC;
+  --cool-bg:    #16203A;
+  --alarm:      #E68B7E;
+  --alarm-bg:   #331714;
+  --shadow: 0 1px 2px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: 20px; padding-block: 0 76px; }
+
+p { max-width: 66ch; margin: 0; }
+p + p { margin-top: .9em; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+b { font-weight: 600; }
+
+/* ---------- masthead ---------- */
+.masthead { padding-block: 50px 26px; border-bottom: 3px solid var(--ink); }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 8.5vw, 66px); line-height: .98; letter-spacing: -.025em; margin: 0; text-wrap: balance; }
+.standfirst { margin: 17px 0 0; font-size: 18.5px; color: var(--ink-soft); max-width: 60ch; }
+
+.card-band {
+  margin-top: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 1px; background: var(--rule-firm); border: 1px solid var(--rule-firm);
+}
+.cell { background: var(--ground); padding: 12px 14px; min-width: 0; }
+.cell dt { font-family: var(--mono); font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+.cell dd { margin: 0; font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.cell dd small { display: block; font-family: var(--body); font-weight: 400; font-size: 12.5px; color: var(--muted); letter-spacing: 0; margin-top: 3px; }
+
+/* ---------- sections ---------- */
+section { padding-block: 46px 0; }
+h2 { font-family: var(--display); font-weight: 700; font-size: clamp(25px, 4.4vw, 34px); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 8px; text-wrap: balance; }
+.sec-num { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--accent); letter-spacing: .1em; display: block; margin-bottom: 6px; }
+.deck { color: var(--muted); font-size: 15.5px; margin: 0 0 22px; max-width: 62ch; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: -.012em; margin: 34px 0 10px; text-wrap: balance; }
+h3:first-child { margin-top: 0; }
+
+code { font-family: var(--mono); font-size: .82em; background: var(--sunk); border: 1px solid var(--rule); border-radius: 3px; padding: .06em .3em; color: var(--ink-soft); word-break: break-word; }
+
+/* ---------- chain ---------- */
+.chain { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin-top: 6px; border: 1px solid var(--rule-firm); background: var(--surface); box-shadow: var(--shadow); }
+.link { padding: 14px 14px 16px; border-right: 1px solid var(--rule); min-width: 0; position: relative; }
+.link:last-child { border-right: 0; }
+.link .k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.link .v { font-family: var(--math); font-size: 19px; margin: 6px 0 4px; white-space: nowrap; overflow-x: auto; }
+.link .v i { font-style: italic; }
+.link .v sub { font-size: .62em; }
+.link p { font-size: 14px; color: var(--ink-soft); }
+.link a { text-decoration: none; }
+.link a:hover { text-decoration: underline; }
+@media (max-width: 760px) {
+  .chain { grid-template-columns: 1fr; }
+  .link { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .link:last-child { border-bottom: 0; }
+}
+
+/* ---------- formulas ---------- */
+.formula { margin-top: 14px; background: var(--sunk); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px 14px; min-width: 0; }
+.formula-label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--cool); margin: 0 0 6px; }
+.eq-row { overflow-x: auto; padding-bottom: 2px; }
+.eq { font-family: var(--math); font-size: 20px; line-height: 1.55; white-space: nowrap; color: var(--ink); text-align: center; display: block; min-width: max-content; margin: 0 auto; padding: 4px 0; }
+.eq i { font-style: italic; }
+.eq .t { font-style: normal; font-family: var(--body); font-size: .8em; }
+.eq sub, .eq sup { font-size: .62em; }
+.frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .15em; }
+.frac > span:first-child { border-bottom: 1.3px solid currentColor; padding: 0 .3em .1em; }
+.frac > span:last-child { padding: .1em .3em 0; }
+.op { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1; margin: 0 .12em; }
+.op .lim { font-size: .55em; font-style: italic; line-height: 1.2; }
+.op .sym { font-size: 1.35em; line-height: 1; }
+.terms { margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 7px; }
+.terms > div { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.terms dt { font-family: var(--math); font-size: 16.5px; color: var(--ink); }
+.terms dt i { font-style: italic; }
+.terms dd { margin: 0; font-size: 15px; color: var(--ink-soft); }
+.effects { margin: 12px 0 0; padding: 12px 0 0; border-top: 1px dashed var(--rule-firm); display: grid; gap: 7px; list-style: none; }
+.effects li { font-size: 15px; color: var(--ink-soft); position: relative; padding-left: 1.5em; }
+.effects li::before { content: "\2192"; position: absolute; left: 0; top: 0; color: var(--accent); font-family: var(--mono); }
+
+/* ---------- worked example ---------- */
+.worked { margin-top: 14px; border: 1px solid var(--accent); border-radius: 4px; background: var(--surface); }
+.worked-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); padding: 10px 14px; border-bottom: 1px solid var(--rule); background: var(--accent-bg); }
+.worked-body { padding: 12px 14px 14px; font-size: 15.5px; color: var(--ink-soft); }
+.worked-body .calc { font-family: var(--mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 8px; }
+
+/* ---------- tree ---------- */
+.tree-box { margin-top: 14px; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: 16px 16px 14px; }
+.tree, .tree ol { list-style: none; margin: 0; padding: 0; }
+.tree ol { margin-left: 12px; padding-left: 16px; border-left: 1.5px solid var(--rule-firm); }
+.tree li { margin-top: 9px; }
+.tree > li { margin-top: 0; }
+.node { display: flex; flex-wrap: wrap; gap: 3px 10px; align-items: baseline; }
+.node .q { min-width: 0; flex: 1 1 260px; font-size: 15.5px; color: var(--ink); }
+.node .q code { font-size: .78em; }
+.br { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--cool); background: var(--cool-bg); padding: 1px 6px; border-radius: 2px; }
+.leafv { font-family: var(--mono); font-size: 13.5px; font-weight: 500; color: var(--accent); }
+.cnt { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; margin-left: auto; white-space: nowrap; }
+
+/* ---------- notes ---------- */
+.note { margin-top: 14px; background: var(--cool-bg); border-left: 3px solid var(--cool); padding: 12px 15px; font-size: 15.5px; }
+.note p { max-width: none; }
+.note.warn { background: var(--alarm-bg); border-left-color: var(--alarm); }
+.note.win  { background: var(--accent-bg); border-left-color: var(--accent); }
+
+/* ---------- tables ---------- */
+.table-scroll { overflow-x: auto; margin-top: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 540px; }
+table.narrow { min-width: 380px; }
+th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 12px 8px 0; border-bottom: 1px solid var(--rule-firm); vertical-align: bottom; }
+th.n, td.n { text-align: right; font-variant-numeric: tabular-nums; }
+td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+td.term { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+td.n { font-family: var(--mono); font-size: 12.5px; color: var(--ink); white-space: nowrap; }
+td.eqc { font-family: var(--math); font-size: 15px; color: var(--ink); white-space: nowrap; }
+td.eqc i { font-style: italic; }
+tr.best td { background: var(--accent-bg); }
+tr.best td.n, tr.best td.term { font-weight: 600; }
+tr.sub td:first-child { padding-left: 14px; }
+tr.rule-top td { border-top: 2px solid var(--ink); }
+
+/* ---------- back link ---------- */
+.next { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: 18px 20px; }
+.next p { font-size: 15.5px; color: var(--ink-soft); }
+.next a.go { font-family: var(--mono); font-size: 13px; text-decoration: none; color: var(--accent); border: 1.5px solid var(--accent); padding: 8px 14px; border-radius: 3px; white-space: nowrap; }
+.next a.go:hover { background: var(--accent-bg); }
+
+footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+
+@media (max-width: 560px) {
+  body { font-size: 16.5px; }
+  .eq { font-size: 17.5px; }
+  .terms > div { grid-template-columns: 4.2em minmax(0, 1fr); }
+  .next { grid-template-columns: 1fr; }
+  .tree ol { margin-left: 6px; padding-left: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Modelling &middot; Teo's UFC ML Predictor</p>
+  <h1>The Modelling Half</h1>
+  <p class="standfirst">The pipeline hands over a table: one row per fight, 40 inputs, and the answer. This page follows what happens next: the model that learns from it, every step from its raw score to a win probability, how it is judged, how its settings were tuned, and how each prediction is explained.</p>
+  <dl class="card-band">
+    <div class="cell"><dt>Accuracy</dt><dd>64.0%<small>men's test fights, 2025&ndash;26</small></dd></div>
+    <div class="cell"><dt>Log loss</dt><dd>0.6435<small>coin flip 0.693</small></dd></div>
+    <div class="cell"><dt>AUC</dt><dd>0.682<small>coin flip 0.500</small></dd></div>
+    <div class="cell"><dt>Age only</dt><dd>60.7%<small>log loss 0.6614</small></dd></div>
+    <div class="cell"><dt>Model</dt><dd>950 &times; 5<small>trees &times; leaves</small></dd></div>
+    <div class="cell"><dt>Averaged</dt><dd>8 &times; 2<small>seeds &times; corners</small></dd></div>
+  </dl>
+</header>
+
+<section id="chain">
+  <h2>From 40 numbers to one probability</h2>
+  <p class="deck">The whole prediction in five steps. Each section below takes one step, with one real fight worked through: Movsar Evloev, who the coin flip put in corner A, against Alexander Volkanovski at UFC 333 on 24 October 2026.</p>
+  <div class="chain">
+    <div class="link"><div class="k"><a href="#model">1 &middot; Score</a></div><div class="v"><i>F</i>(<i>x</i>)</div><p>Each model adds up 950 trees into a score for corner A.</p></div>
+    <div class="link"><div class="k"><a href="#sigmoid">2 &middot; Probability</a></div><div class="v">&sigma;(<i>F</i>)</div><p>The logistic curve turns the score into a probability.</p></div>
+    <div class="link"><div class="k"><a href="#corners">3 &middot; Both corners</a></div><div class="v"><i>p</i><sub>sym</sub></div><p>The fight is asked again with the corners swapped; the two answers are averaged.</p></div>
+    <div class="link"><div class="k"><a href="#seeds">4 &middot; Eight seeds</a></div><div class="v"><i>p&#772;</i></div><p>Eight versions of the model, trained with different random seeds, are averaged.</p></div>
+    <div class="link"><div class="k"><a href="#calibration">5 &middot; Stretch</a></div><div class="v"><i>p</i></div><p>One calibration factor makes the percentages match how often fighters win.</p></div>
+  </div>
+</section>
+
+<section id="model">
+  <span class="sec-num">STEP 1</span>
+  <h2>The model: gradient-boosted decision trees</h2>
+  <p class="deck">scikit-learn's <code>HistGradientBoostingClassifier</code>: many small decision trees, built one after another, each correcting the errors of the ones before it.</p>
+
+  <h3>One tree</h3>
+  <p>A decision tree asks yes/no questions about the inputs and ends in a leaf that holds a number: a small push to the score. Each tree here has at most 5 leaves, so at most 4 questions. This is the first of the 950 trees in one of the final model's eight versions (seed 0), exactly as it was trained on 6,276 fights:</p>
+  <div class="tree-box">
+    <ol class="tree">
+      <li>
+        <div class="node"><span class="q">Is A no more than 1.5 years older than B? <code>age_gap &le; 1.5</code></span><span class="cnt">6,276 fights</span></div>
+        <ol>
+          <li>
+            <div class="node"><span class="br">yes</span><span class="q">Is A rated at least 3.5 Elo points below B? <code>elo &le; &minus;3.5</code></span><span class="cnt">3,846</span></div>
+            <ol>
+              <li>
+                <div class="node"><span class="br">yes</span><span class="q">Do strikes at range land on A at least 0.7 points less often than on B? <code>dist_strikes_hit_rate_against &le; &minus;0.007</code></span><span class="cnt">1,732</span></div>
+                <ol>
+                  <li><div class="node"><span class="br">yes</span><span class="leafv">leaf +0.0034</span><span class="cnt">543</span></div></li>
+                  <li><div class="node"><span class="br">no</span><span class="leafv">leaf &minus;0.0034</span><span class="cnt">1,189</span></div></li>
+                </ol>
+              </li>
+              <li><div class="node"><span class="br">no</span><span class="leafv">leaf +0.0061</span><span class="cnt">2,114</span></div></li>
+            </ol>
+          </li>
+          <li>
+            <div class="node"><span class="br">no</span><span class="q">Is A rated at most 35.7 Elo points above B? <code>elo &le; 35.7</code></span><span class="cnt">2,430</span></div>
+            <ol>
+              <li><div class="node"><span class="br">yes</span><span class="leafv">leaf &minus;0.0068</span><span class="cnt">1,609</span></div></li>
+              <li><div class="node"><span class="br">no</span><span class="leafv">leaf +0.0005</span><span class="cnt">821</span></div></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </div>
+  <p style="margin-top:12px">Leaf values are in log-odds (step 2), positive towards A. Read as a rule: a fighter who is not clearly older and not clearly lower rated gets a small push (+0.0061, about 0.15 percentage points); a clearly older fighter without a clear rating edge gets a small push the other way. Each tree is deliberately weak. The question that splits first, the age gap, and the one that follows, the Elo gap, are the model's two strongest inputs (section 9). A blank input follows a fixed branch: the one learned in training when that input had blanks among the training fights, otherwise the branch with more fights. In this tree that is "no" at the first three questions and "yes" at the fourth.</p>
+
+  <h3>Adding up the trees</h3>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>F</i>(<i>x</i>) = <i>F</i><sub>0</sub> + &eta; <span class="op"><span class="lim">M</span><span class="sym">&Sigma;</span><span class="lim">m = 1</span></span> <i>w</i><sub><i>m</i></sub>(<i>x</i>)</span></div>
+    <dl class="terms">
+      <div><dt><i>x</i></dt><dd>One fight's 40 inputs.</dd></div>
+      <div><dt><i>F</i>(<i>x</i>)</dt><dd>The model's score for corner A, in log-odds. Positive favours A.</dd></div>
+      <div><dt><i>F</i><sub>0</sub></dt><dd>The starting score: the log-odds of the share of training fights corner A won. A won 49.1% of the 6,276 fights, so <i>F</i><sub>0</sub> = ln(0.491 / 0.509) = &minus;0.038.</dd></div>
+      <div><dt><i>w</i><sub><i>m</i></sub>(<i>x</i>)</dt><dd>The value of the leaf that fight <i>x</i> reaches in tree <i>m</i>.</dd></div>
+      <div><dt>&eta;</dt><dd>The learning rate, 0.0113: each tree's correction is scaled down to about 1% of its full size. The leaves shown above already include it.</dd></div>
+      <div><dt><i>M</i></dt><dd>The number of trees, 950.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>Smaller &eta;: each tree fixes less of the remaining error, so more trees are needed. &eta; and <i>M</i> trade off (halve &eta; and roughly twice the trees are needed), so they are tuned together.</li>
+      <li>More trees: finer detail, until they start fitting the noise in the training fights.</li>
+    </ul>
+  </div>
+
+  <h3>How each tree is grown</h3>
+  <p>Each new tree is fitted to what the trees before it still get wrong. "Wrong" is measured with log loss, the same measure the model is judged by (section 6). For training fight <i>i</i>:</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq">&#8467;<sub><i>i</i></sub> = &minus;[ <i>y</i><sub><i>i</i></sub> ln <i>p</i><sub><i>i</i></sub> + (1 &minus; <i>y</i><sub><i>i</i></sub>) ln(1 &minus; <i>p</i><sub><i>i</i></sub>) ]</span></div>
+    <div class="eq-row"><span class="eq"><i>g</i><sub><i>i</i></sub> = <i>p</i><sub><i>i</i></sub> &minus; <i>y</i><sub><i>i</i></sub>, &nbsp;&nbsp; <i>h</i><sub><i>i</i></sub> = <i>p</i><sub><i>i</i></sub> (1 &minus; <i>p</i><sub><i>i</i></sub>)</span></div>
+    <dl class="terms">
+      <div><dt><i>y</i><sub><i>i</i></sub></dt><dd>1 if corner A won training fight <i>i</i>, 0 if not.</dd></div>
+      <div><dt><i>p</i><sub><i>i</i></sub></dt><dd>The probability the trees built so far give that fight, &sigma;(<i>F</i>(<i>x</i><sub><i>i</i></sub>)).</dd></div>
+      <div><dt><i>g</i><sub><i>i</i></sub></dt><dd>The gradient of the loss with respect to the score: how wrong the current prediction is, and which way. A won but the model says 30%: <i>g</i> = 0.3 &minus; 1 = &minus;0.7.</dd></div>
+      <div><dt><i>h</i><sub><i>i</i></sub></dt><dd>The second derivative (curvature): 0.25 at 50%, small for confident predictions. It says how far a step in the score can be trusted.</dd></div>
+    </dl>
+  </div>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>w</i> = &minus; <span class="frac"><span><i>G</i></span><span><i>H</i> + &lambda;</span></span></span></div>
+    <div class="eq-row"><span class="eq"><i>Gain</i> = <span class="frac"><span><i>G</i><sub>L</sub><sup>2</sup></span><span><i>H</i><sub>L</sub> + &lambda;</span></span> + <span class="frac"><span><i>G</i><sub>R</sub><sup>2</sup></span><span><i>H</i><sub>R</sub> + &lambda;</span></span> &minus; <span class="frac"><span>(<i>G</i><sub>L</sub> + <i>G</i><sub>R</sub>)<sup>2</sup></span><span><i>H</i><sub>L</sub> + <i>H</i><sub>R</sub> + &lambda;</span></span></span></div>
+    <dl class="terms">
+      <div><dt><i>G</i>, <i>H</i></dt><dd>The sums of <i>g</i> and <i>h</i> over the training fights in a leaf.</dd></div>
+      <div><dt><i>w</i></dt><dd>The leaf's value: one Newton step, the leaf's total error divided by its total curvature. It is then multiplied by &eta;.</dd></div>
+      <div><dt>L, R</dt><dd>The two children a candidate split would create.</dd></div>
+      <div><dt><i>Gain</i></dt><dd>How much the split would lower the loss, in the same second-order approximation. Larger is better.</dd></div>
+      <div><dt>&lambda;</dt><dd>L2 regularisation, 0.0034: it pulls leaf values towards zero.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>The tree grows best-first. It starts as one leaf holding every training fight, finds the best allowed split of each leaf, splits the leaf whose best split has the largest gain, and repeats until there are 5 leaves or no split is allowed.</li>
+      <li>Larger &lambda;: smaller leaf values, most for leaves with little curvature. A leaf of 28 fights near 50% has <i>H</i> &asymp; 7, so &lambda; = 0.0034 barely matters: the tuning switched it almost off.</li>
+      <li><code>min_samples_leaf</code> = 28: no split may leave fewer than 28 training fights in a child, so every correction rests on at least 28 fights.</li>
+      <li><code>max_features</code> = 0.546: each split may only look at a random 22 of the 40 inputs (0.546 &times; 40, rounded up). Trees then differ from each other, and the model depends on its random seed (step 4).</li>
+    </ul>
+  </div>
+
+  <h3>Bins and blanks</h3>
+  <p><b>Bins.</b> Before training, each input is cut into at most 255 bins at quantiles of the training data, and splits are only tried at bin edges. Training is fast, and a single extreme value can't drag a threshold.</p>
+  <p><b>Blanks.</b> A 256th bin holds blank values. At every split the tree tries sending the blanks left and right and keeps whichever gives the larger gain; a new fight with a blank follows that learned direction. If an input had no blanks at all in training, a blank follows the child that held more training fights. This is how debutants are handled: their blank inputs are never filled in.</p>
+  <p><b>Early stopping is off.</b> The library's built-in stopping rule would hold out a random 10% of the training fights, mixing years. The number of trees is tuned instead.</p>
+
+  <h3>The settings</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Setting</th><th class="n">Value</th><th>What it controls</th><th>Raising it</th></tr></thead>
+      <tbody>
+        <tr><td class="term">learning_rate &eta;</td><td class="n">0.0113</td><td>how much of each tree's correction is kept</td><td>bigger steps; fewer trees needed; more risk of overshooting</td></tr>
+        <tr><td class="term">max_iter <i>M</i></td><td class="n">950</td><td>number of trees</td><td>more detail; eventually fits noise</td></tr>
+        <tr><td class="term">max_leaf_nodes</td><td class="n">5</td><td>leaves per tree (4 questions)</td><td>more complex rules; more inputs combined in one tree</td></tr>
+        <tr><td class="term">min_samples_leaf</td><td class="n">28</td><td>fewest training fights in a leaf</td><td>smoother, more cautious corrections</td></tr>
+        <tr><td class="term">l2_regularization &lambda;</td><td class="n">0.0034</td><td>pull of leaf values towards zero</td><td>smaller leaf values</td></tr>
+        <tr><td class="term">max_features</td><td class="n">0.546</td><td>share of inputs a split may look at (22 of 40)</td><td>trees more alike; less variation between seeds</td></tr>
+        <tr><td class="term">max_bins</td><td class="n">255</td><td>candidate thresholds per input (library default)</td><td>finer thresholds; slower</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">The first six were found by the tuning search (section 7). Together they describe many tiny trees with a small learning rate: each tree is a simple rule, and the model is their sum.</p>
+
+  <h3>Why this model</h3>
+  <p>It is the same family as XGBoost and LightGBM, it handles blanks natively, and it needs nothing beyond scikit-learn. Two alternatives were tried with the same tuning and cross-validation: XGBoost was better in 0 of 8 seeds, and logistic regression, a straight-line model, came within 0.0011 in log loss. A 50/50 blend of the trees and the logistic regression passed the decision rule narrowly, but one interpretable model was preferred. How close the straight-line model came is a first sign that most of the signal adds up input by input, which the interaction analysis confirms (section 9).</p>
+</section>
+
+<section id="sigmoid">
+  <span class="sec-num">STEP 2</span>
+  <h2>From score to probability</h2>
+  <p class="deck">The score is in log-odds. The logistic curve turns it into a probability.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>p</i> = &sigma;(<i>F</i>) = <span class="frac"><span>1</span><span>1 + <i>e</i><sup>&minus;<i>F</i></sup></span></span></span></div>
+    <div class="eq-row"><span class="eq"><i>F</i> = ln <span class="frac"><span><i>p</i></span><span>1 &minus; <i>p</i></span></span></span></div>
+    <dl class="terms">
+      <div><dt><i>F</i></dt><dd>The score, the logarithm of the odds that A wins.</dd></div>
+      <div><dt><i>p</i></dt><dd>The probability that A wins, between 0 and 1.</dd></div>
+      <div><dt><i>e</i></dt><dd>Euler's number, 2.718.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>A score of 0 is 50%. The curve is steepest there, with slope <i>p</i>(1 &minus; <i>p</i>) = 0.25, so near 50% a change of 0.1 in the score moves the probability by about 2.5 percentage points.</li>
+      <li>Far from 50% the same change in the score moves the probability less, and no score ever reaches 0% or 100%.</li>
+    </ul>
+  </div>
+  <div class="table-scroll">
+    <table class="narrow">
+      <thead><tr><th class="n">Score <i>F</i></th><th class="n">&minus;1.0</th><th class="n">&minus;0.5</th><th class="n">&minus;0.1</th><th class="n">0</th><th class="n">+0.1</th><th class="n">+0.5</th><th class="n">+1.0</th></tr></thead>
+      <tbody><tr><td>Probability</td><td class="n">26.9%</td><td class="n">37.8%</td><td class="n">47.5%</td><td class="n">50.0%</td><td class="n">52.5%</td><td class="n">62.2%</td><td class="n">73.1%</td></tr></tbody>
+    </table>
+  </div>
+  <div class="worked">
+    <div class="worked-head">UFC 333, model seed 0, fight as given</div>
+    <div class="worked-body">
+      <p>The 950 trees add up to <i>F</i> = &minus;0.010 for Evloev in corner A.</p>
+      <div class="calc">&sigma;(&minus;0.010) = 0.498 &nbsp;&rarr;&nbsp; Evloev 49.8%</div>
+    </div>
+  </div>
+</section>
+
+<section id="corners">
+  <span class="sec-num">STEP 3</span>
+  <h2>Both corners: the same fight asked twice</h2>
+  <p class="deck">Which fighter is corner A is a coin flip. The model's answer must not depend on it.</p>
+  <p>A tree that learns "age gap at most 1.5 years: push towards A" is not forced to learn the mirror rule "age gap at least &minus;1.5 years: push towards B". It learns whichever the training fights happened to support. Asked one way only, the first version of the model picked a different winner in 34.8% of validation fights depending on which corner the coin flip had chosen.</p>
+  <p>So every fight is asked twice, once as given and once mirrored:</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Kind of input</th><th>When the corners swap</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>a difference (<code>diff_</code>)</td><td>changes sign</td><td>age gap &minus;6 becomes +6</td></tr>
+        <tr><td>a per-corner flag</td><td>the two flags trade places</td><td>A's debut flag and B's debut flag</td></tr>
+        <tr><td>a fact about the bout</td><td>stays the same</td><td>weight limit, women's bout</td></tr>
+        <tr><td>anything else</td><td>refused with an error</td><td>a new input must be declared as one of the three kinds first</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>p</i><sub>sym</sub> = <span class="frac"><span>1</span><span>2</span></span> [ &sigma;(<i>F</i>(<i>x</i>)) + 1 &minus; &sigma;(<i>F</i>(<i>x&#771;</i>)) ]</span></div>
+    <dl class="terms">
+      <div><dt><i>x</i></dt><dd>The fight as given.</dd></div>
+      <div><dt><i>x&#771;</i></dt><dd>The same fight with the corners swapped.</dd></div>
+      <div><dt>&sigma;(<i>F</i>(<i>x&#771;</i>))</dt><dd>The model's probability for whoever sits in corner A after the swap, which is fighter B.</dd></div>
+      <div><dt>1 &minus; &sigma;(<i>F</i>(<i>x&#771;</i>))</dt><dd>That answer turned back into a probability for fighter A.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>The swapped fight gets exactly 1 &minus; <i>p</i><sub>sym</sub>: the two fighters always add up to 100%, whatever the trees learned.</li>
+      <li>It is more accurate as well as consistent. On validation, averaging fixed 106 picks and broke 68 (McNemar test, p = 0.005). Training on mirrored copies of every fight instead was tried and did worse.</li>
+    </ul>
+  </div>
+  <div class="worked">
+    <div class="worked-head">UFC 333, model seed 0</div>
+    <div class="worked-body">
+      <p>As given, Evloev is in corner A: 49.8%. With the corners swapped, Volkanovski sits in corner A and the score is &minus;0.531, so &sigma; = 37.0% for Volkanovski, which is 63.0% for Evloev. One model call disagrees with itself by 13 points depending on the corner. The average removes the corner from the answer.</p>
+      <div class="calc">(0.498 + (1 &minus; 0.370)) &divide; 2 = 0.564 &nbsp;&rarr;&nbsp; Evloev 56.4%</div>
+    </div>
+  </div>
+</section>
+
+<section id="seeds">
+  <span class="sec-num">STEP 4</span>
+  <h2>Eight seeds</h2>
+  <p class="deck">Each split looks at a random 22 of the 40 inputs, so the same settings trained with a different random seed give a slightly different model.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>p&#772;</i> = <span class="frac"><span>1</span><span>8</span></span> <span class="op"><span class="lim">7</span><span class="sym">&Sigma;</span><span class="lim">s = 0</span></span> <i>p</i><sub>sym, <i>s</i></sub></span></div>
+    <dl class="terms">
+      <div><dt><i>s</i></dt><dd>The random seed, 0 to 7. Each seed trains its own 950 trees on the same fights with the same settings.</dd></div>
+      <div><dt><i>p</i><sub>sym, <i>s</i></sub></dt><dd>The two-corner probability (step 3) from the model trained with seed <i>s</i>.</dd></div>
+      <div><dt><i>p&#772;</i></dt><dd>Their average.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>Averaging removes the luck of a single draw. Between seeds, cross-validated log loss varies by about 0.001, as much as many of the differences worth testing, which is why every decision was checked on 8 seeds.</li>
+    </ul>
+  </div>
+  <div class="worked">
+    <div class="worked-head">UFC 333, all eight seeds, Evloev's two-corner probability</div>
+    <div class="worked-body">
+      <div class="calc">56.4 &middot; 56.5 &middot; 57.5 &middot; 55.4 &middot; 56.2 &middot; 57.8 &middot; 56.6 &middot; 55.1 &nbsp;&rarr;&nbsp; mean 56.4%</div>
+    </div>
+  </div>
+  <div class="note warn">
+    <p><b>The seed spread is not the uncertainty.</b> The 55.1&ndash;57.8% range shows the randomness of the trees. Retraining on a different sample of the same years moves a prediction far more: in the project review, 40 refits on resampled fights put this fight's Volkanovski probability anywhere from about 33% to 52% (90% range).</p>
+  </div>
+</section>
+
+<section id="calibration">
+  <span class="sec-num">STEP 5</span>
+  <h2>Calibration: one stretch</h2>
+  <p class="deck">When the model says 70% for a group of fights, fighter A should win about 70% of them. One number, the stretch <i>a</i>, adjusts the percentages so that holds.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>p</i> = &sigma;( <i>a</i> &middot; logit <i>p&#772;</i> )</span></div>
+    <div class="eq-row"><span class="eq">logit <i>p&#772;</i> = ln <span class="frac"><span><i>p&#772;</i></span><span>1 &minus; <i>p&#772;</i></span></span></span></div>
+    <dl class="terms">
+      <div><dt><i>p&#772;</i></dt><dd>The average of step 4.</dd></div>
+      <div><dt><i>a</i></dt><dd>The stretch: 1.235 in the final model.</dd></div>
+      <div><dt><i>p</i></dt><dd>The final probability that corner A wins.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li><i>a</i> &gt; 1 makes the percentages bolder (further from 50%), <i>a</i> &lt; 1 more cautious, <i>a</i> = 1 changes nothing.</li>
+      <li>There is no shift term. A shift would favour whoever sits in corner A, so without one the two corners still add up to 100%.</li>
+      <li>The order of predictions and the 50% point stay where they are, so no pick changes. Accuracy and AUC can't move; only log loss can.</li>
+    </ul>
+  </div>
+  <p style="margin-top:14px"><b>How <i>a</i> is fitted.</b> It is the value that gives the lowest log loss on out-of-fold predictions: each prediction comes from a model that never saw that fight's year (section 7). Predictions on a model's own training fights look more confident and more correct than they are, so they would teach the stretch the wrong lesson.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>a</i>* = <span class="t">the</span> <i>a</i> <span class="t">with the smallest</span> <i>LL</i>(<i>a</i>)</span></div>
+    <div class="eq-row"><span class="eq"><i>LL</i>(<i>a</i>) = &minus;<span class="frac"><span>1</span><span><i>N</i></span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">i</span></span> [ <i>y</i><sub><i>i</i></sub> ln <i>p</i><sub><i>i</i></sub>(<i>a</i>) + (1 &minus; <i>y</i><sub><i>i</i></sub>) ln(1 &minus; <i>p</i><sub><i>i</i></sub>(<i>a</i>)) ]</span></div>
+    <div class="eq-row"><span class="eq"><i>p</i><sub><i>i</i></sub>(<i>a</i>) = &sigma;( <i>a</i> &middot; logit <i>p&#772;</i><sub><i>i</i></sub> )</span></div>
+    <dl class="terms">
+      <div><dt><i>i</i></dt><dd>Each out-of-fold fight, <i>N</i> in all.</dd></div>
+      <div><dt><i>y</i><sub><i>i</i></sub>, <i>p&#772;</i><sub><i>i</i></sub></dt><dd>Whether A won, and the two-corner, eight-seed probability before the stretch.</dd></div>
+      <div><dt><i>LL</i>(<i>a</i>)</dt><dd>The log loss those fights would get with stretch <i>a</i>.</dd></div>
+    </dl>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Where the stretch was fitted</th><th class="n">Fights</th><th class="n"><i>a</i></th></tr></thead>
+      <tbody>
+        <tr><td>out of fold 2019&ndash;2022, for the model judged on validation</td><td class="n">1,953</td><td class="n">1.077 (90% range 0.95&ndash;1.25)</td></tr>
+        <tr><td>out of fold 2021&ndash;2024, refitted for the one test look</td><td class="n">2,020</td><td class="n">1.235</td></tr>
+        <tr class="best"><td>the final model</td><td class="n">&nbsp;</td><td class="n">1.235, kept from the test look</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">The rule was written before the check: keep the stretch only if men's validation log loss improves. It did, from 0.6402 to 0.6389, with accuracy and AUC unchanged as they must be. The final model keeps the test look's value, because refitting it would need out-of-fold predictions on the test years, which the tuning code refuses on purpose. On the test years the percentages held without any further adjustment:</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Men's test fights, in five equal groups</th><th class="n">Fights</th><th class="n">Model said</th><th class="n">Fighter won</th></tr></thead>
+      <tbody>
+        <tr><td>least likely fifth</td><td class="n">163</td><td class="n">26%</td><td class="n">27%</td></tr>
+        <tr><td>second</td><td class="n">162</td><td class="n">39%</td><td class="n">38%</td></tr>
+        <tr><td>middle</td><td class="n">162</td><td class="n">50%</td><td class="n">53%</td></tr>
+        <tr><td>fourth</td><td class="n">162</td><td class="n">60%</td><td class="n">57%</td></tr>
+        <tr><td>most likely fifth</td><td class="n">163</td><td class="n">73%</td><td class="n">73%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>UFC 333, start to finish</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Step</th><th>Formula</th><th class="n">Value</th></tr></thead>
+      <tbody>
+        <tr><td>1. Score, fight as given (seed 0)</td><td class="eqc"><i>F</i>(<i>x</i>)</td><td class="n">&minus;0.010</td></tr>
+        <tr><td>2. Probability, fight as given</td><td class="eqc">&sigma;(<i>F</i>(<i>x</i>))</td><td class="n">Evloev 49.8%</td></tr>
+        <tr><td>3. Corners swapped, then both averaged</td><td class="eqc">&frac12;[&sigma;(<i>F</i>(<i>x</i>)) + 1 &minus; &sigma;(<i>F</i>(<i>x&#771;</i>))]</td><td class="n">Evloev 56.4%</td></tr>
+        <tr><td>4. Average of the eight seeds</td><td class="eqc"><i>p&#772;</i></td><td class="n">Evloev 56.4%</td></tr>
+        <tr class="best"><td>5. Stretch, <i>a</i> = 1.235</td><td class="eqc">&sigma;(1.235 &middot; 0.2585)</td><td class="n">Evloev 57.9% &middot; Volkanovski 42.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="judged">
+  <span class="sec-num">SECTION 6</span>
+  <h2>How it is judged</h2>
+  <p class="deck">Always on fights the model never trained on. Men's fights are reported first, because they are what the project is for; the model trains on men's and women's fights together, which beat men's-only training in 8 of 8 seeds when it was tested on an earlier version.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Period</th><th>Dates</th><th class="n">Fights</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="term">train</td><td>2014 &ndash; 2022</td><td class="n">4,309</td><td>learning and every tuning choice (by cross-validation, section 7)</td></tr>
+        <tr><td class="term">validation</td><td>2023 &ndash; 2024</td><td class="n">1,017</td><td>checking each decision</td></tr>
+        <tr><td class="term">test</td><td>2025-01-11 &ndash; 2026-10-10</td><td class="n">950</td><td>opened once, with the recipe frozen</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Three measures</h3>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>Accuracy</i> = <span class="frac"><span>1</span><span><i>N</i></span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">i</span></span> [ (<i>p</i><sub><i>i</i></sub> &gt; 0.5) = <i>y</i><sub><i>i</i></sub> ]</span></div>
+    <div class="eq-row"><span class="eq"><i>Log loss</i> = &minus;<span class="frac"><span>1</span><span><i>N</i></span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">i</span></span> [ <i>y</i><sub><i>i</i></sub> ln <i>p</i><sub><i>i</i></sub> + (1 &minus; <i>y</i><sub><i>i</i></sub>) ln(1 &minus; <i>p</i><sub><i>i</i></sub>) ]</span></div>
+    <div class="eq-row"><span class="eq"><i>AUC</i> = <span class="frac"><span>1</span><span><i>N</i><sub>won</sub> <i>N</i><sub>lost</sub></span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">i won</span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">j lost</span></span> [ <i>p</i><sub><i>i</i></sub> &gt; <i>p</i><sub><i>j</i></sub> ]</span></div>
+    <dl class="terms">
+      <div><dt><i>p</i><sub><i>i</i></sub>, <i>y</i><sub><i>i</i></sub></dt><dd>The predicted probability that A wins fight <i>i</i>, and 1 if A won, 0 if not.</dd></div>
+      <div><dt>[ &hellip; ]</dt><dd>1 when the statement is true, 0 when false. A 50% call counts as half right; a tie in the AUC counts half.</dd></div>
+      <div><dt><i>Accuracy</i></dt><dd>Share of fights where the favourite won. Easy to read, but a 51% call and a 90% call count the same.</dd></div>
+      <div><dt><i>Log loss</i></dt><dd>Average surprise at what happened. Lower is better. A coin flip scores ln 2 = 0.693. A 90% call costs 0.105 if right and 2.303 if wrong, so confident mistakes cost most.</dd></div>
+      <div><dt><i>AUC</i></dt><dd>Take one fight A won and one A lost: the share of such pairs where the won fight got the higher probability. 0.5 is a coin flip, 1 is perfect ranking.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>Log loss is the headline. It uses the full probability of every fight, while accuracy only moves when a fight crosses 50%, so it changes in lumps and different models often tie.</li>
+    </ul>
+  </div>
+
+  <h3>Is a difference real?</h3>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>d</i><sub><i>i</i></sub> = &#8467;<sub><i>i</i></sub><sup>new</sup> &minus; &#8467;<sub><i>i</i></sub><sup>old</sup>, &nbsp;&nbsp; <i>SE</i> = <span class="frac"><span><i>s</i><sub><i>d</i></sub></span><span>&radic;<i>N</i></span></span></span></div>
+    <div class="eq-row"><span class="eq"><i>z</i> = <span class="frac"><span><i>d&#772;</i></span><span><i>SE</i></span></span>, &nbsp;&nbsp; <i>p-value</i> = 2 [1 &minus; &Phi;(|<i>z</i>|)]</span></div>
+    <dl class="terms">
+      <div><dt><i>d</i><sub><i>i</i></sub></dt><dd>Fight <i>i</i>'s log loss under the new predictions minus under the old ones. Both are scored on the same fights, so how hard each fight was cancels out.</dd></div>
+      <div><dt><i>d&#772;</i>, <i>s</i><sub><i>d</i></sub></dt><dd>The mean and the standard deviation of the <i>d</i><sub><i>i</i></sub>. A negative mean means the new set is better.</dd></div>
+      <div><dt><i>SE</i></dt><dd>Standard error: how much the mean would wobble with a different sample of <i>N</i> fights.</dd></div>
+      <div><dt>&Phi;</dt><dd>The standard normal distribution. The p-value is the chance of a difference at least this large if the two sets were equally good.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>For picks, McNemar's test counts only the fights where the two sets disagree: how many the new set fixed and how many it broke. An even split means noise.</li>
+      <li>The decision rule for any change: better in at least 7 of 8 seeds in cross-validation and not worse on validation. The paired test says how much weight a result deserves.</li>
+    </ul>
+  </div>
+
+  <h3>The results</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Men's fights</th><th class="n">Fights</th><th class="n">Accuracy</th><th class="n">Log loss</th><th class="n">AUC</th></tr></thead>
+      <tbody>
+        <tr><td>validation 2023&ndash;24 (model trained on 2014&ndash;22)</td><td class="n">837</td><td class="n">64.6%</td><td class="n">0.6389</td><td class="n">0.689</td></tr>
+        <tr class="best"><td>test 2025&ndash;26 (model trained on 2014&ndash;24)</td><td class="n">812</td><td class="n">64.0%</td><td class="n">0.6435</td><td class="n">0.682</td></tr>
+        <tr class="sub"><td>&nbsp;&nbsp;no debutant</td><td class="n">643</td><td class="n">64.9%</td><td class="n">0.6403</td><td class="n">0.688</td></tr>
+        <tr class="sub"><td>&nbsp;&nbsp;with a debutant</td><td class="n">169</td><td class="n">61.0%</td><td class="n">0.6557</td><td class="n">0.651</td></tr>
+        <tr class="rule-top"><td>all 950 test fights, men's and women's</td><td class="n">950</td><td class="n">64.7%</td><td class="n">0.6345</td><td class="n">0.696</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>812 men's test fights</th><th class="n">Accuracy</th><th class="n">Log loss</th><th class="n">AUC</th></tr></thead>
+      <tbody>
+        <tr><td>coin flip</td><td class="n">50.0%</td><td class="n">0.6931</td><td class="n">0.500</td></tr>
+        <tr><td>win rate only</td><td class="n">57.4%</td><td class="n">0.6792</td><td class="n">0.601</td></tr>
+        <tr><td>age only</td><td class="n">60.7%</td><td class="n">0.6614</td><td class="n">0.653</td></tr>
+        <tr class="best"><td>Teo's UFC ML Predictor</td><td class="n">64.0%</td><td class="n">0.6435</td><td class="n">0.682</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">The single-input baselines are logistic regressions on one difference column, with no intercept, fitted on 2014&ndash;2024. Against age alone, the model's log loss is 0.018 lower on the men's test fights (paired test p = 0.08) and 0.026 lower on all 950 fights (p = 0.005): a real but modest edge. Validation had promised 64.6% and 0.639; the test gave 64.0% and 0.644. A small drop is expected, because the validation years influenced some choices, and it was small. Fights with a debutant remain the weak spot.</p>
+  <div class="note">
+    <p><b>The betting market, as a yardstick only.</b> On the 664 men's validation fights with odds, the market scored 69.4%, log loss 0.585 and AUC 0.763, against the model's 64.0%, 0.637 and 0.691. The gap of 0.053 in log loss is about five standard errors, and a third of it sits in fights with a debutant, whose pre-UFC record the market knows and the model doesn't. Odds are never an input.</p>
+  </div>
+</section>
+
+<section id="tuning">
+  <span class="sec-num">SECTION 7</span>
+  <h2>Tuning: how the settings were chosen</h2>
+  <p class="deck">Every number the recipe learned from data was chosen without looking at the test years.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Choice</th><th>Chosen by</th><th>Fights used</th></tr></thead>
+      <tbody>
+        <tr><td>91 shrinkage &alpha; values</td><td>best prediction of each fighter's next fight (pipeline step 8)</td><td>2014&ndash;2022</td></tr>
+        <tr><td>8-fight window, the 40 inputs</td><td>model cross-validation, 8 seeds, then validation</td><td>2014&ndash;2024</td></tr>
+        <tr><td>Elo <i>K</i> and decision scores</td><td>model cross-validation, 5 seeds, 180 settings</td><td>2014&ndash;2022</td></tr>
+        <tr><td>6 model settings</td><td>Optuna search, cross-validation, 3 seeds, 60 trials</td><td>2014&ndash;2022</td></tr>
+        <tr><td>calibration stretch</td><td>lowest out-of-fold log loss</td><td>2019&ndash;2022 (2021&ndash;2024 for the final model)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Cross-validation that only looks forward</h3>
+  <p>Settings are not scored on the validation years. Trying 60 settings against about 1,000 fights and keeping the best mostly finds whichever got lucky on those fights, and it would spend the one clean check before the test. Instead, the last four training years are each predicted in turn by a model trained only on the years before:</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Fold</th><th>Trains on</th><th class="n">Fights</th><th>Scores</th><th class="n">Fights</th></tr></thead>
+      <tbody>
+        <tr><td class="term">1</td><td>2014 &ndash; 2018</td><td class="n">2,356</td><td>2019</td><td class="n">506</td></tr>
+        <tr><td class="term">2</td><td>2014 &ndash; 2019</td><td class="n">2,862</td><td>2020</td><td class="n">444</td></tr>
+        <tr><td class="term">3</td><td>2014 &ndash; 2020</td><td class="n">3,306</td><td>2021</td><td class="n">497</td></tr>
+        <tr><td class="term">4</td><td>2014 &ndash; 2021</td><td class="n">3,803</td><td>2022</td><td class="n">506</td></tr>
+        <tr class="rule-top"><td class="term">all</td><td>always past &rarr; future</td><td class="n"></td><td>four years</td><td class="n">1,953</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>CV</i>(&theta;) = <span class="frac"><span>1</span><span>|<i>S</i>|</span></span> <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">s &isin; S</span></span> <i>LogLoss</i>( 1,953 <span class="t">scored fights</span> | &theta;, <i>s</i> )</span></div>
+    <dl class="terms">
+      <div><dt>&theta;</dt><dd>One candidate set of settings.</dd></div>
+      <div><dt><i>S</i></dt><dd>The model seeds the score is averaged over (3 while tuning, 8 for decisions).</dd></div>
+      <div><dt><i>LogLoss</i></dt><dd>Pooled over all scored fights of the four folds, each predicted both ways round as in step 3. A fold with more fights carries more weight.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>Past to future, like real use. Training on 2022 to predict 2019 would be an easier question than the real one.</li>
+      <li>About 1,950 scored fights instead of about 1,000, and a setting has to work in four different years, so a fluke rarely wins.</li>
+      <li>A guard refuses any tuning data that reaches 2025.</li>
+      <li>One small leak remains: the &alpha; values were fitted on 2014&ndash;2022 as a whole, so the early folds use features built with a little knowledge of later years. It is one number per column, shared by every setting tried, so it can't favour one setting over another.</li>
+    </ul>
+  </div>
+
+  <h3>The search for the six model settings</h3>
+  <p>Optuna's TPE sampler (tree-structured Parzen estimator) does the search. Trial 0 is the hand-chosen starting point: 300 trees, learning rate 0.05, 15 leaves, at least 20 fights per leaf, &lambda; = 1, every input at every split. Until 10 trials have finished, settings are drawn at random from the ranges. After that, each new trial works like this:</p>
+  <ol style="margin:10px 0 0;padding-left:1.3em;display:grid;gap:6px;max-width:66ch">
+    <li>Rank the finished trials by cross-validated log loss. The best 10% (at most 25) are "good", the rest are "others".</li>
+    <li>For each setting, fit a smooth density to the values the good trials used, <i>l</i>(&theta;), and one to the others' values, <i>g</i>(&theta;).</li>
+    <li>Draw 24 candidates from <i>l</i>(&theta;) and run the one with the largest ratio <i>l</i>(&theta;) / <i>g</i>(&theta;): settings that look like past winners and unlike past losers.</li>
+  </ol>
+  <p style="margin-top:12px">The sampler's seed is fixed (1926), so the search can be repeated exactly. Each trial was scored on 3 model seeds.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Setting</th><th>Search range</th><th>Scale</th><th class="n">Chosen</th></tr></thead>
+      <tbody>
+        <tr><td class="term">learning_rate</td><td>0.01 &ndash; 0.3</td><td>logarithmic</td><td class="n">0.0113</td></tr>
+        <tr><td class="term">max_iter</td><td>100 &ndash; 1,000</td><td>steps of 50</td><td class="n">950</td></tr>
+        <tr><td class="term">max_leaf_nodes</td><td>4 &ndash; 63</td><td>logarithmic</td><td class="n">5</td></tr>
+        <tr><td class="term">min_samples_leaf</td><td>5 &ndash; 120</td><td>logarithmic</td><td class="n">28</td></tr>
+        <tr><td class="term">l2_regularization</td><td>0.001 &ndash; 30</td><td>logarithmic</td><td class="n">0.0034</td></tr>
+        <tr><td class="term">max_features</td><td>0.3 &ndash; 1.0</td><td>linear</td><td class="n">0.546</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">The best trial scored a cross-validated log loss of 0.6545. Logarithmic ranges are used where the difference between 0.01 and 0.1 matters as much as between 1 and 10. The search landscape is flat: in earlier searches, settings such as &lambda; varied by a factor of a hundred between nearly equal scores, so no single setting should be read as the answer. The pattern that repeats is many tiny trees, a small learning rate, and only part of the inputs at each split.</p>
+
+  <h3>Choosing the Elo settings</h3>
+  <p>Nine values of <i>K</i> (39.8 to 398.1) were combined with 20 pairs of decision scores (unanimous from 1 down to 0.6, narrow from 1 down to 0.5, narrow never above unanimous): 180 settings. Each was scored by building the Elo columns with it and cross-validating the model with its own current settings, on 5 seeds.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><span class="t">among settings with</span> <i>CV</i> &le; <i>CV</i><sub>best</sub> + 0.0005, <span class="t">choose the smallest</span> <i>D</i></span></div>
+    <div class="eq-row"><span class="eq"><i>D</i> = |<i>u</i> &minus; <i>u</i><sub>0</sub>| + |<i>n</i> &minus; <i>n</i><sub>0</sub>| + |ln(<i>K</i> / <i>K</i><sub>0</sub>)|</span></div>
+    <dl class="terms">
+      <div><dt><i>u</i>, <i>n</i></dt><dd>The winner's score for a unanimous and for a narrow (split or majority) decision.</dd></div>
+      <div><dt><i>K</i></dt><dd>How far one fight moves a rating.</dd></div>
+      <div><dt><i>u</i><sub>0</sub>, <i>n</i><sub>0</sub>, <i>K</i><sub>0</sub></dt><dd>The rating already in use: the classic Elo, every win worth 1, <i>K</i> = 251.</dd></div>
+      <div><dt>0.0005</dt><dd>Half the seed-to-seed noise. Inside that band the curve's exact minimum is not a ranking, so the choice moves as little as possible from what was already in use.</dd></div>
+    </dl>
+  </div>
+  <p style="margin-top:12px">The choice, <i>K</i> = 158.5 with 0.7 for a unanimous and 0.55 for a narrow decision, then had to earn its place with its own tuned model: cross-validated log loss 0.65760 &rarr; 0.65477, better in 8 of 8 seeds, and men's validation 61.3% / 0.6455 / 0.675 &rarr; 64.6% / 0.6402 / 0.689. Elo is judged by the model it serves, not by its own forecasts: on its own it forecasts best at <i>K</i> &asymp; 63, and that slower rating added nothing to the model.</p>
+
+  <h3>Tried and not adopted</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Idea</th><th>Result</th><th>Decision</th></tr></thead>
+      <tbody>
+        <tr><td>XGBoost instead of these trees</td><td>better in 0 of 8 seeds</td><td>not adopted</td></tr>
+        <tr><td>logistic regression, and a 50/50 blend</td><td>0.0011 behind; the blend passed narrowly</td><td>one interpretable model kept</td></tr>
+        <tr><td>debutants filled with the league rate</td><td>worse, most of all in debut fights</td><td>blanks kept</td></tr>
+        <tr><td>direction constraints (each input may push one way only)</td><td>+0.0007 in cross-validation, within noise</td><td>not adopted</td></tr>
+        <tr><td>training on men's fights only*</td><td>worse in 8 of 8 seeds and on validation</td><td>pooled training kept</td></tr>
+        <tr><td>no shrinkage*</td><td>&minus;0.0019 in CV (p = 0.37), +0.0050 on validation (p = 0.10)</td><td>shrinkage kept</td></tr>
+        <tr><td>which corner is the southpaw*</td><td>better in 1 of 8 seeds</td><td>not adopted</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:10px;font-size:14.5px;color:var(--muted)">* Tested on the earlier 108-input version of the model, each version with its own tuned settings.</p>
+</section>
+
+<section id="final">
+  <span class="sec-num">SECTION 8</span>
+  <h2>The final model, and fights not yet fought</h2>
+  <p>After the test look, the same frozen recipe was refitted on every decided fight from 2014 to the last event in the data, 10 October 2026: 6,276 fights. The &alpha; values were refitted on the same fights; the Elo settings, the six model settings and the eight seeds are unchanged; the stretch is 1.235 from the test look. Its own score can't be measured, because no unseen fights are left: the test look is the honest estimate of how well this recipe predicts.</p>
+  <p><b>Predicting an upcoming fight.</b> The bout is added to the history as a fight with no statistics and no result, dated on fight night. The normal pipeline then builds its row from earlier fights only, exactly as for every training row; a fight with no result moves no rating and no average. Bouts that share a fighter are built in separate passes, so one can't count as the other's previous fight. A fighter with no UFC fight can't be predicted, because there is no profile to read. A test removes a real 2024 fight from the data, adds it back as "upcoming" on the same night, and checks that its 40 inputs come out identical.</p>
+</section>
+
+<section id="shap">
+  <span class="sec-num">SECTION 9</span>
+  <h2>Explaining a prediction</h2>
+  <p class="deck">SHAP splits a prediction into one piece per input: how far each input pushed it, and towards which fighter. It never looks at who won, so it can be used on any fight.</p>
+
+  <h3>What is explained</h3>
+  <p>SHAP explains a score, so the quantity explained is the two-corner, eight-seed score:</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq"><i>S</i>(<i>x</i>) = <span class="frac"><span>1</span><span>8</span></span> <span class="op"><span class="lim">7</span><span class="sym">&Sigma;</span><span class="lim">s = 0</span></span> <span class="frac"><span>1</span><span>2</span></span> [ <i>F</i><sub><i>s</i></sub>(<i>x</i>) &minus; <i>F</i><sub><i>s</i></sub>(<i>x&#771;</i>) ]</span></div>
+    <dl class="terms">
+      <div><dt><i>F</i><sub><i>s</i></sub></dt><dd>The score of the model trained with seed <i>s</i>.</dd></div>
+      <div><dt><i>x</i>, <i>x&#771;</i></dt><dd>The fight as given and with the corners swapped.</dd></div>
+      <div><dt><i>S</i>(<i>x</i>)</dt><dd>The explained score, in log-odds, positive towards A.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>The corner lean cancels, so a fight with no information scores exactly 0: the baseline is a 50&ndash;50 fight.</li>
+      <li><i>S</i> is not exactly the logit of <i>p&#772;</i>, because the predictor averages probabilities while SHAP explains scores. On validation &sigma;(<i>S</i>) stayed within 1.9 points of <i>p&#772;</i> and picked the same winner in every fight. The stretch would multiply every piece by <i>a</i>, so it is left out.</li>
+    </ul>
+  </div>
+
+  <h3>Shapley values</h3>
+  <div class="formula">
+    <div class="eq-row"><span class="eq">&phi;<sub><i>i</i></sub> = <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">T &sube; N &#8726; {i}</span></span> <span class="frac"><span>|<i>T</i>|! (<i>n</i> &minus; |<i>T</i>| &minus; 1)!</span><span><i>n</i>!</span></span> [ <i>v</i>(<i>T</i> &cup; {<i>i</i>}) &minus; <i>v</i>(<i>T</i>) ]</span></div>
+    <dl class="terms">
+      <div><dt><i>N</i>, <i>n</i></dt><dd>The set of inputs, <i>n</i> = 40.</dd></div>
+      <div><dt><i>T</i></dt><dd>A set of other inputs, those "already known".</dd></div>
+      <div><dt><i>v</i>(<i>T</i>)</dt><dd>The expected score when only the inputs in <i>T</i> are known. For trees it is computed by following the fight down each tree; where a split asks about an input outside <i>T</i>, the fight goes down both branches, weighted by the share of training fights that went each way.</dd></div>
+      <div><dt>the fraction</dt><dd>The share of orderings of all 40 inputs in which exactly the inputs in <i>T</i> come before input <i>i</i>.</dd></div>
+      <div><dt>&phi;<sub><i>i</i></sub></dt><dd>Input <i>i</i>'s average extra push when it joins the others, over every order in which the inputs could be revealed.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>The pieces add up exactly: <i>S</i>(<i>x</i>) = &phi;<sub>0</sub> + &Sigma; &phi;<sub><i>i</i></sub>, with &phi;<sub>0</sub> = 0 here.</li>
+      <li>An input the model never uses gets 0; two inputs that act identically get equal credit.</li>
+      <li>The sum over all subsets looks impossible (2<sup>39</sup> of them), but for trees it can be computed exactly and quickly (TreeExplainer). Each piece is computed for the fight as given and as mirrored, combined like the score, and averaged over the eight seeds.</li>
+      <li>Units are log-odds: near 50%, a piece of 0.1 is about 2.5 percentage points.</li>
+    </ul>
+  </div>
+
+  <div class="worked">
+    <div class="worked-head">UFC 333: why the model says 57.9% Evloev, 42.1% Volkanovski</div>
+    <div class="worked-body">
+      <div class="table-scroll" style="margin-top:0">
+        <table class="narrow">
+          <thead><tr><th>Input (positive = towards Evloev)</th><th class="n">Piece</th></tr></thead>
+          <tbody>
+            <tr><td>age gap: Evloev 6 years younger</td><td class="n">+0.389</td></tr>
+            <tr><td>Elo: Volkanovski rated 119 points higher</td><td class="n">&minus;0.293</td></tr>
+            <tr><td>head-strike accuracy</td><td class="n">&minus;0.097</td></tr>
+            <tr><td>win rate</td><td class="n">+0.090</td></tr>
+            <tr><td>body-strike accuracy</td><td class="n">+0.088</td></tr>
+            <tr><td>accuracy at range</td><td class="n">&minus;0.075</td></tr>
+            <tr><td>takedown accuracy</td><td class="n">+0.068</td></tr>
+            <tr><td>takedown attempts per minute</td><td class="n">+0.067</td></tr>
+            <tr><td>leg kicks thrown per minute</td><td class="n">&minus;0.050</td></tr>
+            <tr><td>all strikes: hit rate against</td><td class="n">+0.036</td></tr>
+            <tr><td>the other 30 inputs together</td><td class="n">+0.039</td></tr>
+            <tr class="best"><td>total, <i>S</i></td><td class="n">+0.262</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px">&sigma;(0.262) = 56.5%, next to the predictor's 56.4% before the stretch. The age gap alone outweighs the Elo gap; the striking numbers lean towards Volkanovski and the grappling numbers towards Evloev.</p>
+    </div>
+  </div>
+
+  <h3>Which families matter</h3>
+  <p>Inputs that measure similar things split the credit between them, so the pieces are also added up within each input family (exact, because the pieces add). The table shows the average size of each family's push, ignoring direction, on validation, with the training years as a cross-check:</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Family</th><th class="n">Inputs</th><th class="n">Validation</th><th class="n">Training</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>strength (Elo)</td><td class="n">1</td><td class="n">0.245</td><td class="n">0.242</td></tr>
+        <tr class="best"><td>physical (age gap, reach, height, division, women's bout)</td><td class="n">5</td><td class="n">0.213</td><td class="n">0.220</td></tr>
+        <tr><td>defence (what happens to the fighter)</td><td class="n">11</td><td class="n">0.169</td><td class="n">0.167</td></tr>
+        <tr><td>striking (what the fighter throws)</td><td class="n">13</td><td class="n">0.109</td><td class="n">0.099</td></tr>
+        <tr><td>grappling</td><td class="n">4</td><td class="n">0.086</td><td class="n">0.074</td></tr>
+        <tr><td>cold start (debut flags)</td><td class="n">2</td><td class="n">0.024</td><td class="n">0.025</td></tr>
+        <tr><td>record (win rate, streak, layoff)</td><td class="n">3</td><td class="n">0.019</td><td class="n">0.018</td></tr>
+        <tr><td>damage (knockdowns scored)</td><td class="n">1</td><td class="n">0.008</td><td class="n">0.007</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">Training and validation agree within 0.015 for every family, and a second method agrees too: scrambling one family's columns across fights on validation and measuring how much log loss rises (permutation importance) ranks the top five families in the same order. The scrambling has to be done on fights the model never trained on; on its own training fights it also measures memorised noise.</p>
+  <p><b>The shapes.</b> Elo and the age gap do most of the work. Elo is close to a straight line, about 0.25 log-odds per 100 rating points (6 percentage points), up to about &plusmn;0.6. The age gap is close to a straight line too, about 0.045 log-odds per year (1 point), flattening beyond about 10 years. The fight statistics are ramps that level off: beyond a few points of difference, more adds nothing. A blank input pushes neither way. The model favours the fighter who is higher rated, younger, harder to hit, and attempts more takedowns and submissions.</p>
+
+  <h3>Interactions</h3>
+  <p>A Shapley value can be split once more: into the input's push on its own (its main effect) and the extra push it gets only because of another input's value. This is the A&nbsp;&times;&nbsp;B term of a factorial experiment, computed for every fight and every pair.</p>
+  <div class="formula">
+    <div class="eq-row"><span class="eq">&Phi;<sub><i>ij</i></sub> = <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">T &sube; N &#8726; {i, j}</span></span> <span class="frac"><span>|<i>T</i>|! (<i>n</i> &minus; |<i>T</i>| &minus; 2)!</span><span>2 (<i>n</i> &minus; 1)!</span></span> &Delta;<sub><i>ij</i></sub>(<i>T</i>)</span></div>
+    <div class="eq-row"><span class="eq">&Delta;<sub><i>ij</i></sub>(<i>T</i>) = <i>v</i>(<i>T</i> &cup; {<i>i</i>, <i>j</i>}) &minus; <i>v</i>(<i>T</i> &cup; {<i>i</i>}) &minus; <i>v</i>(<i>T</i> &cup; {<i>j</i>}) + <i>v</i>(<i>T</i>)</span></div>
+    <div class="eq-row"><span class="eq">&Phi;<sub><i>ii</i></sub> = &phi;<sub><i>i</i></sub> &minus; <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">j &ne; i</span></span> &Phi;<sub><i>ij</i></sub></span></div>
+    <dl class="terms">
+      <div><dt>&Delta;<sub><i>ij</i></sub>(<i>T</i>)</dt><dd>What inputs <i>i</i> and <i>j</i> add together beyond what each adds alone, given the inputs in <i>T</i>.</dd></div>
+      <div><dt>&Phi;<sub><i>ij</i></sub></dt><dd>Half of the pair's interaction; the other half is &Phi;<sub><i>ji</i></sub>. The full pair effect is &Phi;<sub><i>ij</i></sub> + &Phi;<sub><i>ji</i></sub>.</dd></div>
+      <div><dt>&Phi;<sub><i>ii</i></sub></dt><dd>The main effect of input <i>i</i>. Per fight this makes a 40 &times; 40 table whose rows add up to the Shapley values.</dd></div>
+    </dl>
+    <ul class="effects">
+      <li>A tree with 5 leaves asks at most 4 questions, so one tree can combine at most 4 inputs. Many small trees can still build pair effects, but only when the data supports them.</li>
+    </ul>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Measured on validation fights</th><th class="n">Value</th></tr></thead>
+      <tbody>
+        <tr><td>share of the score's variation from main effects alone</td><td class="n">94% (training 93%)</td></tr>
+        <tr><td>probability change if the pair effects were left out, average / largest</td><td class="n">2.4 / 12 points</td></tr>
+        <tr><td>picks that would flip without the pairs (all within 7.4 points of 50&ndash;50)</td><td class="n">6.6%</td></tr>
+        <tr><td>largest pair in a typical fight, against the largest single input</td><td class="n">0.9 vs 7.7 points</td></tr>
+        <tr><td>fights where some pair is worth at least 1 / 2 / 3 points</td><td class="n">40% / 4.3% / 0.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px"><b>The model is mostly additive.</b> The strongest pairs come in two patterns. All 15 strongest on validation are among the 20 strongest on training, with the same pattern:</p>
+  <ul style="margin:8px 0 0;padding-left:1.2em;display:grid;gap:6px;max-width:66ch">
+    <li><b>Overlap.</b> When both inputs favour the same fighter, the pair takes some of the edge back, so the same evidence isn't counted twice. Elo combined with the age gap is the strongest (worth 1 point or more in 19% of fights), then Elo with head defence, takedown attempts, control time and accuracy at range. Elo summarises results that those same skills helped earn.</li>
+    <li><b>Reinforcing.</b> When both favour the same fighter, the pair adds to the edge. The clearest is accuracy at range combined with head defence: a fighter who is both much more accurate at range and much harder to hit in the head gets about 1.2 extra points. Body accuracy with body defence works the same way (1 point or more in 5% of fights), and reach with time spent being controlled (2%).</li>
+  </ul>
+  <p style="margin-top:12px">In the UFC 333 example the largest pair is Elo with win rate, +0.051 towards Evloev: the two inputs point at different fighters, and the pair softens Volkanovski's Elo edge.</p>
+
+  <div class="note">
+    <p><b>Three reading rules.</b> SHAP explains the model, not the fight: a large piece says how the model weighed a number, not that the skill caused the result. Inputs that overlap share credit, which is why families are added up. And every input is an A&nbsp;&minus;&nbsp;B gap, so the model can say "the accuracy gap counts more when the defence gap is large too" but never "A's attack against B's defence": it is never given that combination.</p>
+  </div>
+
+  <div class="next">
+    <p><b>Back to the start: UFC Pipeline Walkthrough.</b> How the 40 inputs are built, step by step, from the Kaggle download.</p>
+    <a class="go" href="../pipeline/">Open &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <a href="../">Teo's UFC ML Predictor</a> &middot; code: <a href="https://github.com/matteoberagnoli/ufc_fight_predictor">ufc_fight_predictor</a> &middot; HistGradientBoostingClassifier, 950 trees &times; 5 leaves, both corners, 8 seeds, stretch 1.235 &middot; final model trained on 6,276 fights, 2014 to 2026-10-10 &middot; men's test fights 2025&ndash;26: 64.0% &middot; log loss 0.6435 &middot; AUC 0.682<br>
+  Data: fight history from <a href="http://ufcstats.com">ufcstats.com</a> through the Kaggle dataset <a href="https://www.kaggle.com/datasets/scarekrow/ufc-data">scarekrow/ufc-data</a>, used with the author's permission for non-commercial purposes. Betting odds, used only as a yardstick: <a href="https://www.kaggle.com/datasets/jerzyszocik/ufc-betting-odds-daily-dataset">jerzyszocik/ufc-betting-odds-daily-dataset</a> (CC0).
+</footer>
+
+</div>
+</body>
+</html>

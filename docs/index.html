@@ -65,15 +65,6 @@ footer p{max-width:none} footer p+p{margin-top:8px}
 <section>
   <h2>Fight previews</h2>
   <div class="grid">
-    <a class="fcard" href="volkanovski-evloev/">
-      <img src="volkanovski-evloev/event_art.jpg" alt="" loading="lazy">
-      <div class="fbody">
-        <p class="fev">UFC 333 &middot; Abu Dhabi</p>
-        <h3>Volkanovski <span>vs</span> Evloev</h3>
-        <p class="fpick">Model's pick: <b>Evloev</b> &middot; 58%</p>
-        <p class="fwhen">Sat 24 Oct 2026 &middot; Fought 24 Oct 2026</p>
-      </div>
-    </a>
     <a class="fcard" href="prates-morales/">
       <img src="prates-morales/event_art.jpg" alt="" loading="lazy">
       <div class="fbody">
@@ -106,6 +97,10 @@ footer p{max-width:none} footer p+p{margin-top:8px}
     <div><b>64.9%</b><span>winners picked<br>643 unseen men's fights, 2025&ndash;26</span></div>
     <div><b>0.640</b><span>log loss<br>coin flip 0.693</span></div>
     <div><b>6,276</b><span>UFC fights<br>trained on, 2014&ndash;2026</span></div>
+  </div>
+  <div class="grid" style="margin-top:20px">
+    <a class="fcard" href="pipeline/"><div class="fbody"><p class="fev">Explainer</p><h3>UFC Pipeline Walkthrough</h3><p class="fpick">From three raw tables to 40 inputs per fight, with one fight worked through.</p></div></a>
+    <a class="fcard" href="modelling/"><div class="fbody"><p class="fev">Explainer</p><h3>The Modelling Half</h3><p class="fpick">How trees, seeds, corners and calibration turn those 40 numbers into a chance.</p></div></a>
   </div>
   <p style="margin-top:16px">The test fights were scored once, after the model was frozen. The model has never been tuned on them. It is a personal project built to learn and to be explained, not a betting tool, and it uses no betting odds.</p>
   <p>Code, notebooks and the full method: <a href="https://github.com/matteoberagnoli/ufc_fight_predictor">github.com/matteoberagnoli/ufc_fight_predictor</a>.</p>

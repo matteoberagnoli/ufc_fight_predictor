@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How three raw tables of UFC results become the 40 numbers the model sees for each fight, step by step, with one fight worked through.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Teo's UFC ML Predictor">
+<meta property="og:title" content="UFC Pipeline Walkthrough">
+<meta property="og:description" content="How three raw tables of UFC results become the 40 numbers the model sees for each fight, step by step, with one fight worked through.">
+<meta property="og:url" content="https://matteoberagnoli.github.io/ufc_fight_predictor/pipeline/">
+<meta property="og:image" content="https://matteoberagnoli.github.io/ufc_fight_predictor/pipeline/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>UFC Pipeline Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* Layout: one reading column; numbered step cards follow the data's real order; formulas sit in worksheet blocks with a term key under each. */
+:root {
+  color-scheme: light;
+  --ground:   #F1F4F3;
+  --surface:  #FFFFFF;
+  --sunk:     #E4E9E8;
+  --ink:      #121817;
+  --ink-soft: #37403F;
+  --muted:    #67736F;
+  --rule:     #D5DCDA;
+  --rule-firm:#B3BEBB;
+  --accent:   #0E6B5C;
+  --accent-bg:#DCEDE9;
+  --warn:     #A8442A;
+  --warn-bg:  #F6E3DC;
+  --shadow: 0 1px 2px rgba(18,24,23,.05), 0 8px 22px rgba(18,24,23,.05);
+
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Newsreader", Georgia, "Times New Roman", serif;
+  --math: "Newsreader", "Cambria Math", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:   #0C1211;
+    --surface:  #141B1A;
+    --sunk:     #080D0C;
+    --ink:      #E7EDEB;
+    --ink-soft: #BCC7C4;
+    --muted:    #85918D;
+    --rule:     #242E2C;
+    --rule-firm:#36433F;
+    --accent:   #4FC3AC;
+    --accent-bg:#0E2925;
+    --warn:     #E08D72;
+    --warn-bg:  #2D1711;
+    --shadow: 0 1px 2px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:   #0C1211;
+  --surface:  #141B1A;
+  --sunk:     #080D0C;
+  --ink:      #E7EDEB;
+  --ink-soft: #BCC7C4;
+  --muted:    #85918D;
+  --rule:     #242E2C;
+  --rule-firm:#36433F;
+  --accent:   #4FC3AC;
+  --accent-bg:#0E2925;
+  --warn:     #E08D72;
+  --warn-bg:  #2D1711;
+  --shadow: 0 1px 2px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17.5px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 900px; margin: 0 auto; padding-inline: 20px; padding-block: 0 76px; }
+
+p { max-width: 66ch; margin: 0; }
+p + p { margin-top: .9em; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+b { font-weight: 600; }
+
+/* ---------- masthead ---------- */
+.masthead { padding-block: 52px 28px; border-bottom: 2px solid var(--ink); }
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 14px;
+}
+h1 {
+  font-family: var(--display); font-weight: 700; font-size: clamp(34px, 7.5vw, 58px);
+  line-height: 1.02; letter-spacing: -.02em; margin: 0; text-wrap: balance;
+}
+.standfirst { margin: 18px 0 0; font-size: 19px; color: var(--ink-soft); max-width: 60ch; }
+
+.facts {
+  margin-top: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px; background: var(--rule-firm); border: 1px solid var(--rule-firm);
+}
+.fact { background: var(--ground); padding: 12px 14px; min-width: 0; }
+.fact dt {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+}
+.fact dd {
+  margin: 0; font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.1;
+  font-variant-numeric: tabular-nums; letter-spacing: -.01em;
+}
+.fact dd small { display: block; font-family: var(--body); font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; letter-spacing: 0; }
+
+/* ---------- sections ---------- */
+section { padding-block: 46px 0; }
+h2 {
+  font-family: var(--display); font-weight: 700; font-size: clamp(25px, 4.4vw, 33px);
+  line-height: 1.1; letter-spacing: -.015em; margin: 0 0 8px; text-wrap: balance;
+}
+.deck { color: var(--muted); font-size: 16px; margin: 0 0 24px; max-width: 62ch; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+
+code {
+  font-family: var(--mono); font-size: .82em; background: var(--sunk); border: 1px solid var(--rule);
+  border-radius: 3px; padding: .06em .3em; color: var(--ink-soft); word-break: break-word;
+}
+
+/* ---------- the rule ---------- */
+.rule-card {
+  background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--accent);
+  box-shadow: var(--shadow); padding: 24px 24px 22px;
+}
+.rule-card .big {
+  font-family: var(--display); font-weight: 600; font-size: clamp(21px, 3.6vw, 26px);
+  line-height: 1.24; letter-spacing: -.01em; margin: 0 0 14px; max-width: 30ch;
+}
+.rule-card p { font-size: 16.5px; color: var(--ink-soft); }
+.rule-card ol { margin: 14px 0 0; padding-left: 1.3em; display: grid; gap: 8px; font-size: 16.5px; color: var(--ink-soft); }
+
+/* ---------- map ---------- */
+.flow { display: flex; flex-direction: column; margin-top: 4px; }
+.stage { display: grid; grid-template-columns: 54px 1fr; gap: 0 16px; align-items: start; }
+.stage-mark { display: flex; flex-direction: column; align-items: center; align-self: stretch; }
+.dot {
+  width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); background: var(--surface);
+  color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 600; display: grid; place-items: center; flex: none;
+}
+.stage.file .dot { border-style: dashed; border-color: var(--rule-firm); color: var(--muted); }
+.stage-line { width: 2px; flex: 1; background: var(--rule); min-height: 16px; }
+.stage:last-child .stage-line { display: none; }
+.stage-body { padding-bottom: 20px; min-width: 0; }
+.stage-title { font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--ink); word-break: break-word; }
+.stage-shape { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--accent); margin-top: 2px; }
+.stage.file .stage-shape { color: var(--muted); }
+.stage-note { font-size: 15.5px; color: var(--ink-soft); margin: 5px 0 0; max-width: 60ch; }
+
+/* ---------- step cards ---------- */
+.step { margin-top: 30px; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+.step-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+  padding: 18px 22px 14px; border-bottom: 1px solid var(--rule);
+}
+.step-num { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: .08em; }
+.step-file { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: auto; }
+.step-body { padding: 20px 22px 22px; min-width: 0; }
+.job {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); margin: 24px 0 8px;
+}
+.step-body > .job:first-child { margin-top: 0; }
+.step-body ul.plain { margin: 8px 0 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 66ch; }
+.step-body ul.plain li { padding-left: .1em; }
+
+/* ---------- formulas ---------- */
+.formula {
+  margin-top: 14px; background: var(--sunk); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 16px 18px 14px; min-width: 0;
+}
+.eq-row { overflow-x: auto; padding-bottom: 2px; }
+.eq {
+  font-family: var(--math); font-size: 21px; line-height: 1.55; white-space: nowrap; color: var(--ink);
+  text-align: center; display: block; min-width: max-content; margin: 0 auto; padding: 4px 0;
+}
+.eq + .eq { margin-top: 6px; }
+.eq i { font-style: italic; }
+.eq .t { font-style: normal; font-family: var(--body); font-size: .8em; }
+.eq sub, .eq sup { font-size: .62em; }
+.frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .15em; }
+.frac > span:first-child { border-bottom: 1.3px solid currentColor; padding: 0 .3em .1em; }
+.frac > span:last-child { padding: .1em .3em 0; }
+.op { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1; margin: 0 .12em; }
+.op .lim { font-size: .55em; font-style: italic; line-height: 1.2; }
+.op .sym { font-size: 1.35em; line-height: 1; }
+.terms { margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 7px; }
+.terms > div { display: grid; grid-template-columns: 5.2em minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.terms dt { font-family: var(--math); font-size: 17px; color: var(--ink); }
+.terms dt i { font-style: italic; }
+.terms dd { margin: 0; font-size: 15.5px; color: var(--ink-soft); }
+.effects { margin: 12px 0 0; padding: 12px 0 0; border-top: 1px dashed var(--rule-firm); display: grid; gap: 7px; list-style: none; }
+.effects li { font-size: 15.5px; color: var(--ink-soft); position: relative; padding-left: 1.5em; }
+.effects li::before { content: "\2192"; position: absolute; left: 0; top: 0; color: var(--accent); font-family: var(--mono); }
+.formula-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 6px;
+}
+
+/* ---------- worked examples ---------- */
+.worked { margin-top: 14px; border: 1px solid var(--accent); border-radius: 4px; background: var(--surface); }
+.worked-head {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); padding: 10px 14px; border-bottom: 1px solid var(--rule); background: var(--accent-bg);
+}
+.worked-body { padding: 12px 14px 14px; font-size: 15.5px; color: var(--ink-soft); }
+.worked-body .calc { font-family: var(--mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 8px; }
+
+/* ---------- notes ---------- */
+.aside { margin-top: 14px; background: var(--accent-bg); border-left: 3px solid var(--accent); padding: 12px 15px; font-size: 15.5px; color: var(--ink); }
+.aside p { max-width: none; }
+.aside.danger { background: var(--warn-bg); border-left-color: var(--warn); }
+
+/* ---------- tables ---------- */
+.table-scroll { overflow-x: auto; margin-top: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+table.narrow { min-width: 420px; }
+th {
+  font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); text-align: left; padding: 0 12px 8px 0; border-bottom: 1px solid var(--rule-firm); vertical-align: bottom;
+}
+td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+td.term { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+td.n { font-family: var(--mono); font-size: 12.5px; color: var(--ink); white-space: nowrap; }
+tr.best td { background: var(--accent-bg); }
+tr.group td {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); padding-top: 16px; border-bottom: 1px solid var(--rule-firm);
+}
+
+/* ---------- next ---------- */
+.next {
+  margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: 18px 20px;
+}
+.next p { font-size: 16px; color: var(--ink-soft); }
+.next a.go {
+  font-family: var(--mono); font-size: 13px; font-weight: 600; text-decoration: none; color: var(--accent);
+  border: 1.5px solid var(--accent); padding: 8px 14px; border-radius: 3px; white-space: nowrap;
+}
+.next a.go:hover { background: var(--accent-bg); }
+
+footer {
+  margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule);
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.7;
+}
+
+@media (max-width: 560px) {
+  body { font-size: 16.5px; }
+  .stage { grid-template-columns: 40px 1fr; gap: 0 10px; }
+  .step-head, .step-body { padding-inline: 16px; }
+  .eq { font-size: 18px; }
+  .terms > div { grid-template-columns: 4em minmax(0, 1fr); }
+  .next { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Data pipeline &middot; Teo's UFC ML Predictor</p>
+  <h1>UFC Pipeline Walkthrough</h1>
+  <p class="standfirst">How a Kaggle download becomes the table the model learns from: 6,276 fights, each described by 40 numbers that were all known before the opening bell. Every step in order, the formula behind it, and the reason for each choice.</p>
+  <dl class="facts">
+    <div class="fact"><dt>Source</dt><dd>v20<small>scarekrow/ufc-data, Kaggle</small></dd></div>
+    <div class="fact"><dt>Fights in the data</dt><dd>8,937<small>1994-03-11 to 2026-10-10</small></dd></div>
+    <div class="fact"><dt>Featured table</dt><dd>8,937 &times; 374<small>every fight, every column</small></dd></div>
+    <div class="fact"><dt>Training table</dt><dd>6,276 &times; 40<small>decided fights from 2014</small></dd></div>
+  </dl>
+</header>
+
+<section>
+  <h2>The rule behind every step</h2>
+  <p class="deck">Every design decision below follows from one rule.</p>
+  <div class="rule-card">
+    <p class="big">An input may only contain what was knowable before the fight started.</p>
+    <p>A results file is written after the fights. Each row holds facts that only exist once the fight is over: strikes landed, minutes fought, the winner. If any of them reaches the model, it learns to read the scorecard. It then scores very well on past fights and fails on every fight that hasn't happened yet. This mistake is called <b>leakage</b>. Three habits keep it out:</p>
+    <ol>
+      <li><b>Work forwards in time.</b> Each fighter's numbers for a fight are built only from that fighter's earlier fights.</li>
+      <li><b>Keep all history, filter late.</b> Draws, no-contests and fights before 2014 never become training rows, but they still count as history.</li>
+      <li><b>Split by date, never at random.</b> The model is always tested on fights that happened after the ones it learned from.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <h2>The map</h2>
+  <p class="deck">The data's route from download to training table. Dashed circles are files on disk; solid circles are processing steps, numbered as in the cards below.</p>
+
+  <div class="flow">
+    <div class="stage file">
+      <div class="stage-mark"><span class="dot">&middot;</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">UFC_full_data_silver_v2.csv</div>
+        <div class="stage-shape">8,937 fights &times; 361 columns</div>
+        <p class="stage-note">The Kaggle file: one row per fight, both fighters side by side, with round-by-round statistics.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">1</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">Convert to three raw tables</div>
+        <div class="stage-shape">fight stats 8,937 &times; 59 &middot; events 793 &middot; fighters 2,767</div>
+        <p class="stage-note">Keeps only what the pipeline uses, in a fixed format.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">2</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">One row per fight, corners by coin flip</div>
+        <div class="stage-shape">fights.parquet &middot; 8,937 &times; 61</div>
+        <p class="stage-note">Date, result, and a fair assignment of corner A and corner B (steps 2 and 3).</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">4</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">One row per fighter per fight</div>
+        <div class="stage-shape">17,874 rows</div>
+        <p class="stage-note">Each career laid out in time order, so "earlier fights" is easy to compute.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">5</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">Records, totals, ratios, shrinkage</div>
+        <div class="stage-shape">99 numbers per fighter per fight</div>
+        <p class="stage-note">Steps 5 to 8: record counts, totals over the last 8 fights, ratios against a league rate, pulled towards the league when evidence is thin.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">9</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">Back to one row per fight, plus physical facts, weight class and Elo</div>
+        <div class="stage-shape">fights_featured.parquet &middot; 8,937 &times; 374</div>
+        <p class="stage-note">Steps 9 to 13: each fighter's numbers side by side and as A&nbsp;minus&nbsp;B differences, then age, reach, height, division and rating.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">14</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">Choose the rows</div>
+        <div class="stage-shape">train 4,309 &middot; validation 1,017 &middot; test 950</div>
+        <p class="stage-note">Decided fights from 2014, cut by date into three periods.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-mark"><span class="dot">15</span><span class="stage-line"></span></div>
+      <div class="stage-body">
+        <div class="stage-title">Choose the columns</div>
+        <div class="stage-shape">X: rows &times; 40 inputs &middot; y: did fighter A win</div>
+        <p class="stage-note">The 40 inputs named in an explicit list. This is what the model is handed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The steps</h2>
+  <p class="deck">In the order the data moves. Each card names the file in <code>src/ufc_predictor/</code> that does the work.</p>
+
+  <!-- 1 -->
+  <article class="step" id="source">
+    <div class="step-head"><span class="step-num">STEP 1</span><h3>Get the data and convert it</h3><span class="step-file">data/source.py</span></div>
+    <div class="step-body">
+      <p class="job">What happens</p>
+      <p>The source is the Kaggle dataset <a href="https://www.kaggle.com/datasets/scarekrow/ufc-data"><code>scarekrow/ufc-data</code></a>, version 20: every UFC fight on ufcstats.com from UFC 2 (March 1994) to 10 October 2026, scraped by its maintainer after each event. It is used here with the author's permission, for non-commercial purposes. It was chosen after comparing about a hundred Kaggle UFC datasets: it reproduces all 7,840 fights of the previous source (dates, strikes and fight times identical, control time within a few seconds), adds 82 early fights that source lacked, and covers every fight since November 2024. ufcstats.com itself no longer answers plain scripted requests, so updating means downloading the newest Kaggle version.</p>
+      <p>The conversion writes three tables in a fixed format: fight statistics (one row per fight, both fighters' columns side by side), events (date of each card) and fighters (date of birth, height, reach, stance). The rest of the pipeline only ever reads these three, so a change of source touches this one file.</p>
+
+      <p class="job">Conversion rules, and why</p>
+      <ul class="plain">
+        <li><b>Only what is used is carried over.</b> The source also has each fighter's <i>current</i> ranking and <i>current</i> career averages. Both are measured on the day of the scrape, so joining them to a 2016 fight would hand that fight ten years of future information. They are left out.</li>
+        <li><b>Per-fight totals per fighter:</b> knockdowns, significant and total strikes (landed and attempted), takedowns (landed and attempted), submission attempts, reversals and control time. Strikes by target (head, body, legs) and by position (distance, clinch, ground) are added up from the round-by-round columns.</li>
+        <li><b>Blank is not zero.</b> When no round has a recorded control time (the 1994&ndash;99 fights), control time is stored as blank. Later steps treat a blank as "no evidence" and a zero as "evidence of none", so the difference matters.</li>
+        <li><b>How the fight ended</b> is grouped into finish (KO/TKO, submission, doctor's stoppage: 4,679 fights), unanimous decision (3,201), split or majority decision (939) and other (118: disqualifications and fights with no result). Only the Elo rating reads this column, after the fight (step 12).</li>
+        <li><b>The result</b> is the winner's id, or <code>d</code> for a draw (no winner and the fight went to the judges or the clock ran out), or <code>nc</code> for a no-contest (no winner for any other reason: overturned result, failed drug test, accidental foul).</li>
+        <li><b>Fighter ids</b> are the first 13 hexadecimal digits of the ufcstats id read as a number. Thirteen digits keep every id below 2<sup>53</sup>, so it stays exact even in a decimal column that also holds blanks.</li>
+      </ul>
+
+      <div class="formula">
+        <p class="formula-label">Fight length and age at fight time</p>
+        <div class="eq-row"><span class="eq"><i>t</i> = 300 &middot; (<i>r</i> &minus; 1) + <i>s</i></span></div>
+        <div class="eq-row"><span class="eq"><i>age</i> = <i>Y</i><sub>fight</sub> &minus; <i>Y</i><sub>birth</sub> &minus; <i>b</i></span></div>
+        <dl class="terms">
+          <div><dt><i>t</i></dt><dd>Fight time in seconds, the same for both fighters.</dd></div>
+          <div><dt><i>r</i></dt><dd>The round in which the fight ended. Each completed round adds 300 seconds (5 minutes).</dd></div>
+          <div><dt><i>s</i></dt><dd>Seconds elapsed in the final round (the clock reading at the finish).</dd></div>
+          <div><dt><i>age</i></dt><dd>Whole years old on the night of the fight, computed from the date of birth, so it is correct for every fight in a career.</dd></div>
+          <div><dt><i>Y</i>, <i>b</i></dt><dd>The calendar years of the fight and of the birth; <i>b</i> = 1 if the birthday had not yet come round that year, otherwise 0.</dd></div>
+        </dl>
+      </div>
+
+      <p class="job">Checks</p>
+      <p>Each refresh records the dataset, version, download date and a SHA-256 checksum of the file in <code>data/raw/source/SOURCE.json</code>, so every result can be traced to the exact data it came from. A refresh also refuses to change fights already in the data unless a person approves it: a silent edit to a 2018 result would quietly change every feature, alpha and score built on it.</p>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="step" id="fights">
+    <div class="step-head"><span class="step-num">STEP 2</span><h3>One row per fight, with the result</h3><span class="step-file">data/build.py</span></div>
+    <div class="step-body">
+      <p class="job">What happens</p>
+      <p>Five small functions run in order, each taking a table and returning a new one:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Function</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td class="term">attach_event_dates</td><td>Adds the date of each fight's event. Stops with an error if any fight has no date.</td></tr>
+            <tr><td class="term">split_result_column</td><td>Turns the raw result into a winner id, or marks the fight as a draw or a no-contest.</td></tr>
+            <tr><td class="term">randomize_fighter_sides</td><td>Decides which fighter is corner A by a coin flip (step 3) and creates the label <code>fighter_a_won</code>.</td></tr>
+            <tr><td class="term">add_outcome_column</td><td>Writes the full result from A's side: <code>fighter_a</code>, <code>fighter_b</code>, <code>draw</code> or <code>no_contest</code>.</td></tr>
+            <tr><td class="term">drop_label_source_columns</td><td>Deletes the raw winner columns, so the answer can't reach the inputs through them.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">The result is <code>fights.parquet</code>: 8,937 rows, 61 columns, sorted by date.</p>
+
+      <p class="job">Why draws and no-contests stay</p>
+      <p>The data has 65 draws and 92 no-contests. They can't be training rows, because there is no winner to learn. They are still part of each fighter's career: strikes were thrown, time passed in the cage, the fighter wasn't resting. So they stay here with <code>fighter_a_won</code> blank and are only removed when the training rows are chosen (step 14). Removing them here would have left a fifth of the modelling fights built on incomplete histories, for example a layoff counted from the fight before a no-contest.</p>
+      <p>Two label columns exist because the record features treat the two kinds of no-winner fight differently (step 5). Both are answers, so neither may ever become an input.</p>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="step" id="coin">
+    <div class="step-head"><span class="step-num">STEP 3</span><h3>The coin flip for corners</h3><span class="step-file">data/randomize.py</span></div>
+    <div class="step-body">
+      <p class="job">The problem</p>
+      <p>The source lists the winner first. In all 8,780 decided fights, the first-listed fighter won. A model fed that order learns "pick the first fighter" and nothing else.</p>
+      <p class="job">The fix</p>
+      <p>For each fight, a coin flip decides whether the first-listed fighter becomes corner A or corner B. The flip comes from a hash of the fight's own permanent id:</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>h</i> = SHA-256( &ldquo;<i>fight_url</i>::1926&rdquo; )</span></div>
+        <div class="eq-row"><span class="eq"><i>swap</i> = [ <i>h</i><sub>1</sub> <span class="t">mod</span> 2 = 0 ]</span></div>
+        <dl class="terms">
+          <div><dt><i>fight_url</i></dt><dd>The fight's ufcstats address, which never changes.</dd></div>
+          <div><dt>1926</dt><dd>A fixed seed (<code>RANDOMIZE_SEED</code>). A different seed gives a different but equally fair set of flips.</dd></div>
+          <div><dt>SHA-256</dt><dd>A hash function: it turns any text into 32 bytes <i>h</i> that look random but are always identical for the same text.</dd></div>
+          <div><dt><i>h</i><sub>1</sub></dt><dd>The first of those bytes, a number from 0 to 255.</dd></div>
+          <div><dt><i>swap</i></dt><dd>True when that byte is even: the second-listed fighter becomes corner A.</dd></div>
+        </dl>
+      </div>
+      <p style="margin-top:14px"><b>Why a hash, not a random number generator.</b> A generator hands out numbers by row position, so adding three fights at the top of the file would give every older fight a new flip. The hash depends only on the fight itself, so a fight keeps its corners through every data refresh.</p>
+      <p>All 27 pairs of first-fighter/second-fighter columns (id, name, age, height and 23 statistics) swap together, found automatically by matching column names. Moving a name without its statistics would silently corrupt the row. After the flip, corner A won 4,336 of the 8,780 decided fights (49.4%): the order now carries no information.</p>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="step" id="history">
+    <div class="step-head"><span class="step-num">STEP 4</span><h3>Lay out every career in time order</h3><span class="step-file">features/rolling.py</span></div>
+    <div class="step-body">
+      <p>In the fight table a fighter appears sometimes in corner A's columns and sometimes in B's, so a career is scattered. Each fight is therefore split into two rows, one from each fighter's point of view: 8,937 fights become 17,874 fighter appearances. Each row records:</p>
+      <ul class="plain">
+        <li>what the fighter did in that fight (for example takedowns landed and attempted);</li>
+        <li>what was done to them: the opponent's numbers, stored as <code>_absorbed</code> columns (takedowns the opponent landed on them, and attempted);</li>
+        <li>the fight length, the date and how the fight went for them (step 5).</li>
+      </ul>
+      <p style="margin-top:12px">The rows are sorted by fighter, then date, then fight id, so each career is one block in chronological order. Every later calculation can then say "the rows above this one" and mean "this fighter's earlier fights".</p>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="step" id="record">
+    <div class="step-head"><span class="step-num">STEP 5</span><h3>The fight record</h3><span class="step-file">features/rolling.py</span></div>
+    <div class="step-body">
+      <p class="job">The leakage guard</p>
+      <p>Every record count for a fight is computed from the rows <i>above</i> it: the column is shifted down by one row, then added up. Adding first and shifting afterwards would include the fight being predicted.</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>wins</i><sub><i>k</i></sub> = <span class="op"><span class="lim">k&minus;1</span><span class="sym">&Sigma;</span><span class="lim">j = 1</span></span> <i>won</i><sub><i>j</i></sub></span></div>
+        <dl class="terms">
+          <div><dt><i>wins</i><sub><i>k</i></sub></dt><dd>Wins before the fight being predicted, the fighter's <i>k</i>-th UFC appearance.</dd></div>
+          <div><dt><i>won</i><sub><i>j</i></sub></dt><dd>1 if the fighter won their <i>j</i>-th fight, otherwise 0.</dd></div>
+          <div><dt><i>j</i></dt><dd>Each earlier appearance, 1 to <i>k</i>&nbsp;&minus;&nbsp;1. A debut (<i>k</i>&nbsp;=&nbsp;1) has an empty sum: 0 wins.</dd></div>
+        </dl>
+      </div>
+
+      <p class="job">The counts</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Feature</th><th>Meaning</th><th>Reaches the model?</th></tr></thead>
+          <tbody>
+            <tr><td class="term">fight_count</td><td>Earlier UFC fights, including draws and no-contests.</td><td>No (used to set the debut flag)</td></tr>
+            <tr><td class="term">is_debut</td><td>True when there are no earlier UFC fights.</td><td>Yes, one flag per corner</td></tr>
+            <tr><td class="term">wins, losses</td><td>Earlier wins and losses.</td><td>No (win rate replaces them)</td></tr>
+            <tr><td class="term">win_rate</td><td>Share of earlier fights won, built in step 8.</td><td>Yes, as A&nbsp;&minus;&nbsp;B</td></tr>
+            <tr><td class="term">streak</td><td>+<i>n</i> after <i>n</i> straight wins, &minus;<i>n</i> after <i>n</i> straight losses.</td><td>Yes, as A&nbsp;&minus;&nbsp;B</td></tr>
+            <tr><td class="term">days_since_last_fight</td><td>Days between this fight and the fighter's previous one (blank on a debut).</td><td>Yes, as A&nbsp;&minus;&nbsp;B</td></tr>
+            <tr><td class="term">title_fights, five_round_fights</td><td>Earlier title fights, and fights that were title fights or lasted beyond 900 seconds.</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="job">How each result counts</p>
+      <div class="table-scroll">
+        <table class="narrow">
+          <thead><tr><th>Result</th><th class="n">Score</th><th>In the win rate</th><th>In the streak</th></tr></thead>
+          <tbody>
+            <tr><td>won</td><td class="n">1</td><td>a full win</td><td>extends a winning run</td></tr>
+            <tr><td>lost</td><td class="n">0</td><td>a full loss</td><td>extends a losing run</td></tr>
+            <tr><td>draw</td><td class="n">0.5</td><td>half a win</td><td>resets to 0</td></tr>
+            <tr><td>no-contest</td><td class="n">blank</td><td>left out entirely</td><td>unchanged</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px"><b>Why the two no-winner results differ.</b> A draw is a real sporting result: neither fighter managed to win, so a winning run is over. A no-contest usually reflects an accidental foul or an overturned result, so it neither counts nor ends a run.</p>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="step" id="window">
+    <div class="step-head"><span class="step-num">STEP 6</span><h3>Totals over the last 8 fights</h3><span class="step-file">features/shrinkage.py &middot; prior_totals</span></div>
+    <div class="step-body">
+      <p>For every statistic, the pipeline adds up what the fighter did in their last 8 fights before this one. It does it with running totals, which avoids looping over windows:</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>T</i><sub><i>k</i></sub> = <span class="op"><span class="lim">k&minus;1</span><span class="sym">&Sigma;</span><span class="lim">j = k&minus;8</span></span> <i>t</i><sub><i>j</i></sub> = <i>C</i><sub><i>k</i>&minus;1</sub> &minus; <i>C</i><sub><i>k</i>&minus;9</sub></span></div>
+        <div class="eq-row"><span class="eq"><i>C</i><sub><i>m</i></sub> = <span class="op"><span class="lim">m</span><span class="sym">&Sigma;</span><span class="lim">j = 1</span></span> <i>t</i><sub><i>j</i></sub></span></div>
+        <dl class="terms">
+          <div><dt><i>t</i><sub><i>j</i></sub></dt><dd>The statistic in the fighter's <i>j</i>-th fight, for example takedowns landed. The matching evidence <i>e</i><sub><i>j</i></sub> (takedown attempts, or minutes fought) is added up the same way into <i>E</i><sub><i>k</i></sub>.</dd></div>
+          <div><dt><i>C</i><sub><i>m</i></sub></dt><dd>Running total up to and including fight <i>m</i>. Missing counts as 0, and <i>C</i> of a fight before the first is 0.</dd></div>
+          <div><dt><i>T</i><sub><i>k</i></sub></dt><dd>Total over the window: fights <i>k</i>&nbsp;&minus;&nbsp;8 to <i>k</i>&nbsp;&minus;&nbsp;1, or all earlier fights if there are fewer than 8. Blank on a debut.</dd></div>
+        </dl>
+        <ul class="effects">
+          <li>Evidence only counts fights where the statistic was recorded (<code>evidence.where(total.notna())</code>), so the top and the bottom of every later ratio cover the same fights. Without it, control-time shares could exceed 100%.</li>
+        </ul>
+      </div>
+
+      <p class="job">Why 8 fights</p>
+      <p>The window was chosen by testing. Each version was built in full, given its own tuned model, and scored by cross-validation inside the training years over 8 random seeds (log loss: lower is better; the method is on The Modelling Half):</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Window</th><th class="n">CV log loss</th><th>Against 3 fights</th></tr></thead>
+          <tbody>
+            <tr><td>last 3 fights</td><td class="n">0.66258</td><td></td></tr>
+            <tr class="best"><td><b>last 8 fights</b></td><td class="n">0.65850</td><td>better in 8 of 8 seeds</td></tr>
+            <tr><td>all fights, older ones fading by 0.85 per fight</td><td class="n">0.65894</td><td>better in all 4 years</td></tr>
+            <tr><td>last 3 at full weight, older ones fading by 0.7</td><td class="n">0.66024</td><td>better in all 4 years</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px">Most fight statistics are noisy over a few fights, so a longer window gives a steadier measurement, and recent form did not earn extra weight. In practice the window often holds the whole UFC career: the typical fighter in a training row has 4 earlier UFC fights, and both fighters have 8 or more in only 17% of rows. The pipeline also builds every statistic over the whole career; those columns are kept but not used by the model.</p>
+    </div>
+  </article>
+
+  <!-- 7 -->
+  <article class="step" id="ratios">
+    <div class="step-head"><span class="step-num">STEP 7</span><h3>From totals to ratios, and the league rate</h3><span class="step-file">features/rolling.py &middot; features/shrinkage.py</span></div>
+    <div class="step-body">
+      <p>A raw total means little on its own: 30 strikes in a 1-minute fight and in a 15-minute fight are different fighters. So every total is divided by the evidence it came from. There are six kinds of ratio, 91 columns in all (45 for each window, plus the career win rate):</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Kind</th><th>Top &divide; bottom</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>accuracy</td><td>landed &divide; attempted</td><td>head-strike accuracy</td></tr>
+            <tr><td>hit rate against</td><td>landed on the fighter &divide; thrown at the fighter</td><td>head strikes: how often they land against them</td></tr>
+            <tr><td>rate per minute</td><td>count &divide; minutes fought</td><td>takedown attempts per minute</td></tr>
+            <tr><td>control share</td><td>minutes in control &divide; minutes fought</td><td>share of fight time controlling the opponent</td></tr>
+            <tr><td>average fight length</td><td>seconds fought &divide; fights</td><td>built, not used by the model</td></tr>
+            <tr><td>win rate</td><td>win score &divide; fights (whole career)</td><td>a draw adds 0.5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px">Each ratio needs a reference point for the next step: the league rate, meaning what all UFC fighters together did over the three years before the fight.</p>
+      <div class="formula">
+        <p class="formula-label">League rate</p>
+        <div class="eq-row"><span class="eq"><i>L</i>(<i>d</i>) = <span class="frac"><span><span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">j &isin; A(d)</span></span> <i>t</i><sub><i>j</i></sub></span><span><span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">j &isin; A(d)</span></span> <i>e</i><sub><i>j</i></sub></span></span></span></div>
+        <dl class="terms">
+          <div><dt><i>d</i></dt><dd>The date of the fight being described.</dd></div>
+          <div><dt><i>A</i>(<i>d</i>)</dt><dd>Every fighter appearance dated from 3 years before <i>d</i> up to the day before <i>d</i>. Neither this fight nor any other fight on the same card is included.</dd></div>
+          <div><dt><i>t</i><sub><i>j</i></sub>, <i>e</i><sub><i>j</i></sub></dt><dd>The statistic and its evidence in appearance <i>j</i>, for example takedowns landed and attempted.</dd></div>
+          <div><dt>3 years</dt><dd><code>LEAGUE_RATE_YEARS</code>. Windows of 1, 3 and 5 years were tried and changed the results by less than 0.1 point, so it is not a sensitive choice.</dd></div>
+        </dl>
+        <ul class="effects">
+          <li>Pooled over every division and both men's and women's fights. Around January 2025 it read 36.7% for takedown accuracy, 38.7% for head-strike accuracy and 0.019 knockdowns per minute.</li>
+          <li>The "against" direction uses the same league value: every strike one fighter lands is one the other absorbs, so league-wide the two rates are equal.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- 8 -->
+  <article class="step" id="shrinkage">
+    <div class="step-head"><span class="step-num">STEP 8</span><h3>Shrinkage: honest ratios from small samples</h3><span class="step-file">features/shrinkage.py</span></div>
+    <div class="step-body">
+      <p class="job">The problem</p>
+      <p>With little evidence a ratio is mostly luck. A fighter who landed their only takedown attempt reads 100%. A fighter who never attempted one reads 0&nbsp;&divide;&nbsp;0, which is a blank.</p>
+      <p class="job">The formula</p>
+      <p>Each fighter is treated as if they already had &alpha; units of imaginary evidence at the league rate, and their real record is added on top:</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>r&#770;</i> = <span class="frac"><span><i>T</i> + &alpha; <i>L</i></span><span><i>E</i> + &alpha;</span></span></span></div>
+        <div class="eq-row"><span class="eq"><i>r&#770;</i> = <i>w</i> &middot; <span class="frac"><span><i>T</i></span><span><i>E</i></span></span> + (1 &minus; <i>w</i>) &middot; <i>L</i>, &nbsp; <span class="t">with</span> &nbsp;<i>w</i> = <span class="frac"><span><i>E</i></span><span><i>E</i> + &alpha;</span></span></span></div>
+        <dl class="terms">
+          <div><dt><i>r&#770;</i></dt><dd>The shrunk ratio that goes into the table.</dd></div>
+          <div><dt><i>T</i>, <i>E</i></dt><dd>The fighter's total and evidence over the window (step 6), for example takedowns landed and attempted in the last 8 fights.</dd></div>
+          <div><dt><i>L</i></dt><dd>The league rate on the fight date (step 7).</dd></div>
+          <div><dt>&alpha;</dt><dd>Shrinkage strength, in the same unit as the evidence: attempts, minutes or fights. One value per column, learned from data (below).</dd></div>
+          <div><dt><i>w</i></dt><dd>The weight of the fighter's own record. The second form shows the shrunk ratio is a weighted average of the fighter's raw ratio and the league rate.</dd></div>
+        </dl>
+        <ul class="effects">
+          <li>Larger &alpha;: more pull towards the league; the fighter's own record needs more evidence before it counts.</li>
+          <li>More evidence <i>E</i>: <i>w</i> approaches 1 and the fighter's own record dominates.</li>
+          <li><i>E</i> = 0 (never attempted): exactly the league rate, so the 0&nbsp;&divide;&nbsp;0 blanks disappear.</li>
+          <li>&alpha; = 0: the raw ratio, unchanged.</li>
+        </ul>
+      </div>
+
+      <div class="worked">
+        <div class="worked-head">Two real fighters, takedown accuracy over the last 8 fights, &alpha; = 79.4 attempts</div>
+        <div class="worked-body">
+          <p><b>Alex Pereira before UFC 300</b> (13 April 2024): 1 takedown from 1 attempt; league rate 36.8%. Raw accuracy 100%. His own record gets weight 1&nbsp;&divide;&nbsp;80.4&nbsp;=&nbsp;1.2%, so the value is almost exactly the league rate.</p>
+          <div class="calc">(1 + 79.4 &times; 0.3676) &divide; (1 + 79.4) = 0.375 &nbsp;&rarr;&nbsp; 37.5%</div>
+          <p style="margin-top:10px"><b>Merab Dvalishvili before UFC 298</b> (17 February 2024): 52 takedowns from 151 attempts; league rate 36.5%. Raw accuracy 34.4%. His own record gets weight 151&nbsp;&divide;&nbsp;230.4&nbsp;=&nbsp;66%.</p>
+          <div class="calc">(52 + 79.4 &times; 0.3654) &divide; (151 + 79.4) = 0.352 &nbsp;&rarr;&nbsp; 35.2%</div>
+        </div>
+      </div>
+
+      <p class="job">Choosing &alpha;</p>
+      <p>&alpha; is never typed by hand. For every column the pipeline tries a fixed grid of values, 10 per factor of ten, each about 26% larger than the last (1 to 10,000 attempts; 0.1 to 100,000 minutes; 0.01 to 1,000 fights). It keeps the value whose shrunk estimates best predict what fighters actually did in their next fight:</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>Q</i>(&alpha;) = <span class="op"><span class="lim">&nbsp;</span><span class="sym">&Sigma;</span><span class="lim">i</span></span> <i>e</i><sub><i>i</i></sub> &middot; ( <i>y</i><sub><i>i</i></sub> &minus; <i>r&#770;</i><sub><i>i</i></sub>(&alpha;) )<sup>2</sup></span></div>
+        <div class="eq-row"><span class="eq">&alpha;* = <span class="t">the grid value with the smallest</span> <i>Q</i>(&alpha;)</span></div>
+        <dl class="terms">
+          <div><dt><i>i</i></dt><dd>Each fighter appearance from 2014 to 2022 where the fighter had earlier fights and some evidence in this one. Earlier fights still count as history.</dd></div>
+          <div><dt><i>y</i><sub><i>i</i></sub></dt><dd>What the fighter actually did in that fight, for example takedowns landed &divide; attempted that night.</dd></div>
+          <div><dt><i>r&#770;</i><sub><i>i</i></sub>(&alpha;)</dt><dd>The shrunk estimate from their earlier fights, computed with this &alpha;.</dd></div>
+          <div><dt><i>e</i><sub><i>i</i></sub></dt><dd>That fight's evidence (attempts or minutes). A fight with 20 attempts says more about true accuracy than one with 1, so it weighs more.</dd></div>
+        </dl>
+        <ul class="effects">
+          <li>Win rate is judged differently, because nobody wins alone: its &alpha; is the one whose A&nbsp;&minus;&nbsp;B difference in win rate best separates the fights A won from the ones A lost (the share of won/lost pairs ranked correctly, the AUC). Ties go to the smaller &alpha;.</li>
+          <li>Only fights before 2023 are used, so the validation and test years never influence &alpha;. The values are saved with those dates in <code>alphas.json</code>; the final model refits them on every fight up to the last event.</li>
+        </ul>
+      </div>
+
+      <p class="job">What the learned &alpha; values say</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Input (last 8 fights)</th><th class="n">&alpha;</th><th class="n">Typical evidence over 8 fights</th><th class="n">Weight of own record</th></tr></thead>
+          <tbody>
+            <tr><td>takedown accuracy</td><td class="n">79.4 attempts</td><td class="n">23 attempts</td><td class="n">0.23</td></tr>
+            <tr><td>head-strike accuracy</td><td class="n">501 attempts</td><td class="n">561 attempts</td><td class="n">0.53</td></tr>
+            <tr><td>knockdowns per minute</td><td class="n">158.5 minutes</td><td class="n">88 minutes</td><td class="n">0.36</td></tr>
+            <tr><td>win rate (whole career)</td><td class="n">3.98 fights</td><td class="n">8 fights</td><td class="n">0.67</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px">Typical evidence uses the averages of 2014&ndash;2026 fighter appearances: 2.9 takedown attempts, 70 head-strike attempts and 11 minutes per fight. Takedown accuracy over a few fights is mostly luck, so even after 8 fights a fighter's own number counts for less than a quarter of the value. Head-strike accuracy settles faster because each fight supplies dozens of attempts.</p>
+
+      <p class="job">Why shrinkage, and why debutants stay blank</p>
+      <p>Shrinkage was chosen because it predicts each fighter's next fight better, then checked against the model itself (on the earlier 108-input version): without it, cross-validation was 0.0019 better (well inside the noise, p&nbsp;=&nbsp;0.37) and validation 0.0050 worse (p&nbsp;=&nbsp;0.10). With the two tests disagreeing, the rule kept shrinkage, which also removes the 0&nbsp;&divide;&nbsp;0 blanks and the extreme values from tiny samples.</p>
+      <p>A debutant has no earlier fights, so there is nothing to shrink and every ratio stays blank. "No history" is information in itself, and the model handles blanks directly. Filling debutants with the league rate was tested and did worse, most of all in the debut fights it was meant to help.</p>
+    </div>
+  </article>
+
+  <!-- 9 -->
+  <article class="step" id="diffs">
+    <div class="step-head"><span class="step-num">STEP 9</span><h3>Back to one row per fight, as differences</h3><span class="step-file">features/rolling.py</span></div>
+    <div class="step-body">
+      <p>The fighter rows are joined back onto the fight table twice, once for each corner, matching on fighter and fight. Each fight now carries both fighters' numbers side by side. Then every numeric pair is turned into one difference:</p>
+      <div class="formula">
+        <div class="eq-row"><span class="eq"><i>diff</i> = <i>x</i><sub>A</sub> &minus; <i>x</i><sub>B</sub></span></div>
+        <dl class="terms">
+          <div><dt><i>x</i><sub>A</sub>, <i>x</i><sub>B</sub></dt><dd>The same feature for corner A and for corner B, both computed from each fighter's earlier fights.</dd></div>
+          <div><dt><i>diff</i></dt><dd>Positive when A has more of it. Blank when either side is blank (a debutant).</dd></div>
+        </dl>
+      </div>
+      <p style="margin-top:14px"><b>Why differences.</b> A fight is a comparison. "A throws six strikes a minute" says little; "A throws two more a minute than B" is the question. One column replaces two, and swapping the corners simply flips its sign, which the model relies on to treat both corners alike (The Modelling Half, "Both corners"). The debut flags are yes/no values that can't be subtracted meaningfully, so they stay as two separate columns, one per corner.</p>
+    </div>
+  </article>
+
+  <!-- 10 -->
+  <article class="step" id="static">
+    <div class="step-head"><span class="step-num">STEP 10</span><h3>Physical facts</h3><span class="step-file">features/static.py</span></div>
+    <div class="step-body">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Column</th><th>How it is built</th><th>Used?</th></tr></thead>
+          <tbody>
+            <tr><td class="term">diff_static_age_gap</td><td>Age of A minus age of B on fight night, in years (step 1).</td><td>Yes</td></tr>
+            <tr><td class="term">diff_static_height_cm</td><td>Height of A minus height of B.</td><td>Yes</td></tr>
+            <tr><td class="term">diff_static_reach_cm</td><td>Reach of A minus reach of B, joined from the fighter table.</td><td>Yes</td></tr>
+            <tr><td class="term">diff_static_ape_index_cm</td><td>Difference in reach minus height.</td><td>No: reach and height are already in</td></tr>
+            <tr><td class="term">same_stance</td><td>Both fighters have the same stance.</td><td>No: it can't favour either corner</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px"><b>Why these can be joined without dates.</b> A fighter's profile is recorded as it stands today. Height and reach don't change across a career, so today's value is correct for every fight. Weight is left out because fighters change division, so one stored weight would be wrong for much of a career. The age gap is called a gap because the model never sees either age itself.</p>
+      <p>Which corner is the southpaw was tested as two signed inputs and not adopted: better in only 1 of 8 seeds. That matches the raw data, where southpaws beat orthodox fighters 52.2% of the time in 2014&ndash;2022, inside the range a coin would give.</p>
+    </div>
+  </article>
+
+  <!-- 11 -->
+  <article class="step" id="weight">
+    <div class="step-head"><span class="step-num">STEP 11</span><h3>Weight class</h3><span class="step-file">features/weight_class.py</span></div>
+    <div class="step-body">
+      <p>The fight table names the bout in 26 different strings ("Light Heavyweight Bout", "UFC Women's Strawweight Title Bout", "Catch Weight Bout"). Two facts are taken from it:</p>
+      <ul class="plain">
+        <li><b><code>weight_class_lbs</code></b>: the division's upper weight limit, 115 (strawweight) to 265 (heavyweight). Division names are matched longest first, so "light heavyweight" is found before "heavyweight", which it contains. The 200 bouts with no fixed division (catchweights, open-weight and early tournament fights; 74 of them from 2014 on) get a blank rather than a guess.</li>
+        <li><b><code>is_womens_bout</code></b>: "Women's" appears in the string, or either fighter has ever fought in a women's division. The second rule catches 10 women's catchweight bouts whose string carries no gender word. 959 bouts are women's bouts.</li>
+      </ul>
+      <p style="margin-top:12px"><b>Why a number, and why no difference.</b> The pound limit has an order, so one question such as "above 155&nbsp;lbs?" separates every heavier division at once; nine separate yes/no columns would lose that order. Both facts describe the bout and are the same for both corners, so neither is a difference. They give the model context, because men's and women's fights of every division are trained together (pooling was tested against men's fights only and won in 8 of 8 seeds).</p>
+    </div>
+  </article>
+
+  <!-- 12 -->
+  <article class="step" id="elo">
+    <div class="step-head"><span class="step-num">STEP 12</span><h3>The Elo rating</h3><span class="step-file">features/elo.py</span></div>
+    <div class="step-body">
+      <p class="job">Why it exists</p>
+      <p>Every other input summarises a fighter's own fights. None knows how good the opponents were: win rate counts a win over a champion and a win over a debutant the same. An Elo rating gives each fighter one number that moves after every fight by how surprising the result was.</p>
+
+      <div class="formula">
+        <p class="formula-label">Forecast, then correction</p>
+        <div class="eq-row"><span class="eq"><i>E</i><sub>A</sub> = <span class="frac"><span>1</span><span>1 + 10<sup>(<i>R</i><sub>B</sub> &minus; <i>R</i><sub>A</sub>) / 400</sup></span></span></span></div>
+        <div class="eq-row"><span class="eq"><i>R</i>&prime;<sub>A</sub> = <i>R</i><sub>A</sub> + <i>K</i> (<i>S</i><sub>A</sub> &minus; <i>E</i><sub>A</sub>)</span></div>
+        <div class="eq-row"><span class="eq"><i>R</i>&prime;<sub>B</sub> = <i>R</i><sub>B</sub> &minus; <i>K</i> (<i>S</i><sub>A</sub> &minus; <i>E</i><sub>A</sub>)</span></div>
+        <dl class="terms">
+          <div><dt><i>R</i><sub>A</sub>, <i>R</i><sub>B</sub></dt><dd>The two ratings going into the fight. Everyone starts at 1500. The start value is cosmetic, because only gaps matter.</dd></div>
+          <div><dt><i>E</i><sub>A</sub></dt><dd>Elo's forecast of A's score, from the rating gap alone. Equal ratings give 0.5.</dd></div>
+          <div><dt>400</dt><dd>The scale: a 400-point gap means 10-to-1 odds (<i>E</i>&nbsp;=&nbsp;0.909). A convention from chess; changing it only rescales the ratings.</dd></div>
+          <div><dt><i>S</i><sub>A</sub></dt><dd>A's actual score, set by how the fight ended (table below).</dd></div>
+          <div><dt><i>K</i></dt><dd>158.5: the most points one fight can move a rating. B moves by exactly the opposite amount.</dd></div>
+          <div><dt><i>R</i>&prime;</dt><dd>The ratings after the fight, used for each fighter's next fight.</dd></div>
+        </dl>
+        <ul class="effects">
+          <li>Larger <i>K</i>: a faster rating that weights recent results more. Smaller <i>K</i>: a slower rating with a long memory.</li>
+          <li>Larger surprise (<i>S</i>&nbsp;&minus;&nbsp;<i>E</i> far from 0): larger moves. An expected result barely moves either rating.</li>
+        </ul>
+      </div>
+
+      <div class="table-scroll">
+        <table class="narrow">
+          <thead><tr><th>How the fight ended</th><th class="n">Winner's score</th><th class="n">Loser's score</th></tr></thead>
+          <tbody>
+            <tr><td>KO, TKO, submission, doctor's stoppage, disqualification</td><td class="n">1.0</td><td class="n">0.0</td></tr>
+            <tr><td>unanimous decision</td><td class="n">0.7</td><td class="n">0.3</td></tr>
+            <tr><td>split or majority decision</td><td class="n">0.55</td><td class="n">0.45</td></tr>
+            <tr><td>draw</td><td class="n" colspan="2" style="text-align:center">0.5 each</td></tr>
+            <tr><td>no-contest</td><td class="n" colspan="2" style="text-align:center">no update</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px"><b>Why a win counts by how it came.</b> In the data, fighters who won by finish went on to win their next fight 52.8% of the time, after a unanimous decision 54.3%, after a split or majority decision only 45.7%. A narrow decision is weak evidence of who was better. <i>K</i> and the two decision scores were chosen together by how much they help the model: 180 combinations, scored by cross-validation (details on The Modelling Half). The weighted rating beat the classic win/loss Elo in 8 of 8 seeds.</p>
+
+      <div class="worked">
+        <div class="worked-head">Two real updates, K = 158.5</div>
+        <div class="worked-body">
+          <p><b>UFC 281, 12 November 2022: Alex Pereira (1742) beats Israel Adesanya (2014) by TKO.</b> Elo gave Pereira 17.3%. A finish scores 1.</p>
+          <div class="calc">158.5 &times; (1 &minus; 0.173) = +131 &nbsp;&rarr;&nbsp; Pereira 1873, Adesanya 1883</div>
+          <p style="margin-top:10px"><b>UFC 273, 9 April 2022: Aljamain Sterling (1962) beats Petr Yan (1856) by split decision.</b> Elo gave Sterling 64.7%. A split decision scores only 0.55, below what the favourite was expected to score, so the winner loses points.</p>
+          <div class="calc">158.5 &times; (0.55 &minus; 0.647) = &minus;15 &nbsp;&rarr;&nbsp; Sterling 1947, Yan 1871</div>
+        </div>
+      </div>
+
+      <p class="job">Rules that keep it leak-free</p>
+      <ul class="plain">
+        <li><b>Store first, then update.</b> The rating saved on a fight's row is the one from before that fight.</li>
+        <li><b>Every fight since 1994 counts</b>, processed in date order (ties broken by fight id), including pre-2014 fights and draws.</li>
+        <li>The model's input is the gap, <code>diff_prior_elo</code>&nbsp;=&nbsp;<i>R</i><sub>A</sub>&nbsp;&minus;&nbsp;<i>R</i><sub>B</sub>. The column saying how a fight ended is used only to update ratings after the fight and can never become an input.</li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- 13 -->
+  <article class="step" id="featured">
+    <div class="step-head"><span class="step-num">STEP 13</span><h3>The featured table</h3><span class="step-file">features/pipeline.py</span></div>
+    <div class="step-body">
+      <p>One function, <code>build_featured_table</code>, runs steps 4 to 12 in order: prior-fight features, physical facts, weight class, then Elo. The main table and every comparison table are built by it, so two tables can only differ in what is passed in. The result is <code>fights_featured.parquet</code>: all 8,937 fights since 1994 and 374 columns. Nothing is deleted from it. Each column belongs to exactly one bucket, and a test fails if a new column belongs to none:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Bucket</th><th class="n">Columns</th><th>What they are</th></tr></thead>
+          <tbody>
+            <tr class="best"><td>model inputs</td><td class="n">40</td><td>The chosen inputs (step 15).</td></tr>
+            <tr><td>safe, not selected</td><td class="n">68</td><td>Career windows, the near-duplicate strikes-faced columns, fight length, the other record counts. One edit away from being used.</td></tr>
+            <tr><td>per-corner halves</td><td class="n">208</td><td>Each fighter's own value that a difference is built from (plus the two debut flags, counted above as inputs).</td></tr>
+            <tr><td>raw fight statistics</td><td class="n">47</td><td>What happened in this fight, plus how it ended. Never inputs.</td></tr>
+            <tr><td>identifiers</td><td class="n">9</td><td>Date, fight and event addresses, the weight-class text and division, fighter ids and names.</td></tr>
+            <tr><td>answers</td><td class="n">2</td><td><code>fighter_a_won</code> and <code>outcome</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px">The raw statistics stay because they are what you check a row against by hand when a prediction looks wrong. The 2,545 fights before 2014 stay because they are history for the fighters who fought on.</p>
+    </div>
+  </article>
+
+  <!-- 14 -->
+  <article class="step" id="rows">
+    <div class="step-head"><span class="step-num">STEP 14</span><h3>Choose the rows</h3><span class="step-file">modeling/split.py</span></div>
+    <div class="step-body">
+      <p>Three filters, applied to the featured table, in this order:</p>
+      <ol style="margin:10px 0 0;padding-left:1.3em;display:grid;gap:6px;max-width:66ch">
+        <li><b>From 2014 on.</b> Earlier MMA was a different sport: rules, judging, depth of talent and anti-doping all changed. 2,545 fights drop out as rows.</li>
+        <li><b>A winner exists.</b> The 116 draws and no-contests from 2014 on have no answer to learn.</li>
+        <li><b>Cut by date</b> into three periods. Each boundary date belongs to the later period.</li>
+      </ol>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Period</th><th>Dates</th><th class="n">Fights</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td class="term">train</td><td>2014 &ndash; 2022</td><td class="n">4,309</td><td>learning the model, the &alpha; values, every tuned setting</td></tr>
+            <tr><td class="term">validation</td><td>2023 &ndash; 2024</td><td class="n">1,017</td><td>checking each design decision</td></tr>
+            <tr><td class="term">test</td><td>2025-01-11 &ndash; 2026-10-10</td><td class="n">950</td><td>one final look, after everything was frozen</td></tr>
+            <tr class="best"><td class="term">final model</td><td>2014 &ndash; 2026-10-10</td><td class="n">6,276</td><td>predicting fights that haven't happened yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px"><b>Why filter after the features, never before.</b> Filtered first, every history would restart in 2014 and a 15-fight veteran would enter 2014 looking like a debutant. Filtered after, the earlier fights still count; they just never become rows.</p>
+      <p><b>Why by date, never at random.</b> A random split would put 2023 fights in training and 2016 fights in testing, so the model would learn from the future to predict the past and score better than it ever could on a real upcoming fight.</p>
+      <p><b>Why three periods.</b> Every choice made by looking at a score adapts the model a little to the fights looked at. Choices were made inside the training years and on validation; the test years were opened once, at the end. About 900 test fights pin log loss to roughly &plusmn;0.008, which is all one honest check needs; every fight beyond that is better used for training.</p>
+    </div>
+  </article>
+
+  <!-- 15 -->
+  <article class="step" id="columns">
+    <div class="step-head"><span class="step-num">STEP 15</span><h3>Choose the columns: the 40 inputs</h3><span class="step-file">features/manifest.py</span></div>
+    <div class="step-body">
+      <p class="job">An allow-list</p>
+      <p>The input matrix is built by naming the columns allowed in (<code>FEATURES</code>), never by dropping the ones that aren't. Dropping is unsafe because a raw fact and a safe feature can be one word apart: <code>fighter_a_sig_strikes</code> is the answer sheet, while <code>fighter_a_prior_sig_strikes_accuracy_career_avg</code> is a feature. Two guards back it up: no raw fight statistic can ever be selected (a test deliberately tries), and every column must belong to a bucket.</p>
+      <p class="job">How the 40 were chosen</p>
+      <p>All 108 safe candidates were reviewed one by one, and each kept input needed a mechanism: a reason it should decide a fight. One rule came out of the review: what a fighter does is a skill; what opponents do to them is mostly circumstance (the opponent's choices, the pace of the fight); how often they get hit is a skill again. The candidate lists were then tested as models, each with its own tuned settings, by cross-validation over 8 seeds:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Version</th><th class="n">Inputs</th><th class="n">CV log loss</th></tr></thead>
+          <tbody>
+            <tr><td>every safe column, 3-fight window</td><td class="n">108</td><td class="n">0.66258</td></tr>
+            <tr><td>every safe column, 8-fight window</td><td class="n">108</td><td class="n">0.65850</td></tr>
+            <tr class="best"><td>the reviewed list, one 8-fight input per statistic</td><td class="n">40</td><td class="n">0.65767</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px">The 40 inputs beat the 108 in all 8 seeds. Most of that gain came from the longer window; the cut from 108 to 40 kept the score while making every input explainable. The reasons for every decision are in the project's <code>reviews/</code> folder, and a test keeps <code>FEATURES</code> identical to the reviewed list.</p>
+    </div>
+  </article>
+</section>
+
+<section id="table">
+  <h2>The table the model trains on</h2>
+  <p class="deck">One row per decided fight from 2014. Every input below is a difference, fighter A minus fighter B, except the two debut flags and the two facts about the bout. The &alpha; column is the shrinkage strength fitted on 2014&ndash;2022 (step 8).</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Input</th><th>Meaning</th><th class="n">&alpha;</th></tr></thead>
+      <tbody>
+        <tr class="group"><td colspan="3">Strength &middot; 1</td></tr>
+        <tr><td class="term">elo</td><td>Elo rating gap going into the fight (step 12)</td><td class="n"></td></tr>
+        <tr class="group"><td colspan="3">Physical &middot; 5</td></tr>
+        <tr><td class="term">age_gap</td><td>Age difference, years</td><td class="n"></td></tr>
+        <tr><td class="term">reach_cm</td><td>Reach difference, cm</td><td class="n"></td></tr>
+        <tr><td class="term">height_cm</td><td>Height difference, cm</td><td class="n"></td></tr>
+        <tr><td class="term">weight_class_lbs</td><td>Division's weight limit, same for both</td><td class="n"></td></tr>
+        <tr><td class="term">is_womens_bout</td><td>Women's bout, same for both</td><td class="n"></td></tr>
+        <tr class="group"><td colspan="3">Cold start &middot; 2</td></tr>
+        <tr><td class="term">fighter_a_prior_is_debut</td><td>A's first UFC fight</td><td class="n"></td></tr>
+        <tr><td class="term">fighter_b_prior_is_debut</td><td>B's first UFC fight</td><td class="n"></td></tr>
+        <tr class="group"><td colspan="3">Record &middot; 3</td></tr>
+        <tr><td class="term">win_rate</td><td>Share of earlier UFC fights won (whole career)</td><td class="n">3.98 fights</td></tr>
+        <tr><td class="term">streak</td><td>Current winning or losing run</td><td class="n"></td></tr>
+        <tr><td class="term">days_since_last_fight</td><td>Layoff before this fight, days</td><td class="n"></td></tr>
+        <tr class="group"><td colspan="3">Striking: what the fighter throws &middot; 13</td></tr>
+        <tr><td class="term">sig_strike_atts_per_min</td><td>Significant strikes thrown per minute</td><td class="n">39.8 min</td></tr>
+        <tr><td class="term">tot_strike_atts_per_min</td><td>All strikes thrown per minute</td><td class="n">31.6 min</td></tr>
+        <tr><td class="term">body_strike_atts_per_min</td><td>Body strikes thrown per minute</td><td class="n">31.6 min</td></tr>
+        <tr><td class="term">leg_strike_atts_per_min</td><td>Leg kicks thrown per minute</td><td class="n">25.1 min</td></tr>
+        <tr><td class="term">clinch_atts_per_min</td><td>Clinch strikes thrown per minute</td><td class="n">79.4 min</td></tr>
+        <tr><td class="term">ground_atts_per_min</td><td>Ground strikes thrown per minute</td><td class="n">199.5 min</td></tr>
+        <tr><td class="term">sig_strikes_accuracy</td><td>Share of significant strikes that land</td><td class="n">501 att.</td></tr>
+        <tr><td class="term">tot_strikes_accuracy</td><td>Share of all strikes that land</td><td class="n">631 att.</td></tr>
+        <tr><td class="term">head_strikes_accuracy</td><td>Share of head strikes that land</td><td class="n">501 att.</td></tr>
+        <tr><td class="term">body_strikes_accuracy</td><td>Share of body strikes that land</td><td class="n">158.5 att.</td></tr>
+        <tr><td class="term">leg_strikes_accuracy</td><td>Share of leg kicks that land</td><td class="n">125.9 att.</td></tr>
+        <tr><td class="term">dist_strikes_accuracy</td><td>Share of strikes at range that land</td><td class="n">316.2 att.</td></tr>
+        <tr><td class="term">grounds_accuracy</td><td>Share of ground strikes that land</td><td class="n">398.1 att.</td></tr>
+        <tr class="group"><td colspan="3">Grappling &middot; 4</td></tr>
+        <tr><td class="term">takedown_atts_per_min</td><td>Takedown attempts per minute</td><td class="n">25.1 min</td></tr>
+        <tr><td class="term">takedowns_accuracy</td><td>Share of takedown attempts that succeed</td><td class="n">79.4 att.</td></tr>
+        <tr><td class="term">submissions_per_min</td><td>Submission attempts per minute</td><td class="n">100 min</td></tr>
+        <tr><td class="term">ctrl_time_frac</td><td>Share of fight time spent controlling the opponent</td><td class="n">39.8 min</td></tr>
+        <tr class="group"><td colspan="3">Damage &middot; 1</td></tr>
+        <tr><td class="term">knockdowns_per_min</td><td>Knockdowns scored per minute</td><td class="n">158.5 min</td></tr>
+        <tr class="group"><td colspan="3">Defence: what happens to the fighter &middot; 11</td></tr>
+        <tr><td class="term">sig_strike_atts_absorbed_per_min</td><td>Significant strikes thrown at them per minute</td><td class="n">50.1 min</td></tr>
+        <tr><td class="term">head_strikes_hit_rate_against</td><td>Share of head strikes thrown at them that land</td><td class="n">501 att.</td></tr>
+        <tr><td class="term">body_strikes_hit_rate_against</td><td>Share of body strikes thrown at them that land</td><td class="n">199.5 att.</td></tr>
+        <tr><td class="term">leg_strikes_hit_rate_against</td><td>Share of leg kicks thrown at them that land</td><td class="n">100 att.</td></tr>
+        <tr><td class="term">dist_strikes_hit_rate_against</td><td>Share of strikes at range thrown at them that land</td><td class="n">1000 att.</td></tr>
+        <tr><td class="term">clinchs_hit_rate_against</td><td>Share of clinch strikes thrown at them that land</td><td class="n">158.5 att.</td></tr>
+        <tr><td class="term">grounds_hit_rate_against</td><td>Share of ground strikes thrown at them that land</td><td class="n">158.5 att.</td></tr>
+        <tr><td class="term">tot_strikes_hit_rate_against</td><td>Share of all strikes thrown at them that land</td><td class="n">794 att.</td></tr>
+        <tr><td class="term">takedowns_success_rate_against</td><td>Share of opponents' takedown attempts that succeed</td><td class="n">31.6 att.</td></tr>
+        <tr><td class="term">knockdowns_absorbed_per_min</td><td>Knockdowns suffered per minute</td><td class="n">158.5 min</td></tr>
+        <tr><td class="term">ctrl_time_absorbed_frac</td><td>Share of fight time spent controlled by opponents</td><td class="n">79.4 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px;font-size:15.5px;color:var(--ink-soft)">Full column names add <code>diff_prior_</code> or <code>diff_static_</code> in front and <code>_last8_avg</code> at the end of the fight statistics, for example <code>diff_prior_head_strikes_hit_rate_against_last8_avg</code>. The label <i>y</i> is <code>fighter_a_won</code>.</p>
+
+  <h3 style="margin-top:32px">Blanks</h3>
+  <p style="margin-top:8px">23.3% of training rows have at least one blank input. Almost all come from debutants: a debut leaves 31 of the 40 inputs blank for that fight (the 29 fight statistics, win rate and layoff), because there is no history to describe. In fights without a debutant, the only blanks are reach (1.9% of rows) and the weight limit of catchweight bouts (1.0%). Nothing is filled in; the model learns where blanks belong (The Modelling Half).</p>
+
+  <h3 style="margin-top:32px">One row, read across</h3>
+  <p style="margin-top:8px">Movsar Evloev against Alexander Volkanovski at UFC 333 (24 October 2026), as the final model sees it. The coin flip put Evloev in corner A. Values use the &alpha; values refitted on all fights to 10 October 2026.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Input</th><th class="n">A: Evloev</th><th class="n">B: Volkanovski</th><th class="n">Input value</th></tr></thead>
+      <tbody>
+        <tr><td>age on fight night</td><td class="n">32</td><td class="n">38</td><td class="n">age_gap &minus;6</td></tr>
+        <tr><td>Elo rating</td><td class="n">1827</td><td class="n">1947</td><td class="n">elo &minus;119</td></tr>
+        <tr><td>win rate (shrunk)</td><td class="n">0.880</td><td class="n">0.784</td><td class="n">+0.096</td></tr>
+        <tr><td>days since last fight</td><td class="n">217</td><td class="n">266</td><td class="n">&minus;49</td></tr>
+        <tr><td>takedown attempts per minute</td><td class="n">0.495</td><td class="n">0.292</td><td class="n">+0.203</td></tr>
+        <tr><td>head-strike accuracy</td><td class="n">0.426</td><td class="n">0.489</td><td class="n">&minus;0.063</td></tr>
+        <tr><td>head strikes: hit rate against</td><td class="n">0.345</td><td class="n">0.355</td><td class="n">&minus;0.010</td></tr>
+        <tr><td>reach, cm</td><td class="n">182.9</td><td class="n">180.3</td><td class="n">+2.5</td></tr>
+        <tr><td>weight limit, lbs</td><td class="n" colspan="2" style="text-align:center">same bout</td><td class="n">145</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:12px">Read the signs from corner A's side: Evloev is six years younger, rated 119 points lower, attempts more takedowns and lands a smaller share of his head strikes. The model turns these 40 numbers into a probability on <a href="../modelling/">The Modelling Half</a>.</p>
+
+  <div class="next">
+    <p><b>Next: The Modelling Half.</b> The model that learns from this table, how its score becomes a probability, how its settings were tuned and how each prediction is explained.</p>
+    <a class="go" href="../modelling/">Open &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <a href="../">Teo's UFC ML Predictor</a> &middot; code: <a href="https://github.com/matteoberagnoli/ufc_fight_predictor">ufc_fight_predictor</a> &middot; data: <a href="https://www.kaggle.com/datasets/scarekrow/ufc-data">scarekrow/ufc-data</a> v20 (author's permission, non-commercial), fights to 2026-10-10 &middot; Kaggle file &rarr; 3 raw tables &rarr; 8,937 &times; 61 &rarr; 17,874 fighter rows &rarr; 8,937 &times; 374 &rarr; 6,276 &times; 40
+</footer>
+
+</div>
+</body>
+</html>
